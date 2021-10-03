@@ -10,23 +10,23 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link href="../assets/img/favicon.png" rel="icon">
+  <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
   <!-- Vendor CSS Files -->
-  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="../assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="../assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
   <!-- Template Main CSS File -->
-  <link href="assets/css/style.css" rel="stylesheet">
+  <link href="../assets/css/style.css" rel="stylesheet">
 
   <!-- =======================================================
   * Template Name: Vesperr - v4.4.0
@@ -45,46 +45,33 @@
 
 <body>
 
-  <!-- ======= Header ======= -->
-  <header id="header" class="fixed-top d-flex align-items-center">
-    <div class="container d-flex align-items-center justify-content-between">
-
-      <div class="logo">
-        <h1><a href="index.html">Learning Management System</a></h1>
-        <!-- Uncomment below if you prefer to use an image logo -->
-        <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
-      </div>
-
-      <nav id="navbar" class="navbar">
-        <ul>
-          <li><a class="nav-link scrollto " href="index.html">Home</a></li>
-          <li><a class="nav-link scrollto" href="#about">About</a></li>
-          <li><a class="nav-link scrollto" href="#services">Services</a></li>
-          <li><a class="nav-link scrollto " href="#portfolio">Portfolio</a></li>
-          <li><a class="nav-link scrollto" href="#team">Team</a></li>
-          <li><a class="nav-link scrollto" href="courses">Courses</a></li>
-          <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
-            <ul>
-              <li><a href="#">Drop Down 1</a></li>
-              <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a>
-                <ul>
-                  <li><a href="#">Deep Drop Down 1</a></li>
-                  <li><a href="#">Deep Drop Down 2</a></li>
-                  <li><a href="#">Deep Drop Down 3</a></li>
-                  <li><a href="#">Deep Drop Down 4</a></li>
-                  <li><a href="#">Deep Drop Down 5</a></li>
-                </ul>
-              </li>
-              <li><a href="#">Drop Down 2</a></li>
-              <li><a href="#">Drop Down 3</a></li>
-              <li><a href="#">Drop Down 4</a></li>
-            </ul>
-          </li>
-          <li><a class="nav-link scrollto" href="profile">Profile</a></li>
-          <li><a class="getstarted scrollto" href="#about">Get Started</a></li>
-        </ul>
-        <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav><!-- .navbar -->
+    <!-- ======= Header ======= -->
+    <header id="header" class="fixed-top d-flex align-items-center">
+      <div class="container d-flex align-items-center justify-content-between">
+  
+        <div class="logo">
+          <h1><a href="index.html">Learning Management System</a></h1>
+          <!-- Uncomment below if you prefer to use an image logo -->
+          <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+        </div>
+  
+        <nav id="navbar" class="navbar">
+          <ul>
+            <li><a class="nav-link scrollto " href="#hero">Home</a></li>
+            <li><a class="nav-link scrollto" href="#about">About</a></li>
+            <li><a class="nav-link scrollto" href="#team">Team</a></li>
+            <li><a class="nav-link scrollto" href="courses">Courses</a></li>
+            <li class="dropdown"><a href="#"><span>Name<i class="bi bi-chevron-down"></i></a>
+              <ul>
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Enrolled Courses</a></li>
+                <li><a href="#">Completed Courses</a></li>
+              </ul>
+            </li>
+            <li><a class="getstarted scrollto" href="#about">log out</a></li>
+          </ul>
+          <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav><!-- .navbar -->
 
     </div>
   </header><!-- End Header -->
@@ -110,7 +97,7 @@
       <!-- Start of Header  -->
       <div class="bg-img">
         <div class="bg-text">
-            <h1 class="display-4 font-weight-bold" style="color:black" >Courses</h1>
+            <h1 class="display-4 font-weight-bold" style="color:black; align-content: center;" >Available Courses</h1>
         </div>
     </div>
     <!-- End of Header -->
@@ -118,70 +105,80 @@
     <br>
     <br>
     
-    <table class="table table-hover">
-        <caption>Course Details</caption>
-        
+    <table class="table table-hover"> 
         <tr> 
+            <th scope="col">Course Code</th> 
             <th scope="col">Course Name</th> 
             <th scope="col">Description</th> 
-            <th scope="col">Course Code</th> 
-            <th scope="col">Category</th> 
-            <th scope="col">More information</th> 
-         
+            <th scope="col">Eligibility</th> 
         </tr>
         
     <tr> 
-        <td>ABC course</td>
+        <td><a href='courseDetails.html'>RE101</a></td>
+        <td>Repair Words 101</td>
         <td>ABCDEFG Description</td>
-        <td>RE123</td>
-        <td>Repairs</td>
-        <td><a href='courseDetails.html'>More Info</a></td>
+        <td>Eligible</td>
     </tr>
        
 
     <tr>
-        <td>ABC course</td>
+        <td><a href='courseDetails.html'>RE101</a></td>
+        <td>Repair Words 101</td>
         <td>ABCDEFG Description</td>
-        <td>RE123</td>
-        <td>Repairs</td>
-        <td><a href='courseDetails.html'>More Info</a></td>
+        <td>Not Eligible</td>
     </tr>
     
     <tr> 
-        <td>ABC course</td>
+        <td><a href='courseDetails.html'>RE123</a></td>
+        <td>Repair Words 101</td>
         <td>ABCDEFG Description</td>
-        <td>RE123</td>
-        <td>Repairs</td>
-        <td><a href='courseDetails.html'>More Info</a></td>
+        <td>Eligible</td>
     </tr>
 
-    <tr> 
-        <td>ABC course</td>
-        <td>ABCDEFG Description</td>
-        <td>RE123</td>
-        <td>Repairs</td>
-        <td><a href='courseDetails.html'>More Info</a></td>
-    </tr>
-
-    <tr> 
-        <td>ABC course</td>
-        <td>ABCDEFG Description</td>
-        <td>RE123</td>
-        <td>Repairs</td>
-        <td><a href='courseDetails.html'>More Info</a></td>
-    </tr>
-       
-
-
+  
     </table>
 
 
 
 
 
+ <!-- Start of Header  -->
+ <div class="bg-img">
+  <div class="bg-text">
+      <h1 class="display-4 font-weight-bold" style="color:black; align-content: center;" >Applied Courses</h1>
+  </div>
+</div>
+<!-- End of Header -->
+
+<br>
+<br>
+
+<table class="table table-hover"> 
+  <tr> 
+      <th scope="col">Course Code</th> 
+      <th scope="col">Course Name</th> 
+      <th scope="col">Class</th> 
+      <th scope="col">Status</th> 
+  </tr>
+  <tr> 
+    <td><a href='courseDetails.html'>RE101</a></td>
+    <td>Repair Words 101</td>
+    <td>RE_1</td>
+    <td>Accepted</td>
+</tr>
+
+<tr> 
+    <td><a href='courseDetails.html'>RE123</a></td>
+    <td>Repair Words 101</td>
+    <td>RE_2</td>
+    <td>Pending</td>
+</tr>
 
 
+</table>
 
+
+<br><br>
 
   </main><!-- End #main -->
 
