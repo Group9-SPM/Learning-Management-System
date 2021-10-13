@@ -24,7 +24,7 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
 db = SQLAlchemy(app)
 CORS(app)
 
-class employee(db.Model):
+class Employee(db.Model):
     __tablename__ = 'employee'
 
     empID = db.Column(db.Integer, primary_key=True)
@@ -45,13 +45,13 @@ class employee(db.Model):
 
 @app.route("/employee")
 def get_all():
-    employeelist = employee.query.all()
+    employeelist = Employee.query.all()
     if len(employeelist):
         return jsonify(
             {
                 "code": 200,
                 "data": {
-                    "hints": [employee.json() for employee in employeelist]
+                    "employee": [employee.json() for employee in employeelist]
                 }
             }
         )
@@ -63,7 +63,24 @@ def get_all():
     ), 404
 
 
-
+@app.route("/employee/<string:roleType>")
+def getAllEmployeeByRole(roleType):
+    employeelist = Employee.query.filter_by(roleType = roleType).all()
+    if len(employeelist):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "employee": [employee.json() for employee in employeelist]
+                }
+            }
+        ), 200
+    return jsonify(
+        {
+            "code": 404,
+            "message": "employee not found."
+        }
+    ), 404
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5007, debug=True)
