@@ -104,40 +104,69 @@
     <br>
     <br>
     
-    <table class="table table-hover"> 
+    <table id="coursesTable" class="table table-hover"> 
         <tr> 
             <th scope="col">Course Code</th> 
             <th scope="col">Course Name</th> 
             <th scope="col">Description</th> 
             <th scope="col">Eligibility</th> 
         </tr>
-        
-    <tr> 
-        <td><a href='courseDetails.html'>RE101</a></td>
-        <td>Repair Words 101</td>
-        <td>ABCDEFG Description</td>
-        <td>Eligible</td>
-    </tr>
-       
-
-    <tr>
-        <td><a href='courseDetails.html'>RE101</a></td>
-        <td>Repair Words 101</td>
-        <td>ABCDEFG Description</td>
-        <td>Not Eligible</td>
-    </tr>
-    
-    <tr> 
-        <td><a href='courseDetails.html'>RE123</a></td>
-        <td>Repair Words 101</td>
-        <td>ABCDEFG Description</td>
-        <td>Eligible</td>
-    </tr>
-
-  
+      
     </table>
 
-
+  <script>
+            // Helper function to display error message
+            function showError(message) {
+                // Hide the table in the event of error
+                $('#coursesTable').hide();
+        
+                // Display an error under the main container
+                $('#main-container')
+                    .append("<label>"+message+"</label>");
+            }
+        
+            // anonymous async function 
+            // - using await requires the function that calls it to be async
+            $(async() => {           
+                // Change serviceURL to your own
+                var serviceURL = "http://127.0.0.1:5007/courses";
+        
+                try {
+                    const response =
+                     await fetch(
+                       serviceURL, { method: 'GET' }
+                    );
+                    const result = await response.json();
+                     if (response.status === 200) {
+                        // success case
+                        var courses = result.data.courses; //the array is in books within data of 
+                                                       // the returned result
+                        // for loop to setup all table rows with obtained book data
+                        var rows = "";
+                        for (const course of courses) {
+                           eachRow ="<td> <a href='courseDetails.html'> " + course.courseID + "<a></td>" +
+                                    "<td>" + course.courseName + "</td>" +
+                                    "<td>" + course.courseDesc + "</td>" +
+                                    "<td> eligible" +  + "</td>";
+                           rows += "<tbody><tr>" + eachRow + "</tr></tbody>";
+                        }
+                            // add all the rows to the table
+                            $('#coursesTable').append(rows);
+                } else if (response.status == 404) {
+                    // No books
+                    showError(result.message);
+                } else {
+                    // unexpected outcome, throw the error
+                    throw response.status;
+                }
+            } catch (error) {
+                // Errors when calling the service; such as network error, 
+                // service offline, etc
+                showError
+    ('There is a problem retrieving courses data, please try again later.<br />' + error);
+            } // error
+    });
+</script>
 
 
 
