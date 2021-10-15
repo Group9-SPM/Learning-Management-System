@@ -69,21 +69,22 @@ CREATE TABLE enrolmentList (
 CREATE TABLE signupList (
     learnerID INT NOT NULL,
     classID INT NOT NULL,
+    courseStatus VARCHAR(100),
 
     CONSTRAINT signupList_pk PRIMARY KEY (learnerID,classID),
     CONSTRAINT signupList_fk1 FOREIGN KEY (learnerID) REFERENCES learner(empID),
     CONSTRAINT signupList_fk2 FOREIGN KEY (classID) REFERENCES class(classID)
 );
 
-CREATE TABLE chapter (
-    chapterID INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE lesson (
+    lessonID INT NOT NULL AUTO_INCREMENT,
     classID INT NOT NULL,
-    chapterName VARCHAR(100) NOT NULL,
-    chapterDesc VARCHAR(500) NOT NULL,
-    chapterMaterials VARCHAR(100) NOT NULL,
+    lessonName VARCHAR(100) NOT NULL,
+    lessonDesc VARCHAR(500) NOT NULL,
+    lessonMaterials VARCHAR(100) NOT NULL,
 
-    CONSTRAINT chapter_pk PRIMARY KEY (chapterID),
-    CONSTRAINT chapter_fk FOREIGN KEY (classID) REFERENCES class(classID)
+    CONSTRAINT lesson_pk PRIMARY KEY (lessonID),
+    CONSTRAINT lesson_fk FOREIGN KEY (classID) REFERENCES class(classID)
 );
 
 CREATE TABLE quiz (
@@ -91,10 +92,10 @@ CREATE TABLE quiz (
     quizDuration VARCHAR(20) NOT NULL,
     passingCriteria VARCHAR(5) NOT NULL,
     quizType VARCHAR(2) NOT NULL,
-    chapterID INT NOT NULL,
+    lessonID INT NOT NULL,
 
     CONSTRAINT quiz_pk PRIMARY KEY (quizID),
-    CONSTRAINT quiz_fk FOREIGN KEY (chapterID) REFERENCES chapter(chapterID)
+    CONSTRAINT quiz_fk FOREIGN KEY (lessonID) REFERENCES lesson(lessonID)
 );
 
 CREATE TABLE quizQuestions (
@@ -135,15 +136,15 @@ INSERT INTO enrolmentList VALUES(3, 1);
 INSERT INTO signupList VALUES(1, 1);
 INSERT INTO signupList VALUES(2, 2);
 
-INSERT INTO chapter(classID, chapterName, chapterDesc, chapterMaterials) VALUES(1, "Basic English", "Basic English words.", "basic.pdf");
-INSERT INTO chapter(classID, chapterName, chapterDesc, chapterMaterials) VALUES(1, "Advanced English", "Advanced English words.", "advanced.pdf");
-INSERT INTO chapter(classID, chapterName, chapterDesc, chapterMaterials) VALUES(1, "Repair English", "English repair words.", "repair.pdf");
-INSERT INTO chapter(classID, chapterName, chapterDesc, chapterMaterials) VALUES(2, "Using Hands", "How to use your hands to repair things.", "hands.pptx");
-INSERT INTO chapter(classID, chapterName, chapterDesc, chapterMaterials) VALUES(2, "Using Tools", "How to use tools to repair things.", "tools.pdf");
+INSERT INTO lesson(classID, lessonName, lessonDesc, lessonMaterials) VALUES(1, "Basic English", "Basic English words.", "basic.pdf");
+INSERT INTO lesson(classID, lessonName, lessonDesc, lessonMaterials) VALUES(1, "Advanced English", "Advanced English words.", "advanced.pdf");
+INSERT INTO lesson(classID, lessonName, lessonDesc, lessonMaterials) VALUES(1, "Repair English", "English repair words.", "repair.pdf");
+INSERT INTO lesson(classID, lessonName, lessonDesc, lessonMaterials) VALUES(2, "Using Hands", "How to use your hands to repair things.", "hands.pptx");
+INSERT INTO lesson(classID, lessonName, lessonDesc, lessonMaterials) VALUES(2, "Using Tools", "How to use tools to repair things.", "tools.pdf");
 
-INSERT INTO quiz(quizDuration, passingCriteria, quizType, chapterID) VALUES("10min", "3", "UG", 1);
-INSERT INTO quiz(quizDuration, passingCriteria, quizType, chapterID) VALUES("10min", "3", "UG", 2);
-INSERT INTO quiz(quizDuration, passingCriteria, quizType, chapterID) VALUES("10min", "3", "UG", 4);
+INSERT INTO quiz(quizDuration, passingCriteria, quizType, lessonID) VALUES("10min", "3", "UG", 1);
+INSERT INTO quiz(quizDuration, passingCriteria, quizType, lessonID) VALUES("10min", "3", "UG", 2);
+INSERT INTO quiz(quizDuration, passingCriteria, quizType, lessonID) VALUES("10min", "3", "UG", 4);
 
 INSERT INTO quizQuestions VALUES(1, 1, "What is the number that is shown when facing printing error?", "21,23,24,25", "21");
 INSERT INTO quizQuestions VALUES(1, 2, "Which of the following options states the main purpose of HP Printer?", "Printing,Copying,Scanning,Faxing", "Copying");
