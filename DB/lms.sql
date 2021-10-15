@@ -133,8 +133,8 @@ INSERT INTO learner VALUES(3, NULL);
 
 INSERT INTO enrolmentList VALUES(3, 1);
 
-INSERT INTO signupList VALUES(1, 1);
-INSERT INTO signupList VALUES(2, 2);
+INSERT INTO signupList VALUES(1, 1, "Pending");
+INSERT INTO signupList VALUES(2, 2) , "Successful";
 
 INSERT INTO lesson(classID, lessonName, lessonDesc, lessonMaterials) VALUES(1, "Basic English", "Basic English words.", "basic.pdf");
 INSERT INTO lesson(classID, lessonName, lessonDesc, lessonMaterials) VALUES(1, "Advanced English", "Advanced English words.", "advanced.pdf");
