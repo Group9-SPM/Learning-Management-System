@@ -6,6 +6,9 @@ class Course:
         self.__CourseDuration = CourseDuration
         self.__PreReqCourses = PreReqCourses
 
+    def getCourseID(self):
+        return self.__CourseID
+    
     def getCourseName(self):
         return self.__CourseName
 
