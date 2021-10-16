@@ -36,18 +36,65 @@
   ======================================================== -->
 </head>
 <script>
-  var optionCount = 2;
-  function addOption() {
-    var option = `
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
-                    <input type="text" class="form-control" placeholder="Option ">
-                  </div>`;
-    console.log(contentInfo);
-    console.log(contentInfo.classList); 
-    // if (contentInfo.classList.length > 1) {
-    //   contentInfo.className -= "show";
-    // }
+  var optionCount = 3;
+  var questionCount = 2;
+  function deleteBtn(ele) {
+    var parent = ele.parentNode;
+  }
+  function addOption(current) {
+    var newNode = document.createElement("div"); 
+    newNode.classList.add("form-check");
+
+    var newOption = `<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios${optionCount}" value="option${optionCount}">
+                    <input type="text" class="form-control" placeholder="Option ${optionCount}" style="display: inline; width: 625px;">
+                    <button class="btn btn-secondary" type="button"><i class="ri-delete-bin-fill"></i></button>
+                    `;
+    newNode.innerHTML = newOption;
+    
+    var optionElement = current.parentNode;
+    var length = optionElement.childNodes.length
+    optionElement.insertBefore(newNode, optionElement.childNodes[length-2]);
+
+    optionCount++;
+  }
+  function addQuestion(current) {
+    var newNode = document.createElement("div"); 
+    newNode.classList.add("mb-3");
+
+    var newQuestion = `<div class="row mb-3">
+                      <label for="inputQn" class="col-sm-2 col-form-label">Question ${questionCount}</label>
+                      <div class="col-sm-10">
+                        <textarea class="form-control" id="inputQn" rows="1"></textarea>
+                      </div>
+                    </div>
+                    <!-- Options -->
+                    <div class="row mb-3">
+                      <label class="col-sm-2 col-form-label">Options</label>
+                      <div class="col-sm-10">
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1">
+                          <input type="text" class="form-control" placeholder="True/Option 1">
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+                          <input type="text" class="form-control" placeholder="False/Option 2">
+                        </div>
+                        <button type="button" class="btn btn-primary" style="margin-top: 10px; float: right;" onclick="addOption(this)">Add New Option</button>
+                      </div>
+                    </div>
+                    <!-- Correct Answer -->
+                    <div class="row mb-3">
+                      <label for="correctAns" class="col-sm-2 col-form-label">Correct Answer</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="correctAns">
+                      </div>
+                    </div>`;
+    newNode.innerHTML = newQuestion;
+    
+    var buttonElement = document.getElementById("questionBtn").parentNode;
+    var length = buttonElement.childNodes.length
+    buttonElement.insertBefore(newNode, buttonElement.childNodes[length-7]);
+    questionCount++;
   }
 </script>
 <body>
@@ -61,9 +108,9 @@
       </div>
       <nav id="navbar" class="navbar">
         <ul>
-          <li><a class="nav-link scrollto " href="./trainer.html">Home</a></li>
-          <li><a class="nav-link scrollto" href="./course.html">Course</a></li>
-          <li><a class="getstarted scrollto" href="">Logout</a></li>
+          <li><a class="nav-link" href="./trainer.html">Home</a></li>
+          <li><a class="nav-link" href="./course.html">Course</a></li>
+          <li><a class="getstarted" href="../index.html">Logout</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav>
@@ -86,9 +133,9 @@
             <h3>New Quiz</h3>
             <form>
               <div class="row mb-3">
-                <label for="inputName" class="col-sm-2 col-form-label">Chapter Name</label>
+                <label for="inputNum" class="col-sm-2 col-form-label">Chapter Number</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control" id="inputName">
+                  <input type="number" class="form-control" id="inputNum">
                 </div>
               </div>
               <div class="mb-3">
@@ -122,7 +169,7 @@
                       <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
                       <input type="text" class="form-control" placeholder="False/Option 2">
                     </div>
-                    <button type="button" class="btn btn-primary" style="margin-top: 10px; float: right;">Add New Option</button>
+                    <button type="button" class="btn btn-primary" style="margin-top: 10px; float: right;" onclick="addOption(this)">Add New Option</button>
                   </div>
                 </div>
                 <!-- Correct Answer -->
@@ -134,10 +181,10 @@
                 </div>
               </div>
               <!-- Add new question button -->
-              <div class="row mb-3">
+              <div class="row mb-3" id="questionBtn">
                 <div class="col-8"></div>
                 <div class="col-4" style="padding-left: 75px;">
-                  <button class="btn icon-box" type="button" style="padding-top: 10px; padding-bottom: 10px; padding-left: 20px; padding-right: 0%;">
+                  <button class="btn icon-box" type="button" onclick="addQuestion()" style="padding-top: 10px; padding-bottom: 10px; padding-left: 20px; padding-right: 0%;">
                     Add New Question<i class="ri-add-line" style="color: #000000;"></i></i>
                   </button>
                 </div>

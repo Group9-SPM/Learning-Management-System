@@ -35,20 +35,7 @@
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
 </head>
-<script>
-  var myGroup;
-  function collapseMultiple() {
-    var contentInfo = document.getElementById("contentInfo");
-    console.log(contentInfo);
-    console.log(contentInfo.classList); 
-    // if (contentInfo.classList.length > 1) {
-    //   contentInfo.className -= "show";
-    // }
-  }
-  // myGroup.on('show.bs.collapse','.collapse', function() {
-  //   myGroup.find('.collapse.in').collapse('hide');
-  // });
-</script>
+
 <body>
   <!-- ======= Header ======= -->
   <header id="header" class="fixed-top d-flex align-items-center">
@@ -60,9 +47,9 @@
       </div>
       <nav id="navbar" class="navbar">
         <ul>
-          <li><a class="nav-link scrollto " href="./trainer.html">Home</a></li>
-          <li><a class="nav-link scrollto" href="./course.html">Course</a></li>
-          <li><a class="getstarted scrollto" href="">Logout</a></li>
+          <li><a class="nav-link" href="./trainer.html">Home</a></li>
+          <li><a class="nav-link" href="./course.html">Course</a></li>
+          <li><a class="getstarted" href="../index.html">Logout</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav>
@@ -108,77 +95,6 @@
 
       </div>
     </section><!-- End Features Section -->
-    <section class="inner-page">
-      <div class="row" id="myGroup">
-        <div class="" id="contentInfo">
-          <div class="card card-body">
-            <span>
-            </span>
-            <section id="chapterForm">
-            </section>
-            <section id="chapters">
-              <table class="table table-hover">
-                <thead>
-                  <th scope="col">Course Name</th> 
-                  <th scope="col">Description</th> 
-                  <th scope="col">Course Code</th> 
-                  <th scope="col">Category</th>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>ABC course</td>
-                    <td>ABCDEFG Description</td>
-                    <td>RE101</td>
-                    <td>Repairs</td>
-                  </tr>
-                  <tr>
-                    <td><a href="./course-page.html">ABC course</a></td>
-                    <td>ABCDEFG Description</td>
-                    <td>RE101</td>
-                    <td>Repairs</td>
-                  </tr>
-                  <tr>
-                    <td>ABC course</td>
-                    <td>ABCDEFG Description</td>
-                    <td>RE101</td>
-                    <td>Repairs</td>
-                  </tr>
-                </tbody>
-              </table>
-            </section>
-          </div>
-        </div>
-        <div class="collapse" id="classInfo">
-          <div class="card card-body">
-            <h3>Class List</h3>
-            <table class="table table-hover">
-              <thead>
-                <th scope="col">S/N</th> 
-                <th scope="col">Learner Name</th> 
-                <th scope="col">Progress</th>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>John Doe</td>
-                  <td><a href=''>View Progress</a></td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>James Smith</td>
-                  <td><a href=''>View Progress</a></td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>Ronald Lim</td>
-                  <td><a href=''>View Progress</a></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </section>
     
   </main><!-- End #main -->
 
