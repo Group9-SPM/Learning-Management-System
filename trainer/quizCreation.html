@@ -38,12 +38,17 @@
 <script>
   var optionCount = 3;
   var questionCount = 2;
+  function deleteBtn(ele) {
+    var parent = ele.parentNode;
+  }
   function addOption(current) {
     var newNode = document.createElement("div"); 
     newNode.classList.add("form-check");
 
     var newOption = `<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios${optionCount}" value="option${optionCount}">
-                    <input type="text" class="form-control" placeholder="Option ${optionCount}">`;
+                    <input type="text" class="form-control" placeholder="Option ${optionCount}" style="display: inline; width: 625px;">
+                    <button class="btn btn-secondary" type="button"><i class="ri-delete-bin-fill"></i></button>
+                    `;
     newNode.innerHTML = newOption;
     
     var optionElement = current.parentNode;
@@ -103,9 +108,9 @@
       </div>
       <nav id="navbar" class="navbar">
         <ul>
-          <li><a class="nav-link scrollto " href="./trainer.html">Home</a></li>
-          <li><a class="nav-link scrollto" href="./course.html">Course</a></li>
-          <li><a class="getstarted scrollto" href="">Logout</a></li>
+          <li><a class="nav-link" href="./trainer.html">Home</a></li>
+          <li><a class="nav-link" href="./course.html">Course</a></li>
+          <li><a class="getstarted" href="../index.html">Logout</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav>
@@ -128,9 +133,9 @@
             <h3>New Quiz</h3>
             <form>
               <div class="row mb-3">
-                <label for="inputName" class="col-sm-2 col-form-label">Chapter Name</label>
+                <label for="inputNum" class="col-sm-2 col-form-label">Chapter Number</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control" id="inputName">
+                  <input type="number" class="form-control" id="inputNum">
                 </div>
               </div>
               <div class="mb-3">
