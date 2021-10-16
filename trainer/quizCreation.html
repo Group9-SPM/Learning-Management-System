@@ -37,17 +37,17 @@
 </head>
 <script>
   var optionCount = 2;
-  function addOption() {
-    var option = `
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
-                    <input type="text" class="form-control" placeholder="Option ">
-                  </div>`;
-    console.log(contentInfo);
-    console.log(contentInfo.classList); 
-    // if (contentInfo.classList.length > 1) {
-    //   contentInfo.className -= "show";
-    // }
+  function addOption(current) {
+    var newOption = `<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios${optionCount}" value="option${optionCount}">
+                    <input type="text" class="form-control" placeholder="Option ${optionCount}">`;
+    var newNode = document.createElement("div"); 
+    newNode.classList.add("form-check");
+    newNode.innerHTML = newOption;
+    
+    var optionElement = current.parentNode;
+    var length = optionElement.childNodes.length
+    optionElement.insertBefore(newNode, optionElement.childNodes[length-2]);
+    optionCount++;
   }
 </script>
 <body>
@@ -122,7 +122,7 @@
                       <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
                       <input type="text" class="form-control" placeholder="False/Option 2">
                     </div>
-                    <button type="button" class="btn btn-primary" style="margin-top: 10px; float: right;">Add New Option</button>
+                    <button type="button" class="btn btn-primary" style="margin-top: 10px; float: right;" onclick="addOption(this)">Add New Option</button>
                   </div>
                 </div>
                 <!-- Correct Answer -->
