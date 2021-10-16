@@ -8,7 +8,7 @@ services:
     #################################
     # Employee: The Employee microservice
     #################################
-    user:
+    employee:
         build:
             context: ./
             dockerfile: employee.Dockerfile      
@@ -24,7 +24,7 @@ services:
     ###############################################
     # course: The course microservice
     ###############################################
-    guess:
+    course:
         build:
             context: ./
             dockerfile: course.Dockerfile
@@ -39,7 +39,7 @@ services:
     ###############################################
     # prereq: The prereq microservice
     ###############################################
-    guess:
+    prereq:
         build:
             context: ./
             dockerfile: prereq.Dockerfile
@@ -53,7 +53,7 @@ services:
     ###############################################
     # signupList: The signupList microservice
     ###############################################
-    guess:
+    signupList:
         build:
             context: ./
             dockerfile: signupList.Dockerfile
@@ -67,7 +67,7 @@ services:
     ###############################################
     # learner: The learner microservice
     ###############################################
-    guess:
+    learner:
         build:
             context: ./
             dockerfile: learner.Dockerfile
@@ -82,27 +82,27 @@ services:
     ###############################################
     # class: The class microservice
     ###############################################
-    guess:
-        build:
-            context: ./
-            dockerfile: class.Dockerfile
-        image: amandateo2019/class:1.0
-        environment:
-            dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/lms
-            PYTHONUNBUFFERED: 1
-        ports:
-            - "5011:5011"
+   # guess:
+    #    build:
+     #       context: ./
+      #      dockerfile: class.Dockerfile
+       # image: amandateo2019/class:1.0
+        #environment:
+         #   dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/lms
+          #  PYTHONUNBUFFERED: 1
+        #ports:
+         #   - "5011:5011"
 
     ###############################################
     # Quiz: The quiz microservice
     ###############################################
-    guess:
-        build:
-            context: ./
-            dockerfile: quiz.Dockerfile
-        image: amandateo2019/quiz:1.0
-        environment:
-            dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/lms
-            PYTHONUNBUFFERED: 1
-        ports:
-            - "5012:5012"
+    #guess:
+     #   build:
+      #      context: ./
+       #     dockerfile: quiz.Dockerfile
+        #image: amandateo2019/quiz:1.0
+        #environment:
+          #  dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/lms
+           # PYTHONUNBUFFERED: 1
+        #ports:
+         #   - "5012:5012"
