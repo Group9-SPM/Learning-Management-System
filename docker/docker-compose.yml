@@ -1,7 +1,7 @@
 version: "3.8"
 
 volumes:
-   # pgdata: 
+    pgdata: 
     #kongadata:
 
 services:    
@@ -53,11 +53,11 @@ services:
     ###############################################
     # signupList: The signupList microservice
     ###############################################
-    signupList:
+    signuplist:
         build:
             context: ./
-            dockerfile: signupList.Dockerfile
-        image: amandateo2019/signupList:1.0
+            dockerfile: signuplist.Dockerfile
+        image: amandateo2019/signuplist:1.0
         environment:
             dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/lms
             PYTHONUNBUFFERED: 1

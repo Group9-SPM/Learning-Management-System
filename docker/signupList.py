@@ -24,8 +24,8 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
 db = SQLAlchemy(app)
 CORS(app)
 
-class SignupList(db.Model):
-    __tablename__ = 'signupList'
+class signuplist(db.Model):
+    __tablename__ = 'signuplist'
 
     learnerID = db.Column(db.Integer, primary_key=True)
     classID = db.Column(db.Integer, primary_key=True)
@@ -37,4 +37,21 @@ class SignupList(db.Model):
         self.classID = classID
         self.courseStatus = courseStatus
 
-
+@app.route("/signuplist")
+def getAll():
+    signuplists = signuplist.query.all()
+    if len(signuplists):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "signuplist": [signup.json() for signup in signuplists]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There are no signup."
+        }
+    ), 404
