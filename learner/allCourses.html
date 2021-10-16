@@ -35,6 +35,17 @@
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
 
+ <!-- Latest compiled and minified JavaScript -->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script 
+    src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    
+    <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+    integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+    crossorigin="anonymous"></script>
+    
+
   <style>
       main{
         max-width: 1000px;
@@ -117,19 +128,16 @@
   <script>
             // Helper function to display error message
             function showError(message) {
-                // Hide the table in the event of error
                 $('#coursesTable').hide();
-        
-                // Display an error under the main container
                 $('#main-container')
                     .append("<label>"+message+"</label>");
             }
         
-            // anonymous async function 
-            // - using await requires the function that calls it to be async
+            // anonymous async function using await requires the function that calls it to be async
             $(async() => {           
                 // Change serviceURL to your own
                 var serviceURL = "http://127.0.0.1:5007/courses";
+                
         
                 try {
                     const response =
@@ -137,17 +145,21 @@
                        serviceURL, { method: 'GET' }
                     );
                     const result = await response.json();
-                     if (response.status === 200) {
+
+                    if (response.status === 200) {
                         // success case
-                        var courses = result.data.courses; //the array is in books within data of 
-                                                       // the returned result
+                        
+                        var courses = result.data.course; 
+                        console.log(courses);
+
                         // for loop to setup all table rows with obtained book data
                         var rows = "";
                         for (const course of courses) {
+               
                            eachRow ="<td> <a href='course.html'> " + course.courseID + "<a></td>" +
                                     "<td>" + course.courseName + "</td>" +
                                     "<td>" + course.courseDesc + "</td>" +
-                                    "<td> eligible" +  + "</td>";
+                                    "<td> eligible</td>";
                            rows += "<tbody><tr>" + eachRow + "</tr></tbody>";
                         }
                             // add all the rows to the table
@@ -207,9 +219,9 @@
   // - using await requires the function that calls it to be async
   $(async() => {           
       // Change serviceURL to your own
-      var serviceURL = "http://127.0.0.1:5007/signupList";
-      var serviceURL = "http://127.0.0.1:5007/course";
-      var serviceURL = "http://127.0.0.1:5007/class";
+      var serviceURL = "http://127.0.0.1:5009/signuplist";
+      var serviceURL = "http://127.0.0.1:5007/courses";
+      var serviceURL = "http://127.0.0.1:5011/class";
 
       try {
           const response =
