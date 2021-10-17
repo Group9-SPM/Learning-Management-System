@@ -30,7 +30,7 @@ CREATE TABLE prerequisite (
     CONSTRAINT prerequisite_fk FOREIGN KEY (prerequisiteID) REFERENCES course(courseID)
 );
 
-CREATE TABLE class (
+CREATE TABLE classes (
     classID INT NOT NULL AUTO_INCREMENT,
     startDate DATE NOT NULL,
     endDate DATE NOT NULL,
@@ -57,23 +57,23 @@ CREATE TABLE learner (
     CONSTRAINT learner_fk FOREIGN KEY (empID) REFERENCES employee(empID)
 );
 
+CREATE TABLE classList (
+    learnerID INT NOT NULL,
+    classID INT NOT NULL,
+
+    CONSTRAINT classList_pk PRIMARY KEY (learnerID,classID),
+    CONSTRAINT classList_fk1 FOREIGN KEY (learnerID) REFERENCES learner(empID),
+    CONSTRAINT classList_fk2 FOREIGN KEY (classID) REFERENCES classes(classID)
+);
+
 CREATE TABLE enrolmentList (
     learnerID INT NOT NULL,
     classID INT NOT NULL,
+    enolmentStatus VARCHAR(100) NOT NULL,
 
     CONSTRAINT enrolmentList_pk PRIMARY KEY (learnerID,classID),
     CONSTRAINT enrolmentList_fk1 FOREIGN KEY (learnerID) REFERENCES learner(empID),
-    CONSTRAINT enrolmentList_fk2 FOREIGN KEY (classID) REFERENCES class(classID)
-);
-
-CREATE TABLE signupList (
-    learnerID INT NOT NULL,
-    classID INT NOT NULL,
-    courseStatus VARCHAR(100),
-
-    CONSTRAINT signupList_pk PRIMARY KEY (learnerID,classID),
-    CONSTRAINT signupList_fk1 FOREIGN KEY (learnerID) REFERENCES learner(empID),
-    CONSTRAINT signupList_fk2 FOREIGN KEY (classID) REFERENCES class(classID)
+    CONSTRAINT enrolmentList_fk2 FOREIGN KEY (classID) REFERENCES classes(classID)
 );
 
 CREATE TABLE lesson (
@@ -84,7 +84,7 @@ CREATE TABLE lesson (
     lessonMaterials VARCHAR(100) NOT NULL,
 
     CONSTRAINT lesson_pk PRIMARY KEY (lessonID),
-    CONSTRAINT lesson_fk FOREIGN KEY (classID) REFERENCES class(classID)
+    CONSTRAINT lesson_fk FOREIGN KEY (classID) REFERENCES classes(classID)
 );
 
 CREATE TABLE quiz (
@@ -122,19 +122,19 @@ INSERT INTO course(courseName, courseDesc, courseDuration) VALUES("Repair 101", 
 
 INSERT INTO prerequisite VALUES(2, 1);
 
-INSERT INTO class(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
+INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
 VALUES("2021-08-01", "2021-11-15", 30, "12:00", "13:00", 10, 30, "2021-07-01", "2021-07-18", 1, NULL);
-INSERT INTO class(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
+INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
 VALUES("2021-08-01", "2021-11-15", 30, "12:00", "15:00", 10, 30, "2021-07-01", "2021-07-18", 2, 2);
 
 INSERT INTO learner VALUES(1, NULL);
 INSERT INTO learner VALUES(2, "1");
 INSERT INTO learner VALUES(3, NULL);
 
-INSERT INTO enrolmentList VALUES(3, 1);
+INSERT INTO classList VALUES(3, 1);
 
-INSERT INTO signupList VALUES(1, 1, "Pending");
-INSERT INTO signupList VALUES(2, 2) , "Successful";
+INSERT INTO enrolmentList VALUES(1, 1, "Pending");
+INSERT INTO enrolmentList VALUES(2, 2 , "Successful");
 
 INSERT INTO lesson(classID, lessonName, lessonDesc, lessonMaterials) VALUES(1, "Basic English", "Basic English words.", "basic.pdf");
 INSERT INTO lesson(classID, lessonName, lessonDesc, lessonMaterials) VALUES(1, "Advanced English", "Advanced English words.", "advanced.pdf");
