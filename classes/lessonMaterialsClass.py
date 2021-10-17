@@ -1,4 +1,4 @@
-class CourseMaterials: 
+class LessonMaterials: 
     def __init__(self , Documents):
         self.__Documents = Documents
 

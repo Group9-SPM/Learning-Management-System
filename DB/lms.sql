@@ -69,7 +69,7 @@ CREATE TABLE classList (
 CREATE TABLE enrolmentList (
     learnerID INT NOT NULL,
     classID INT NOT NULL,
-    enolmentStatus VARCHAR(100) NOT NULL,
+    enrolmentStatus VARCHAR(100) NOT NULL,
 
     CONSTRAINT enrolmentList_pk PRIMARY KEY (learnerID,classID),
     CONSTRAINT enrolmentList_fk1 FOREIGN KEY (learnerID) REFERENCES learner(empID),
