@@ -35,15 +35,19 @@
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
 
- <!-- Latest compiled and minified JavaScript -->
+  <!-- Latest compiled and minified JavaScript -->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script 
-    src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    
-    <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
-    integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
-    crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     
 
   <style>
@@ -114,7 +118,7 @@
 
     <br>
     <br>
-    
+
     <table id="coursesTable" class="table table-hover"> 
         <tr> 
             <th scope="col">Course Code</th> 
@@ -122,63 +126,34 @@
             <th scope="col">Description</th> 
             <th scope="col">Eligibility</th> 
         </tr>
+        <tbody>
+          <tr v-for="course in courses">
+              <td><a href='course.html'>#{{ course.courseID }}</a></td>
+              <td>{{ course.courseName }}</td>
+              <td>{{ course.courseDesc }}</td>
+              <td>"eligible"</td>
+          </tr>
+      </tbody>
       
     </table>
 
-  <script>
-            // Helper function to display error message
-            function showError(message) {
-                $('#coursesTable').hide();
-                $('#main-container')
-                    .append("<label>"+message+"</label>");
-            }
-        
-            // anonymous async function using await requires the function that calls it to be async
-            $(async() => {           
-                // Change serviceURL to your own
-                var serviceURL = "http://127.0.0.1:5007/courses";
-                
-        
-                try {
-                    const response =
-                     await fetch(
-                       serviceURL, { method: 'GET' }
-                    );
-                    const result = await response.json();
 
-                    if (response.status === 200) {
-                        // success case
-                        
-                        var courses = result.data.course; 
-                        console.log(courses);
-
-                        // for loop to setup all table rows with obtained book data
-                        var rows = "";
-                        for (const course of courses) {
-               
-                           eachRow ="<td> <a href='course.html'> " + course.courseID + "<a></td>" +
-                                    "<td>" + course.courseName + "</td>" +
-                                    "<td>" + course.courseDesc + "</td>" +
-                                    "<td> eligible</td>";
-                           rows += "<tbody><tr>" + eachRow + "</tr></tbody>";
-                        }
-                            // add all the rows to the table
-                            $('#coursesTable').append(rows);
-                } else if (response.status == 404) {
-                    // No books
-                    showError(result.message);
-                } else {
-                    // unexpected outcome, throw the error
-                    throw response.status;
-                }
-            } catch (error) {
-                // Errors when calling the service; such as network error, 
-                // service offline, etc
-                showError
-    ('There is a problem retrieving courses data, please try again later.<br />' + error);
-            } // error
-    });
-</script>
+    <script>
+    
+      const vm = new Vue({
+          el: '#coursesTable',
+          data: {
+              courses: []
+          },
+          mounted: function() {
+              axios.get('http://localhost:5000/courses')
+                  .then(response => {
+                      this.courses = response.data.data;
+                  })
+                  .catch(error => alert(error));
+          }
+      });
+  </script>
 
 
 
@@ -219,9 +194,9 @@
   // - using await requires the function that calls it to be async
   $(async() => {           
       // Change serviceURL to your own
-      var serviceURL = "http://127.0.0.1:5009/signuplist";
-      var serviceURL = "http://127.0.0.1:5007/courses";
-      var serviceURL = "http://127.0.0.1:5011/class";
+      //var serviceURL = "http://127.0.0.1:5009/signuplist";
+      //var serviceURL = "http://127.0.0.1:5007/courses";
+      //var serviceURL = "http://127.0.0.1:5011/class";
 
       try {
           const response =
