@@ -70,9 +70,10 @@
           <div class="col-lg-2"></div>
             <div class="col-lg-8 col-md-12">
             <h3>New Quiz</h3>
-            <form>
+<!-- action="./createQuiz.js" -->
+            <form method="post" id="quizForm">
               <div class="row mb-3">
-                <label for="inputNum" class="col-sm-2 col-form-label">Chapter Number</label>
+                <label for="inputNum" class="col-sm-2 col-form-label">Lesson Number</label>
                 <div class="col-sm-10">
                   <input type="number" class="form-control" id="inputNum">
                 </div>
@@ -101,12 +102,12 @@
                   <label class="col-sm-2 col-form-label">Options</label>
                   <div class="col-sm-10">
                     <div class="form-check">
-                      <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1">
-                      <input type="text" class="form-control" placeholder="True/Option 1">
+                      <input class="form-check-input" type="radio" value="option1">
+                      <input type="text" class="form-control" id="option1" placeholder="True/Option 1">
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
-                      <input type="text" class="form-control" placeholder="False/Option 2">
+                      <input class="form-check-input" type="radio" value="option2">
+                      <input type="text" class="form-control" id="option2" placeholder="False/Option 2">
                     </div>
                     <button type="button" class="btn btn-primary" style="margin-top: 10px; float: right;" onclick="addOption(this)">Add New Option</button>
                   </div>
@@ -128,9 +129,10 @@
                   </button>
                 </div>
               </div><br>
-              <button type="submit" class="btn btn-danger">Cancel</button>
-              <button type="submit" class="btn btn-success">Create</button>
+              <button type="button" class="btn btn-danger">Cancel</button>
+              <button type="button" onclick="createQuiz()" class="btn btn-success">Create</button>
             </form>
+            <p id="test"></p>
           </div>
           <div class="col-lg-2"></div>
         </div>
