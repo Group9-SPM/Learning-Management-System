@@ -1,4 +1,4 @@
-from QuizClass import Quiz
+from quizClass import Quiz
 class Lesson():
     def __init__(self, lessonNum):
         self.__lessonNum = lessonNum
