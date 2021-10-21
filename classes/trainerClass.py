@@ -15,12 +15,16 @@ CORS(app)
 
 from LessonClass import Lesson
 from courseClass import Course
+from employeeClass import Employee
 
 class Trainer:
-    def __init__(self,courseName =  Course.courseName ):
+    def __init__(self,courseName =  Course.courseName , trainerID = Employee.empID):
         self.__courseName= courseName
+        self.__trainerID = trainerID
 
     #def getClass(self):
+    def getEmpID(self):
+        return self.__trainerID
 
 
     def getAssignedCourse(self, courseName):
