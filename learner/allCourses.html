@@ -120,31 +120,32 @@
     <br>
 
     <table id="coursesTable" class="table table-hover"> 
+      <thead>
         <tr> 
             <th scope="col">Course Code</th> 
             <th scope="col">Course Name</th> 
             <th scope="col">Description</th> 
             <th scope="col">Eligibility</th> 
         </tr>
-        <tbody>
-          <tr v-for="course in courses">
-              <td><a href='course.html'>#{{ course.courseID }}</a></td>
-              <td>{{ course.courseName }}</td>
-              <td>{{ course.courseDesc }}</td>
-              <td>"eligible"</td>
-          </tr>
+      </thead>  
+      <tbody>
+        <tr v-for="course in courses">
+            <td id = "courseID">{{ course.courseID }}</td>
+            <td id = "courseName" onclick="findCourse()">{{ course.courseName }}</td>
+            <td id = "courseDesc">{{ course.courseDesc }}</td>
+            <td>eligible</td>
+        </tr>
       </tbody>
-      
-    </table>
+  </table>
 
-
-    <script>
-    
-      const vm = new Vue({
+  <script>
+        
+        const vm = new Vue({
           el: '#coursesTable',
           data: {
-              courses: []
+              courses: [],
           },
+
           mounted: function() {
               axios.get('http://localhost:5000/courses')
                   .then(response => {
@@ -153,6 +154,47 @@
                   .catch(error => alert(error));
           }
       });
+     
+        async function findCourse() {
+          var courseName = document.getElementById('courseName').innerHTML
+          var courseID = document.getElementById("courseID").innerHTML
+          var courseDesc = document.getElementById("courseDesc").innerHTML
+ 
+          var serviceURL = "http://localhost:5000/course/" + courseName;
+
+          try {
+              const response =
+              await fetch(
+                serviceURL, { method: 'GET' }
+              );
+
+          const data = await response.json();
+          if (response.ok) { 
+              var name = data.data.courseName;
+              if (courseName == name) {
+                  localStorage.courseName = data.data.courseName;
+                  localStorage.courseID = data.data.courseID;
+                  localStorage.courseDesc = data.data.courseDesc;
+
+                  window.location.replace("course.html");
+              } else {
+                  alert("You have faced a problem!");
+              }
+          } else {
+              alert("Theres an issue right now!");
+          }
+      }
+      catch (error) {
+          // Errors when calling the service; such as network error, 
+          // service offline, etc
+          console.log(error);
+          alert('There is a problem, please try again later.');
+      } // error
+
+  };
+
+
+    
   </script>
 
 
@@ -269,6 +311,13 @@
   </footer><!-- End Footer -->
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 
   <!-- Vendor JS Files -->
   <script src="assets/vendor/aos/aos.js"></script>

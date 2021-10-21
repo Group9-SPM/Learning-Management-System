@@ -69,5 +69,21 @@ def employee():
     ), 200
 
 
+@app.route("/employee/<int:empID>")
+def employee_by_id(empID):
+    employee = Employee.query.filter_by(id=empID).first()
+    if employee:
+        return jsonify({
+            "data": employee.to_dict()
+        }), 200
+    else:
+        return jsonify({
+            "message": "Employee not found."
+        }), 404
+
+
+
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
