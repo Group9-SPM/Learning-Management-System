@@ -15,35 +15,12 @@ CORS(app)
 
 class Course(db.Model): 
 
-
     __tablename__ = 'course'
 
     courseID = db.Column(db.Integer, primary_key=True)
     courseName = db.Column(db.String(100), nullable=False)
     courseDesc = db.Column(db.String(500), nullable=False)
     courseDuration = db.Column(db.String(50), nullable=False)
-
-    def __init__(self , courseID , courseName, CourseDesc, CourseDuration, PreReqCourses):
-        self.__courseID = courseID
-        self.__courseName = courseName
-        self.__CourseDesc = CourseDesc
-        self.__CourseDuration = CourseDuration
-        self.__PreReqCourses = PreReqCourses
-
-    def getCourseID(self):
-        return self.__courseID
-    
-    def getCourseName(self):
-        return self.__courseName
-
-    def getCourseDesc(self):
-        return self.__CourseDesc
-
-    def getCourseDuration(self):
-        return self.__CourseDuration
-        
-    def getPreReqCourses(self):
-        return self.__PreReqCourses
 
     def to_dict(self):
         """
@@ -83,6 +60,6 @@ def course_by_id(courseName):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5007, debug=True)
 
 

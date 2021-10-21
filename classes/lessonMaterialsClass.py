@@ -12,10 +12,39 @@ db = SQLAlchemy(app)
 
 CORS(app)
 
-class LessonMaterials: 
-    def __init__(self , Documents):
-        self.__Documents = Documents
+class LessonMaterials(db.Model): 
+    
+    __tablename__ = 'lessonMaterials'
 
-    def getDocuments(self):
-        return self.__Documents
+    materialID = db.Column(db.Integer, primary_key=True)
+    lessonID = db.Column(db.Integer, db.ForeignKey('lesson.lessonID'), nullable=False)
+    content = db.Column(db.String(500), nullable=False)
 
+    def to_dict(self):
+        """
+        'to_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
+
+
+@app.route("/lessonMaterials/<int:lessonID>")
+def lessonMaterials_by_lesson(lessonID):
+    lessonMaterials = LessonMaterials.query.filter_by(lessonID=lessonID)
+    if lessonMaterials:
+        return jsonify({
+            "data": [lessonMaterial.to_dict()
+                     for lessonMaterial in lessonMaterials]
+        }), 200
+    else:
+        return jsonify({
+            "message": "No lesson materials found."
+        }), 404
+
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5009, debug=True)
