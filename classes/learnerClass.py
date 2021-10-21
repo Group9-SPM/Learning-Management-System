@@ -2,9 +2,6 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
-from QuizClass import Quiz
-from LessonClass import Lesson
-from courseClass import Course
 from employeeClass import Employee
 
 app = Flask(__name__)
@@ -17,28 +14,25 @@ db = SQLAlchemy(app)
 
 CORS(app)
 
-class Learner: 
+class Learner(Employee): 
 
     __tablename__ = 'learner'
 
-    #empID = db.Column(db.Integer, primary_key=True)
-    badges = db.Column(db.String(300), nullable=False)
-    learnerID = db.Column(db.Integer, db.ForeignKey('employee.empID'))
+    badges = db.Column(db.String(300))
+    empID = db.Column(db.Integer, db.ForeignKey(Employee.empID), primary_key=True)
     
-    def __init__(self , badges, empID = Employee.empID, quizGrade = Quiz.quizGrade, courseName = Course.CourseName):
-        self.__empID = empID
-        self.__badges = badges
-        self.__quizGrade = quizGrade
-        self.__courseName = courseName
 
-    def getEmpID(self):
-            return self.__empID
+@app.route("/learner")
+def learner():
+    learner_list = Learner.query.all()
+    return jsonify(
+        {
+            "data": [learner.to_dict()
+                     for learner in learner_list]
+        }
+    ), 200
     
-    def getQuizGrade(self):
 
-            return self.__quizGrade
 
-    def getEnrolledCourse(self):
-            return self.__courseName
-    
-    #def getAppliedClass(self):
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5011, debug=True)

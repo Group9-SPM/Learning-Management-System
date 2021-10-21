@@ -12,15 +12,13 @@ db = SQLAlchemy(app)
 
 CORS(app)
 
+class LessonMaterials(db.Model): 
+    
+    __tablename__ = 'lessonMaterials'
 
-class Course(db.Model): 
-
-    __tablename__ = 'course'
-
-    courseID = db.Column(db.Integer, primary_key=True)
-    courseName = db.Column(db.String(100), nullable=False)
-    courseDesc = db.Column(db.String(500), nullable=False)
-    courseDuration = db.Column(db.String(50), nullable=False)
+    materialID = db.Column(db.Integer, primary_key=True)
+    lessonID = db.Column(db.Integer, db.ForeignKey('lesson.lessonID'), nullable=False)
+    content = db.Column(db.String(500), nullable=False)
 
     def to_dict(self):
         """
@@ -34,32 +32,19 @@ class Course(db.Model):
         return result
 
 
-
-@app.route("/courses")
-def courses():
-    course_list = Course.query.all()
-    return jsonify(
-        {
-            "data": [course.to_dict()
-                     for course in course_list]
-        }
-    ), 200
-
-@app.route("/course/<string:courseName>")
-def course_by_id(courseName):
-    course = Course.query.filter_by(courseName=courseName).first()
-    if course:
+@app.route("/lessonMaterials/<int:lessonID>")
+def lessonMaterials_by_lesson(lessonID):
+    lessonMaterials = LessonMaterials.query.filter_by(lessonID=lessonID)
+    if lessonMaterials:
         return jsonify({
-            "data": course.to_dict() 
+            "data": [lessonMaterial.to_dict()
+                     for lessonMaterial in lessonMaterials]
         }), 200
     else:
         return jsonify({
-            "message": "Course not found."
+            "message": "No lesson materials found."
         }), 404
 
 
-
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5007, debug=True)
-
-
+    app.run(host='0.0.0.0', port=5009, debug=True)

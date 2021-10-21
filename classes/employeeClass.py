@@ -13,7 +13,7 @@ db = SQLAlchemy(app)
 CORS(app)
 
 
-class Employee: 
+class Employee(db.Model): 
 
     __tablename__ = 'employee'
 

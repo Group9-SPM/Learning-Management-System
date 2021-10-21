@@ -12,8 +12,6 @@ db = SQLAlchemy(app)
 
 CORS(app)
 
-
-from LessonClass import Lesson
 from courseClass import Course
 from employeeClass import Employee
 
