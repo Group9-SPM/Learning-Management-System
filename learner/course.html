@@ -35,6 +35,23 @@
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
 
+
+  <!-- Latest compiled and minified JavaScript -->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+
   <style>
       main{
         max-width: 1000px;
@@ -84,7 +101,7 @@
         <div class="d-flex justify-content-between align-items-center">
          <p></p>
           <ol>
-            <li><a href="courses.html">Courses</a></li>
+            <li><a href="allCourses.html">Courses</a></li>
             <li>Course Details</li>
           </ol>
         </div>
@@ -96,22 +113,28 @@
       <!-- Start of Header  -->
       <div class="bg-img">
         <div class="bg-text">
-            <h1 class="display-4 font-weight-bold" style="color:black" >Course Name</h1>
-            <h5>ID44</h5>
+            <h1 id = "courseTitle"class="display-4 font-weight-bold" style="color:black" > </h1>
+            <h5 id ="courseID"></h5>
         </div>
     </div>
+
+   
+
     <!-- End of Header -->
 
     <br>
     <br>
-    <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed interdum eros turpis, vel maximus ex tincidunt sit amet. Praesent at augue hendrerit, molestie arcu nec, venenatis justo. Suspendisse nec sem sed turpis viverra convallis. Phasellus dui orci, sagittis ut pharetra in, imperdiet in turpis. Pellentesque bibendum ipsum eget maximus venenatis. Morbi tincidunt, velit a suscipit dignissim, tortor lorem semper metus, eget pharetra est augue et augue. Vivamus sit amet tincidunt sem. Nunc purus felis, facilisis et massa ut, convallis rhoncus urna.
-ficitur dictum lectus lectus id sapien. Suspendisse feugiat at massa porttitor bibendum. Fusce eu eros eget lacus consequat egestas. Praesent volutpat quam arcu, molestie euismod nisi maximus nec. Sed scelerisque tellus commodo rutrum hendrerit. Vivamus sollicitudin ante
-    </p>
+    <p id = "courseDesc"></p>
 <br><br>
 
-    
-    <table class="table table-hover">
+     <script>
+      document.getElementById("courseTitle").innerHTML = localStorage.courseName
+      document.getElementById("courseID").innerHTML = localStorage.courseID
+      document.getElementById("courseDesc").innerHTML = localStorage.courseDesc
+    </script>
+
+
+    <table id = "classesTable"class="table table-hover">
         <tr> 
             <th scope="col">Class</th> 
             <th scope="col">Start Date - End Date</th> 
@@ -122,6 +145,9 @@ ficitur dictum lectus lectus id sapien. Suspendisse feugiat at massa porttitor b
          
         </tr>
         
+        
+
+
     <tr> 
         <td>RE_1</td>
         <td>10/12/2021 - 13/12/2021</td>
@@ -133,25 +159,33 @@ ficitur dictum lectus lectus id sapien. Suspendisse feugiat at massa porttitor b
     </tr>
        
 
-    <tr> 
-      <td>RE_2</td>
-      <td>13/12/2021 - 15/12/2021</td>
-      <td>3:00 pm - 5:00 pm</td>
-      <td>FULL</td>
-      <td>Tommy Low</td>
-      <td><button type="button">Sign Up</button></td>
-    </tr>
-    
-    <tr> 
-      <td>RE_3</td>
-      <td>15/12/2021 - 17/12/2021</td>
-      <td>2:00 pm - 5:00 pm</td>
-      <td>7</td>
-      <td>John Tan</td>
-      <td><button type="button">Sign Up</button></td>
-    </tr>
     </table>
 </main><!-- End #main -->
+
+<!--<script>
+  const vm = new Vue({
+      el: '#classesTable',
+      data: {
+          
+        classes: []
+      },
+      mounted: function() {
+          axios.get('http://localhost:5000/classess')
+              .then(response => {
+                  this.classes = response.data.data;
+              })
+              .catch(error => alert(error));
+      }
+  });
+</script>
+-->
+
+
+
+
+
+
+
 
   <!-- ======= Footer ======= -->
   <footer id="footer">
