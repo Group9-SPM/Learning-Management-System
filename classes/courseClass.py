@@ -46,8 +46,20 @@ def courses():
     ), 200
 
 @app.route("/course/<string:courseName>")
-def course_by_id(courseName):
+def course_by_name(courseName):
     course = Course.query.filter_by(courseName=courseName).first()
+    if course:
+        return jsonify({
+            "data": course.to_dict() 
+        }), 200
+    else:
+        return jsonify({
+            "message": "Course not found."
+        }), 404
+
+@app.route("/course/<int:courseID>")
+def course_by_id(courseID):
+    course = Course.query.filter_by(courseID=courseID).first()
     if course:
         return jsonify({
             "data": course.to_dict() 

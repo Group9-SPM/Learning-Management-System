@@ -1,9 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-
-from employeeClass import Employee
-
+from courseClass import Course
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/lms'
@@ -15,13 +13,12 @@ db = SQLAlchemy(app)
 
 CORS(app)
 
-class Learner(Employee): 
+class Prerequisite(db.Model):
+    __tablename__ = 'prerequisite'
 
-    __tablename__ = 'learner'
+    courseID = db.Column(db.Integer, db.ForeignKey(Course.courseID) ,primary_key=True)
+    prerequisiteID = db.Column(db.Integer, primary_key=True)
 
-    badges = db.Column(db.String(300))
-    empID = db.Column(db.Integer, db.ForeignKey(Employee.empID), primary_key=True)
-    
     def to_dict(self):
         """
         'to_dict' converts the object into a dictionary,
@@ -32,19 +29,31 @@ class Learner(Employee):
         for column in columns:
             result[column] = getattr(self, column)
         return result
-        
 
-@app.route("/learner")
-def learner():
-    learner_list = Learner.query.all()
+@app.route("/prerequisite")
+def prerequisite():
+    prerequisite = Prerequisite.query.all()
     return jsonify(
         {
-            "data": [learner.to_dict()
-                     for learner in learner_list]
+            "data": [prereq.to_dict()
+                     for prereq in prerequisite]
         }
     ), 200
-    
+
+
+@app.route("/prerequisite/<int:courseID>")
+def prerequisite_by_courseID(courseID):
+    prerequisite = Prerequisite.query.filter_by(courseID=courseID).first()
+    if prerequisite:
+        return jsonify({
+            "data": prerequisite.to_dict() 
+        }), 200
+    else:
+        return jsonify({
+            "message": "No prerequisite course."
+        }), 404
+
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5011, debug=True)
+    app.run(host='0.0.0.0', port=5006, debug=True)
