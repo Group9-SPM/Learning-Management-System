@@ -71,11 +71,13 @@ CREATE TABLE classList (
 CREATE TABLE enrolmentList (
     learnerID INT NOT NULL,
     classID INT NOT NULL,
+    courseID  INT NOT NULL,
     enrolmentStatus VARCHAR(100) NOT NULL,
 
     CONSTRAINT enrolmentList_pk PRIMARY KEY (learnerID,classID),
     CONSTRAINT enrolmentList_fk1 FOREIGN KEY (learnerID) REFERENCES learner(empID),
-    CONSTRAINT enrolmentList_fk2 FOREIGN KEY (classID) REFERENCES classes(classID)
+    CONSTRAINT enrolmentList_fk2 FOREIGN KEY (classID) REFERENCES classes(classID),
+    CONSTRAINT enrolmentList_fk3 FOREIGN KEY (courseID) REFERENCES course(courseID)
 );
 
 CREATE TABLE lesson (
@@ -143,8 +145,8 @@ INSERT INTO learner VALUES(3, NULL);
 
 INSERT INTO classList VALUES(3, 1, 0, NULL);
 
-INSERT INTO enrolmentList VALUES(1, 1, "Pending");
-INSERT INTO enrolmentList VALUES(2, 2 , "Successful");
+INSERT INTO enrolmentList VALUES(1, 1, 2,"Pending");
+INSERT INTO enrolmentList VALUES(2, 2 , 1 ,"Successful");
 
 INSERT INTO lesson(classID, lessonName, lessonDesc) VALUES(1, "Basic English", "Basic English words.");
 INSERT INTO lesson(classID, lessonName, lessonDesc) VALUES(1, "Advanced English", "Advanced English words.");

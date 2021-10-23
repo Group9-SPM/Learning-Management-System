@@ -21,6 +21,17 @@ class Learner(Employee):
     badges = db.Column(db.String(300))
     empID = db.Column(db.Integer, db.ForeignKey(Employee.empID), primary_key=True)
     
+    def to_dict(self):
+        """
+        'to_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
+        
 
 @app.route("/learner")
 def learner():

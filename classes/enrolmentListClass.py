@@ -1,8 +1,11 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+
+
 from classesClass import Classes
 from learnerClass import Learner
+from courseClass import Course
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/lms'
@@ -20,6 +23,7 @@ class EnrolmentList(db.Model):
 
     classID = db.Column(db.Integer, db.ForeignKey(Classes.classID), primary_key=True)
     learnerID = db.Column(db.Integer, db.ForeignKey(Learner.empID), nullable=False)
+    courseID = db.Column(db.Integer, db.ForeignKey(Course.courseID), nullable=False)
     enrolmentStatus = db.Column(db.String(100), nullable=False)
 
     def to_dict(self):

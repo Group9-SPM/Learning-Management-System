@@ -101,7 +101,7 @@
         <div class="d-flex justify-content-between align-items-center">
          <p></p>
           <ol>
-            <li><a href="allCourses.html">Courses</a></li>
+            <li><a href="allCourses.html" onclick="clear()">Courses</a></li>
             <li>Course Details</li>
           </ol>
         </div>
@@ -128,9 +128,13 @@
 <br><br>
 
      <script>
-      document.getElementById("courseTitle").innerHTML = localStorage.courseName
-      document.getElementById("courseID").innerHTML = localStorage.courseID
-      document.getElementById("courseDesc").innerHTML = localStorage.courseDesc
+      document.getElementById("courseTitle").innerHTML = sessionStorage.courseName
+      document.getElementById("courseID").innerHTML = sessionStorage.courseID
+      document.getElementById("courseDesc").innerHTML = sessionStorage.courseDesc
+
+      function clear(){
+        sessionStorage.clear();
+      }
     </script>
 
 
@@ -232,3 +236,9 @@
 </body>
 
 </html>
+
+
+
+
+
+
