@@ -45,7 +45,7 @@ class Classes(db.Model):
 
 
 @app.route("/classes")
-def classess():
+def classes():
     class_list = Classes.query.all()
     return jsonify(
         {
