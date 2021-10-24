@@ -35,15 +35,19 @@
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
 
- <!-- Latest compiled and minified JavaScript -->
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script 
-    src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    
-    <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
-    integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
-    crossorigin="anonymous"></script>
+  <!-- Latest compiled and minified JavaScript -->
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+      integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+      crossorigin="anonymous"></script>
+
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+      integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+      crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     
 
   <style>
@@ -114,70 +118,86 @@
 
     <br>
     <br>
-    
+
+
+
+
     <table id="coursesTable" class="table table-hover"> 
+      <thead>
         <tr> 
             <th scope="col">Course Code</th> 
             <th scope="col">Course Name</th> 
             <th scope="col">Description</th> 
             <th scope="col">Eligibility</th> 
         </tr>
-      
-    </table>
+      </thead>  
+      <tbody>
+        <tr v-for="course in courses">
+            <td id = "courseID">{{ course.courseID }}</td>
+            <td id = "courseName" onclick="findCourse()">{{ course.courseName }}</td>
+            <td id = "courseDesc">{{ course.courseDesc }}</td>
+            <td>eligible</td>
+        </tr>
+      </tbody>
+  </table>
 
   <script>
-            // Helper function to display error message
-            function showError(message) {
-                $('#coursesTable').hide();
-                $('#main-container')
-                    .append("<label>"+message+"</label>");
-            }
         
-            // anonymous async function using await requires the function that calls it to be async
-            $(async() => {           
-                // Change serviceURL to your own
-                var serviceURL = "http://127.0.0.1:5007/courses";
-                
-        
-                try {
-                    const response =
-                     await fetch(
-                       serviceURL, { method: 'GET' }
-                    );
-                    const result = await response.json();
+        const vm = new Vue({
+          el: '#coursesTable',
+          data: {
+              courses: [],
+          },
 
-                    if (response.status === 200) {
-                        // success case
-                        
-                        var courses = result.data.course; 
-                        console.log(courses);
+          mounted: function() {
+              axios.get('http://localhost:5007/courses')
+                  .then(response => {
+                      this.courses = response.data.data;
+                  })
+                  .catch(error => alert(error));
+          }
+      });
+     
+        async function findCourse() {
+          var courseName = document.getElementById('courseName').innerHTML
+          var courseID = document.getElementById("courseID").innerHTML
+          var courseDesc = document.getElementById("courseDesc").innerHTML
+ 
+          var serviceURL = "http://localhost:5007/course/" + courseName;
 
-                        // for loop to setup all table rows with obtained book data
-                        var rows = "";
-                        for (const course of courses) {
-               
-                           eachRow ="<td> <a href='course.html'> " + course.courseID + "<a></td>" +
-                                    "<td>" + course.courseName + "</td>" +
-                                    "<td>" + course.courseDesc + "</td>" +
-                                    "<td> eligible</td>";
-                           rows += "<tbody><tr>" + eachRow + "</tr></tbody>";
-                        }
-                            // add all the rows to the table
-                            $('#coursesTable').append(rows);
-                } else if (response.status == 404) {
-                    // No books
-                    showError(result.message);
-                } else {
-                    // unexpected outcome, throw the error
-                    throw response.status;
-                }
-            } catch (error) {
-                // Errors when calling the service; such as network error, 
-                // service offline, etc
-                showError
-    ('There is a problem retrieving courses data, please try again later.<br />' + error);
-            } // error
-    });
+          try {
+              const response =
+              await fetch(
+                serviceURL, { method: 'GET' }
+              );
+
+          const data = await response.json();
+          if (response.ok) { 
+              var name = data.data.courseName;
+              if (courseName == name) {
+                  sessionStorage.courseName = data.data.courseName;
+                  sessionStorage.courseID = data.data.courseID;
+                  sessionStorage.courseDesc = data.data.courseDesc;
+
+                  window.location.replace("course.html");
+
+            //    sessionStorageStorage.clear();
+              } else {
+                  alert("You have faced a problem!");
+              }
+          } else {
+              alert("Theres an issue right now!");
+          }
+      }
+      catch (error) {
+          // Errors when calling the service; such as network error, 
+          // service offline, etc
+          console.log(error);
+          alert('There is a problem, please try again later.');
+      } // error
+
+  };
+
 </script>
 
 
@@ -194,70 +214,39 @@
 <br>
 
 <table id="enrolledCoursesTable" class="table table-hover"> 
-  <tr> 
+  <thead>
+    <tr> 
       <th scope="col">Course Code</th> 
-      <th scope="col">Course Name</th> 
-      <th scope="col">Class</th> 
+      <th scope="col">Class Code</th> 
       <th scope="col">Status</th> 
-  </tr>
-  
-
-
+    </tr>
+  </thead>
+  <tbody>
+      <tr v-for="enrol in enrolmentList">
+        <td id = "courseID"> {{ enrol.courseID }} </td>
+        <td id = "classID"> {{ enrol.classID }} </td>
+        <td id = "enrolmentStatus"> {{ enrol.enrolmentStatus }} </td>
+    </tr>
+  </tbody>
 </table>
+
 <script>
-  // Helper function to display error message
-  function showError(message) {
-      // Hide the table in the event of error
-      $('#enrolledCoursesTable').hide();
+      localStorage.setItem("learnerID", "1")
 
-      // Display an error under the main container
-      $('#main-container')
-          .append("<label>"+message+"</label>");
-  }
+      const enrolment = new Vue({
+          el: '#enrolledCoursesTable',
+          data: {
+              enrolmentList: [],
+          },
 
-  // anonymous async function 
-  // - using await requires the function that calls it to be async
-  $(async() => {           
-      // Change serviceURL to your own
-      var serviceURL = "http://127.0.0.1:5009/signuplist";
-      var serviceURL = "http://127.0.0.1:5007/courses";
-      var serviceURL = "http://127.0.0.1:5011/class";
-
-      try {
-          const response =
-           await fetch(
-             serviceURL, { method: 'GET' }
-          );
-          const result = await response.json();
-           if (response.status === 200) {
-              // success case
-              var courses = result.data.courses; //the array is in books within data of 
-                                             // the returned result
-              // for loop to setup all table rows with obtained book data
-              var rows = "";
-              for (const course of courses) {
-                 eachRow ="<td> <a href='course.html'> " + course.courseID + "<a></td>" +
-                          "<td>" + course.courseName + "</td>" +
-                          //"<td>" + class.classID + "</td>" +
-                          "<td> eligible" + signupList.courseStatus + "</td>";
-                 rows += "<tbody><tr>" + eachRow + "</tr></tbody>";
-              }
-                  // add all the rows to the table
-                  $('#enrolledCoursesTable').append(rows);
-      } else if (response.status == 404) {
-          // No books
-          showError(result.message);
-      } else {
-          // unexpected outcome, throw the error
-          throw response.status;
-      }
-  } catch (error) {
-      // Errors when calling the service; such as network error, 
-      // service offline, etc
-      showError
-('There is a problem retrieving enrolled courses data, please try again later.<br />' + error);
-  } // error
-});
+          mounted: function() {
+              axios.get('http://localhost:5008/enrolmentList/'+ localStorage.learnerID)
+                  .then(response => {
+                      this.enrolmentList = response.data.data;
+                  })
+                  .catch(error => alert(error));
+          }
+      });
 </script>
 
 
@@ -294,6 +283,13 @@
   </footer><!-- End Footer -->
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 
   <!-- Vendor JS Files -->
   <script src="assets/vendor/aos/aos.js"></script>

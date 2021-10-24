@@ -60,6 +60,8 @@ CREATE TABLE learner (
 CREATE TABLE classList (
     learnerID INT NOT NULL,
     classID INT NOT NULL,
+    progressPercentage INT NOT NULL,
+    finalQuizGrade VARCHAR(5),
 
     CONSTRAINT classList_pk PRIMARY KEY (learnerID,classID),
     CONSTRAINT classList_fk1 FOREIGN KEY (learnerID) REFERENCES learner(empID),
@@ -69,22 +71,33 @@ CREATE TABLE classList (
 CREATE TABLE enrolmentList (
     learnerID INT NOT NULL,
     classID INT NOT NULL,
-    enolmentStatus VARCHAR(100) NOT NULL,
+    courseID  INT NOT NULL,
+    enrolmentStatus VARCHAR(100) NOT NULL,
 
     CONSTRAINT enrolmentList_pk PRIMARY KEY (learnerID,classID),
     CONSTRAINT enrolmentList_fk1 FOREIGN KEY (learnerID) REFERENCES learner(empID),
-    CONSTRAINT enrolmentList_fk2 FOREIGN KEY (classID) REFERENCES classes(classID)
+    CONSTRAINT enrolmentList_fk2 FOREIGN KEY (classID) REFERENCES classes(classID),
+    CONSTRAINT enrolmentList_fk3 FOREIGN KEY (courseID) REFERENCES course(courseID)
 );
 
 CREATE TABLE lesson (
-    lessonID INT NOT NULL AUTO_INCREMENT,
+    lessonID INT NOT NULL,
     classID INT NOT NULL,
     lessonName VARCHAR(100) NOT NULL,
     lessonDesc VARCHAR(500) NOT NULL,
-    lessonMaterials VARCHAR(100) NOT NULL,
 
-    CONSTRAINT lesson_pk PRIMARY KEY (lessonID),
+    CONSTRAINT lesson_pk PRIMARY KEY (lessonID, classID),
     CONSTRAINT lesson_fk FOREIGN KEY (classID) REFERENCES classes(classID)
+);
+
+CREATE TABLE lessonMaterials (
+    materialID INT NOT NULL AUTO_INCREMENT,
+    content varchar(100) NOT NULL,
+    lessonID INT NOT NULL,
+    classID INT NOT NULL,
+
+    CONSTRAINT lessonMaterials_pk PRIMARY KEY (materialID),
+    CONSTRAINT lessonMaterials_fk FOREIGN KEY (lessonID, classID) REFERENCES lesson(lessonID, classID)
 );
 
 CREATE TABLE quiz (
@@ -131,16 +144,22 @@ INSERT INTO learner VALUES(1, NULL);
 INSERT INTO learner VALUES(2, "1");
 INSERT INTO learner VALUES(3, NULL);
 
-INSERT INTO classList VALUES(3, 1);
+INSERT INTO classList VALUES(3, 1, 0, NULL);
 
-INSERT INTO enrolmentList VALUES(1, 1, "Pending");
-INSERT INTO enrolmentList VALUES(2, 2 , "Successful");
+INSERT INTO enrolmentList VALUES(1, 1, 2,"Pending");
+INSERT INTO enrolmentList VALUES(2, 2 , 1 ,"Successful");
 
-INSERT INTO lesson(classID, lessonName, lessonDesc, lessonMaterials) VALUES(1, "Basic English", "Basic English words.", "basic.pdf");
-INSERT INTO lesson(classID, lessonName, lessonDesc, lessonMaterials) VALUES(1, "Advanced English", "Advanced English words.", "advanced.pdf");
-INSERT INTO lesson(classID, lessonName, lessonDesc, lessonMaterials) VALUES(1, "Repair English", "English repair words.", "repair.pdf");
-INSERT INTO lesson(classID, lessonName, lessonDesc, lessonMaterials) VALUES(2, "Using Hands", "How to use your hands to repair things.", "hands.pptx");
-INSERT INTO lesson(classID, lessonName, lessonDesc, lessonMaterials) VALUES(2, "Using Tools", "How to use tools to repair things.", "tools.pdf");
+INSERT INTO lesson(lessonID, classID, lessonName, lessonDesc) VALUES(1, 1, "Basic English", "Basic English words.");
+INSERT INTO lesson(lessonID, classID, lessonName, lessonDesc) VALUES(2, 1, "Advanced English", "Advanced English words.");
+INSERT INTO lesson(lessonID, classID, lessonName, lessonDesc) VALUES(3, 1, "Repair English", "English repair words.");
+INSERT INTO lesson(lessonID, classID, lessonName, lessonDesc) VALUES(1, 2, "Using Hands", "How to use your hands to repair things.");
+INSERT INTO lesson(lessonID, classID, lessonName, lessonDesc) VALUES(2, 2, "Using Tools", "How to use tools to repair things.");
+
+INSERT INTO lessonMaterials(content, lessonID, classID) VALUES("basic.pdf", 1, 1);
+INSERT INTO lessonMaterials(content, lessonID, classID) VALUES("advanced.pdf", 2, 1);
+INSERT INTO lessonMaterials(content, lessonID, classID) VALUES("repair.pdf", 3, 1);
+INSERT INTO lessonMaterials(content, lessonID, classID) VALUES("hands.pptx", 1, 2);
+INSERT INTO lessonMaterials(content, lessonID, classID) VALUES("tools.pdf", 2, 2);
 
 INSERT INTO quiz(quizDuration, passingCriteria, quizType, lessonID) VALUES("10min", "3", "UG", 1);
 INSERT INTO quiz(quizDuration, passingCriteria, quizType, lessonID) VALUES("10min", "3", "UG", 2);

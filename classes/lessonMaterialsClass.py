@@ -12,16 +12,13 @@ db = SQLAlchemy(app)
 
 CORS(app)
 
+class LessonMaterials(db.Model): 
+    
+    __tablename__ = 'lessonMaterials'
 
-class Employee(db.Model): 
-
-    __tablename__ = 'employee'
-
-    empID = db.Column(db.Integer, primary_key=True)
-    empName = db.Column(db.String(100), nullable=False)
-    department = db.Column(db.String(100), nullable=False)
-    username = db.Column(db.String(100), nullable=False)
-    roleType = db.Column(db.String(1), nullable=False)
+    materialID = db.Column(db.Integer, primary_key=True)
+    lessonID = db.Column(db.Integer, db.ForeignKey('lesson.lessonID'), nullable=False)
+    content = db.Column(db.String(500), nullable=False)
 
     def to_dict(self):
         """
@@ -35,32 +32,19 @@ class Employee(db.Model):
         return result
 
 
-@app.route("/employee")
-def employee():
-    employee_list = Employee.query.all()
-    return jsonify(
-        {
-            "data": [employee.to_dict()
-                     for employee in employee_list]
-        }
-    ), 200
-
-
-@app.route("/employee/<int:empID>")
-def employee_by_id(empID):
-    employee = Employee.query.filter_by(id=empID).first()
-    if employee:
+@app.route("/lessonMaterials/<int:lessonID>")
+def lessonMaterials_by_lesson(lessonID):
+    lessonMaterials = LessonMaterials.query.filter_by(lessonID=lessonID)
+    if lessonMaterials:
         return jsonify({
-            "data": employee.to_dict()
+            "data": [lessonMaterial.to_dict()
+                     for lessonMaterial in lessonMaterials]
         }), 200
     else:
         return jsonify({
-            "message": "Employee not found."
+            "message": "No lesson materials found."
         }), 404
 
 
-
-
-
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5009, debug=True)
