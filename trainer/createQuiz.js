@@ -60,7 +60,7 @@ function addQuestion() {
     questionCount++;
 }
 
-function createQuiz() {
+function create() {
     var lessonNum = 0
     var graded = false
     var questions = []
@@ -79,7 +79,6 @@ function createQuiz() {
     if (formArr[1].checked) {
         graded = true
     } 
-
     formArr["inputQn"].forEach(qns => {
         questions.push(qns.value);
     });
@@ -87,22 +86,30 @@ function createQuiz() {
         answers.push(ans.value);
     });
     
-    const xhttp = new XMLHttpRequest();
-    xhttp.onload = function() {
-      document.getElementById("test").innerHTML = this.responseText;
-    }
-    
-    xhttp.open("POST", "quiz.py");
-    xhttp.send();
-
-    let response = await fetch('/article/formdata/post/user', {
+    formElem = [lessonNum, graded]
+    const data = {lessonNum, graded}
+    const qnsElem = {
         method: 'POST',
-        body: new FormData(formElem)
-    });
+        body: JSON.stringify(data)
+    }
+    fetch('/quiz/create', qnsElem)
+    console.log(form);
+    // const xhttp = new XMLHttpRequest();
+    // xhttp.onload = function() {
+    //   document.getElementById("test").innerHTML = this.responseText;
+    //   console.log(this.responseText);
+    // }
+    
+    // xhttp.open("POST", "quiz.py");
+    // xhttp.send();
+    // let response = await fetch('/quiz/create', {
+    //     method: 'POST',
+    //     body: new FormData(formElem)
+    // });
+    const qnsElem
+    // let result = await response.json();
 
-    let result = await response.json();
-
-    alert(result.message);
+    // alert(result.message);
 }
 
 function deleteBtn(ele) {
