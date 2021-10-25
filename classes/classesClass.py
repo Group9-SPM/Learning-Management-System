@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+
 from courseClass import Course
 from employeeClass import Employee
 
@@ -56,11 +57,11 @@ def classes():
 
 @app.route("/classes/<int:courseID>")
 def class_by_courseID(courseID):
-    classCourseID = Classes.query.filter_by(courseID=courseID).first()
+    classCourseID = Classes.query.filter_by(courseID=courseID)
     if classCourseID:
         return jsonify({
-           
-            "data": [indivClass.json() for indivClass in classCourseID]
+            "data": [classCourse.to_dict()
+                     for classCourse in classCourseID]
         }), 200
     else:
         return jsonify({

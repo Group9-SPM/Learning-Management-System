@@ -138,7 +138,11 @@ INSERT INTO prerequisite VALUES(2, 1);
 INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
 VALUES("2021-08-01", "2021-11-15", 30, "12:00", "13:00", 10, 30, "2021-07-01", "2021-07-18", 1, NULL);
 INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
-VALUES("2021-08-01", "2021-11-15", 30, "12:00", "15:00", 10, 30, "2021-07-01", "2021-07-18", 2, 2);
+VALUES("2021-08-05", "2021-11-19", 20, "15:00", "16:00", 10, 30, "2021-07-01", "2021-07-18", 1, 1);
+INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
+VALUES("2021-08-01", "2021-11-15", 15, "12:00", "15:00", 10, 30, "2021-07-01", "2021-07-18", 2, 2);
+INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
+VALUES("2021-08-05", "2021-11-19", 30, "15:00", "18:00", 10, 30, "2021-07-01", "2021-07-18", 2, 2);
 
 INSERT INTO learner VALUES(1, NULL);
 INSERT INTO learner VALUES(2, "1");
