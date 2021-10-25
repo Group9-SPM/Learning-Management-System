@@ -1,9 +1,9 @@
-from flask import Flask, request, jsonify
+from flask import Flask, render_template, url_for, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
 from LessonClass import Lesson
-from questionClass import Questions
+# from questionClass import Questions
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/lms'
@@ -46,21 +46,23 @@ def quizList():
         }
     ), 200
 
-@app.route('/quiz/create', methods=['POST'])
+@app.route('/quiz-create', methods=['POST'])
 def create_quiz():
     data = request.get_json()
+    print(data)
     # read data from the form and save in variable
     question = request.form['inputQn']
     # options = request.form['options']
     options = 'True', 'False'
     answer = request.form['correctAns']
-    print(data)
+    print(question, answer)
     if ( request.get_json() is not None ): 
-        quizCreation = Questions(**data)
+        # quizCreation = Questions(**data)
+        quizCreation = {question, answer}
         print(quizCreation)
         try:
-            db.session.add(quizCreation)
-            db.session.commit()
+            # db.session.add(quizCreation)
+            # db.session.commit()
             return jsonify(quizCreation.to_dict()), 201
         except Exception:
             return jsonify({
