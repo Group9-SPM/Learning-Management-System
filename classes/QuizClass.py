@@ -2,6 +2,8 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
+from LessonClass import Lesson
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/lms'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -18,14 +20,20 @@ class Quiz(db.Model):
     quizDuration = db.Column(db.String(20), nullable=False)
     passingCriteria = db.Column(db.String(5), nullable=False)
     quizType = db.Column(db.String(2), nullable=False)
-    lessonID = db.Column(db.Integer, db.ForeignKey('lesson.lessonID'), nullable=False)
+    lessonID = db.Column(db.Integer, db.ForeignKey(Lesson.lessonID), nullable=False)
 
-    def __init__(self, quizID, quizDuration, passingCriteria, quizType, lessonID):
-        self.quizID = quizID
-        self.quizDuration = quizDuration
-        self.passingCriteria = passingCriteria
-        self.quizType = quizType
-        self.lessonID = lessonID
+
+    def to_dict(self):
+        """
+        'to_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
+
 
 @app.route("/quiz")
 def quizList():
@@ -60,4 +68,4 @@ def create_quiz():
     
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5007, debug=True)
+    app.run(host='0.0.0.0', port=5014, debug=True)

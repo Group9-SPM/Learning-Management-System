@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from quizClass import Quiz
+from QuizClass import Quiz
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/lms'
@@ -21,12 +21,16 @@ class Questions(db.Model):
     options = db.Column(db.String(100), nullable=False)
     answer = db.Column(db.String(50), nullable=False)
 
-    def __init__(self, quizID, qnNo, question, options, answer):
-        self.quizID = quizID
-        self.qnNo = qnNo
-        self.question = question
-        self.options = options
-        self.answer = answer
+    def to_dict(self):
+        """
+        'to_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
 
 @app.route("/question/<int:quizID>")
 def quizQuestions(quizID):
@@ -42,4 +46,4 @@ def quizQuestions(quizID):
         }), 404
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5007, debug=True)
+    app.run(host='0.0.0.0', port=5013, debug=True)
