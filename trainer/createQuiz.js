@@ -79,34 +79,51 @@ function create() {
     if (formArr[1].checked) {
         graded = true
     } 
-    formArr["inputQn"].forEach(qns => {
-        questions.push(qns.value);
-    });
-    formArr["correctAns"].forEach(ans => {
-        answers.push(ans.value);
-    });
-    
-    formElem = [lessonNum, graded]
-    const data = {lessonNum, graded}
-    const qnsElem = {
-        method: 'POST',
-        body: JSON.stringify(data)
-    }
-    fetch('/quiz/create', qnsElem)
-    console.log(form);
-    // const xhttp = new XMLHttpRequest();
-    // xhttp.onload = function() {
-    //   document.getElementById("test").innerHTML = this.responseText;
-    //   console.log(this.responseText);
+    // formArr["inputQn"].forEach(qns => {
+    //     questions.push(qns.value);
+    // });
+    // formArr["correctAns"].forEach(ans => {
+    //     answers.push(ans.value);
+    // });
+    var test = document.getElementById("test");
+    formElem = [lessonNum, graded], questions, answers
+    // console.log(formElem);
+    const quiz_data = {lessonNum, graded, questions, answers}
+    console.log(quiz_data);
+    // const qnsElem = {
+    //     method: 'POST',
+    //     body: JSON.stringify(data)
     // }
-    
-    // xhttp.open("POST", "quiz.py");
-    // xhttp.send();
+    // fetch('/quiz/create', qnsElem);
+    $.ajax({
+      type: "POST",
+      url: "/quiz-create",
+      data: JSON.stringify(quiz_data),
+      contentType: "application/json",
+      dataType: 'json',
+      success: function(result) {
+        test.innerHTML = result.rows; 
+      } 
+    });
+    // fetch('http://localhost/spm/trainer/quizCreation.html/quiz-create', {
+    //   method: 'POST', // or 'PUT'
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(data),
+    // })
+    // .then(response => response.json())
+    // .then(data => {
+    //   console.log('Success:', data);
+    // })
+    // .catch((error) => {
+    //   console.log('Data:', data);
+    //   console.error('Error:', error);
+    // });
     // let response = await fetch('/quiz/create', {
     //     method: 'POST',
     //     body: new FormData(formElem)
     // });
-    const qnsElem
     // let result = await response.json();
 
     // alert(result.message);
