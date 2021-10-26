@@ -38,7 +38,6 @@ class EnrolmentList(db.Model):
         return result
 
 
-
 @app.route("/enrolmentList")
 def enrolmentList():
     enrolments_list = EnrolmentList.query.all()
@@ -62,12 +61,11 @@ def enrolments_by_learner(learnerID):
             "message": "No enrolments found."
         }), 404
 
-
 @app.route("/enrolmentList", methods=['POST'])
 def create_enrolment():
     data = request.get_json()
     if not all(key in data.keys() for
-               key in ('learnerID', 'classID')):
+               key in ('learnerID', 'classID', 'courseID')):
         return jsonify({
             "message": "Incorrect JSON object provided."
         }), 500
@@ -86,10 +84,16 @@ def create_enrolment():
             "message": "Learner is not valid."
         }), 500
 
+    course = Course.query.filter_by(courseID=data['courseID']).first()
+    if not course:
+        return jsonify({
+            "message": "Course is not valid."
+        }), 500
+
     # (4): Create enrolment record
     enrolment = EnrolmentList(
         classID=data['classID'], learnerID=data['learnerID'],
-        enrolmentStatus="Pending"
+         courseID=data['courseID'], enrolmentStatus="Pending"
     )
 
     # (5): Commit to DB
