@@ -35,20 +35,19 @@
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
 
+<!-- Latest compiled and minified JavaScript -->
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-  <!-- Latest compiled and minified JavaScript -->
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+      integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+      crossorigin="anonymous"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
-        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
-        crossorigin="anonymous"></script>
-
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
-        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+      integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+      crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 
 
@@ -101,13 +100,13 @@
         <div class="d-flex justify-content-between align-items-center">
          <p></p>
           <ol>
-            <li><a href="allCourses.html" onclick="clear()">Courses</a></li>
+            <li><a href="allCourses.html" >Courses</a></li>
             <li>Course Details</li>
           </ol>
         </div>
 
       </div>
-    </section><!-- End Breadcrumbs Section -->
+    </section><!-- End Breadcrumbs Section onclick="clear()"-->
 
 
       <!-- Start of Header  -->
@@ -132,64 +131,78 @@
       document.getElementById("courseID").innerHTML = sessionStorage.courseID
       document.getElementById("courseDesc").innerHTML = sessionStorage.courseDesc
 
-      function clear(){
-        sessionStorage.clear();
-      }
+      //function clear(){
+        //sessionStorage.clear();
+      //}
     </script>
 
 
     <table id = "classesTable"class="table table-hover">
+      <thead>
         <tr> 
             <th scope="col">Class</th> 
             <th scope="col">Start Date - End Date</th> 
             <th scope="col">Start Time - End Time </th> 
-            <th scope="col">Class Size</th>
+            <th scope="col">Current Class Size</th>
+            <th scope="col">Max number of Seats</th> 
             <th scope="col">Trainer Name</th> 
             <th></th>
-         
         </tr>
-        
-        
-
-
-    <tr> 
-        <td>RE_1</td>
-        <td>10/12/2021 - 13/12/2021</td>
-        <td>1:00 pm - 3:00 pm</td>
-        <td>10</td>
-        <td>Amy Wong</td>
-        <td><button type="button">Sign Up</button></td>
-
-    </tr>
-       
+      </thead>
+      
+    <tbody>
+        <tr v-for="classs in classes">
+          <td>{{ classs.classID }}</td>
+          <td>{{ classs.startDate }} - {{ classs.endDate }} </td>
+          <td>{{ classs.startTime }} - {{ classs.endTime }}</td>
+          <td>{{ classs.size }}</td>
+          <td>{{ classs.maxSlot }}</td>
+          <td>{{ classs.trainerID }}</td>
+          <td v-if = "classs.maxSlot  >  classs.size &&  "><button type="button" class="btn btn-primary" v-on:click="signUp(classs.classID)">  Sign Up </button></td>
+          <td v-else><button type="button" class="btn btn-secondary" disabled>  Sign Up </button></td>
+      
+        </tr>
+      </tbody>
 
     </table>
-</main><!-- End #main -->
+</main><!-- End #main-->
+<script>
 
-<!--<script>
-  const vm = new Vue({
+    const vm = new Vue({
       el: '#classesTable',
       data: {
-          
-        classes: []
+        classes: [],
+        classID: 0,
+        learnerID: sessionStorage.learnerID,
+        courseID: sessionStorage.courseID
+      },
+      methods: {
+        signUp: function(id){
+          event.preventDefault();
+          this.classID = id;
+          axios.post('http://localhost:5008/enrolmentList', {
+                    classID: this.classID,
+                    learnerID: this.learnerID,
+                    courseID: this.courseID
+                })
+          .then(response => {
+                  window.location.replace("allCourses.html");
+                  return false;         
+              })
+          .catch(error => { console.log(error) });
+        }        
       },
       mounted: function() {
-          axios.get('http://localhost:5000/classess')
+          axios.get('http://localhost:5010/classes/' + sessionStorage.courseID)
               .then(response => {
                   this.classes = response.data.data;
+             
               })
-              .catch(error => alert(error));
-      }
-  });
+              .catch(error => alert(error)); 
+        },
+    });
+
 </script>
--->
-
-
-
-
-
-
-
 
   <!-- ======= Footer ======= -->
   <footer id="footer">
