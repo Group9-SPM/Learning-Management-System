@@ -9,6 +9,9 @@
   <meta content="" name="description">
   <meta content="" name="keywords">
 
+  <!-- jQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
   <!-- Favicons -->
   <link href="../assets/img/favicon.png" rel="icon">
   <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon">
@@ -120,46 +123,67 @@
 <br><br>
 
     <form>
-        <table class="table table-hover">
+        <table id="engineers" class="table table-hover">
             <caption>List of Engineers</caption>
             
             <tr> 
                 <th colspan="3" scope="col">Engineer</th>
-            </tr>
-            
-            <tr> 
-                <td>Amy Tan</td>
-                <td><a href>View Profile</a></a></td>
-                <td><input type="checkbox"></td>
-            </tr>
-            
-            <tr> 
-                <td>Amy Tan</td>
-                <td><a href>View Profile</a></a></td>
-                <td><input type="checkbox"></td>
-            </tr>
-            
-            <tr> 
-                <td>Amy Tan</td>
-                <td><a href>View Profile</a></a></td>
-                <td><input type="checkbox"></td>
-            </tr>
-            
-            <tr> 
-                <td>Amy Tan</td>
-                <td><a href>View Profile</a></a></td>
-                <td><input type="checkbox"></td>
-            </tr>
-
-            <tr>
-                <td><a href="classList.html" class="btn btn-primary">Cancel</a></td>
-                <td colspan="2" align="right"><button class="btn btn-primary" type="submit">Confirm</button></td>
             </tr>
         
         </table>
 
     </form>
   </main><!-- End #main -->
+
+  <script>
+        // Helper function to display error message
+        function showError(message) {
+    
+            // Display an error under the main container
+            $('#engineers')
+                .append("<label>"+message+"</label>");
+        }
+    
+        // anonymous async function 
+        // - using await requires the function that calls it to be async
+        $(async() => {           
+            // Change serviceURL to your own change to wtv port number it is 
+            var serviceURL = "http://127.0.0.1:5011/learner";
+    
+            try {
+                const response =
+                await fetch(
+                   serviceURL, { method: 'GET' }
+                );
+                const result = await response.json();
+                if (response.ok) {
+                    // success case
+                    var allLearners = result.data; //the array is in hints within data of 
+                                                   // the returned result
+                    // for loop to setup all table rows with obtained hint data
+                    console.log(allLearners);
+                    var rows = "";
+                    for (const engineer of allLearners) {
+                        eachRow ="<td>" + engineer.empName + "</td><td><input id='" + engineer.empID +"' value='" + engineer.empID +  "' type='checkbox'></td>";
+                       
+                        rows += "<tr>" + eachRow + "</tr>";
+                    }
+                    // add all the rows to the table
+                    $('#engineers').append(rows);
+                    
+                    $('#engineers').append(
+                        `<tr>
+                            <td><a href="classList.html" class="btn btn-primary">Cancel</a></td>
+                            <td colspan="2" align="right"><button class="btn btn-primary" type="submit">Confirm</button></td>
+                        </tr>`);
+                }
+            } catch (error) {
+                // Errors when calling the service; such as network error, 
+                // service offline, etc
+                showError('There is a problem retrieving engineers data, please refresh the page or try again later.');
+            } // error
+        });
+  </script>
 
   <!-- ======= Footer ======= -->
   <footer id="footer">
