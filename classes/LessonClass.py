@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from QuizClass import Quiz
+from classesClass import Classes
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/lms'
@@ -12,17 +14,25 @@ db = SQLAlchemy(app)
 
 CORS(app)
 
+class Lesson(db.Model):
+    __tablename__ = 'lesson'
 
-from QuizClass import Quiz
-class Lesson():
-    def __init__(self, lessonNum):
-        self.__lessonNum = lessonNum
-    def getLessonNum(self):
-        return self.__lessonNum
+    lessonID = db.Column(db.Integer, primary_key=True)
+    classID = db.Column(db.Integer, db.ForeignKey(Classes.classID), nullable=False)
+    lessonName = db.Column(db.String(100), nullable=False)
+    lessonDesc = db.Column(db.String(500), nullable=False)
 
-    def getDocuments():
-        return "d.getCourseMaterials()"
+    def to_dict(self):
+        """
+        'to_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
 
-    def getQuiz():
-        q = Quiz()
-        return q.getQuizID()
+    
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5005, debug=True)

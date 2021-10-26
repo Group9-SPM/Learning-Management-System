@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+
 from courseClass import Course
 from employeeClass import Employee
 
@@ -45,7 +46,7 @@ class Classes(db.Model):
 
 
 @app.route("/classes")
-def classess():
+def classes():
     class_list = Classes.query.all()
     return jsonify(
         {
@@ -54,6 +55,18 @@ def classess():
         }
     ), 200
 
+@app.route("/classes/<int:courseID>")
+def class_by_courseID(courseID):
+    classCourseID = Classes.query.filter_by(courseID=courseID)
+    if classCourseID:
+        return jsonify({
+            "data": [classCourse.to_dict()
+                     for classCourse in classCourseID]
+        }), 200
+    else:
+        return jsonify({
+            "message": "No available classes."
+        }), 404
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5010, debug=True)

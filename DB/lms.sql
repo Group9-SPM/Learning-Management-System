@@ -71,20 +71,22 @@ CREATE TABLE classList (
 CREATE TABLE enrolmentList (
     learnerID INT NOT NULL,
     classID INT NOT NULL,
+    courseID  INT NOT NULL,
     enrolmentStatus VARCHAR(100) NOT NULL,
 
     CONSTRAINT enrolmentList_pk PRIMARY KEY (learnerID,classID),
     CONSTRAINT enrolmentList_fk1 FOREIGN KEY (learnerID) REFERENCES learner(empID),
-    CONSTRAINT enrolmentList_fk2 FOREIGN KEY (classID) REFERENCES classes(classID)
+    CONSTRAINT enrolmentList_fk2 FOREIGN KEY (classID) REFERENCES classes(classID),
+    CONSTRAINT enrolmentList_fk3 FOREIGN KEY (courseID) REFERENCES course(courseID)
 );
 
 CREATE TABLE lesson (
-    lessonID INT NOT NULL AUTO_INCREMENT,
+    lessonID INT NOT NULL,
     classID INT NOT NULL,
     lessonName VARCHAR(100) NOT NULL,
     lessonDesc VARCHAR(500) NOT NULL,
 
-    CONSTRAINT lesson_pk PRIMARY KEY (lessonID),
+    CONSTRAINT lesson_pk PRIMARY KEY (lessonID, classID),
     CONSTRAINT lesson_fk FOREIGN KEY (classID) REFERENCES classes(classID)
 );
 
@@ -92,9 +94,10 @@ CREATE TABLE lessonMaterials (
     materialID INT NOT NULL AUTO_INCREMENT,
     content varchar(100) NOT NULL,
     lessonID INT NOT NULL,
+    classID INT NOT NULL,
 
     CONSTRAINT lessonMaterials_pk PRIMARY KEY (materialID),
-    CONSTRAINT lessonMaterials_fk FOREIGN KEY (lessonID) REFERENCES lesson(lessonID)
+    CONSTRAINT lessonMaterials_fk FOREIGN KEY (lessonID, classID) REFERENCES lesson(lessonID, classID)
 );
 
 CREATE TABLE quiz (
@@ -135,7 +138,11 @@ INSERT INTO prerequisite VALUES(2, 1);
 INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
 VALUES("2021-08-01", "2021-11-15", 30, "12:00", "13:00", 10, 30, "2021-07-01", "2021-07-18", 1, NULL);
 INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
-VALUES("2021-08-01", "2021-11-15", 30, "12:00", "15:00", 10, 30, "2021-07-01", "2021-07-18", 2, 2);
+VALUES("2021-08-05", "2021-11-19", 20, "15:00", "16:00", 10, 30, "2021-07-01", "2021-07-18", 1, 1);
+INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
+VALUES("2021-08-01", "2021-11-15", 15, "12:00", "15:00", 10, 30, "2021-07-01", "2021-07-18", 2, 2);
+INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
+VALUES("2021-08-05", "2021-11-19", 30, "15:00", "18:00", 10, 30, "2021-07-01", "2021-07-18", 2, 2);
 
 INSERT INTO learner VALUES(1, NULL);
 INSERT INTO learner VALUES(2, "1");
@@ -143,20 +150,20 @@ INSERT INTO learner VALUES(3, NULL);
 
 INSERT INTO classList VALUES(3, 1, 0, NULL);
 
-INSERT INTO enrolmentList VALUES(1, 1, "Pending");
-INSERT INTO enrolmentList VALUES(2, 2 , "Successful");
+INSERT INTO enrolmentList VALUES(1, 1, 2,"Pending");
+INSERT INTO enrolmentList VALUES(2, 2 , 1 ,"Successful");
 
-INSERT INTO lesson(classID, lessonName, lessonDesc) VALUES(1, "Basic English", "Basic English words.");
-INSERT INTO lesson(classID, lessonName, lessonDesc) VALUES(1, "Advanced English", "Advanced English words.");
-INSERT INTO lesson(classID, lessonName, lessonDesc) VALUES(1, "Repair English", "English repair words.");
-INSERT INTO lesson(classID, lessonName, lessonDesc) VALUES(2, "Using Hands", "How to use your hands to repair things.");
-INSERT INTO lesson(classID, lessonName, lessonDesc) VALUES(2, "Using Tools", "How to use tools to repair things.");
+INSERT INTO lesson(lessonID, classID, lessonName, lessonDesc) VALUES(1, 1, "Basic English", "Basic English words.");
+INSERT INTO lesson(lessonID, classID, lessonName, lessonDesc) VALUES(2, 1, "Advanced English", "Advanced English words.");
+INSERT INTO lesson(lessonID, classID, lessonName, lessonDesc) VALUES(3, 1, "Repair English", "English repair words.");
+INSERT INTO lesson(lessonID, classID, lessonName, lessonDesc) VALUES(1, 2, "Using Hands", "How to use your hands to repair things.");
+INSERT INTO lesson(lessonID, classID, lessonName, lessonDesc) VALUES(2, 2, "Using Tools", "How to use tools to repair things.");
 
-INSERT INTO lessonMaterials(content, lessonID) VALUES("basic.pdf", 1);
-INSERT INTO lessonMaterials(content, lessonID) VALUES("advanced.pdf", 2);
-INSERT INTO lessonMaterials(content, lessonID) VALUES("repair.pdf", 3);
-INSERT INTO lessonMaterials(content, lessonID) VALUES("hands.pptx", 4);
-INSERT INTO lessonMaterials(content, lessonID) VALUES("tools.pdf", 5);
+INSERT INTO lessonMaterials(content, lessonID, classID) VALUES("basic.pdf", 1, 1);
+INSERT INTO lessonMaterials(content, lessonID, classID) VALUES("advanced.pdf", 2, 1);
+INSERT INTO lessonMaterials(content, lessonID, classID) VALUES("repair.pdf", 3, 1);
+INSERT INTO lessonMaterials(content, lessonID, classID) VALUES("hands.pptx", 1, 2);
+INSERT INTO lessonMaterials(content, lessonID, classID) VALUES("tools.pdf", 2, 2);
 
 INSERT INTO quiz(quizDuration, passingCriteria, quizType, lessonID) VALUES("10min", "3", "UG", 1);
 INSERT INTO quiz(quizDuration, passingCriteria, quizType, lessonID) VALUES("10min", "3", "UG", 2);

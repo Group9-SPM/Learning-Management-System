@@ -1,8 +1,11 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+
+
 from classesClass import Classes
 from learnerClass import Learner
+from courseClass import Course
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/lms'
@@ -20,6 +23,7 @@ class EnrolmentList(db.Model):
 
     classID = db.Column(db.Integer, db.ForeignKey(Classes.classID), primary_key=True)
     learnerID = db.Column(db.Integer, db.ForeignKey(Learner.empID), nullable=False)
+    courseID = db.Column(db.Integer, db.ForeignKey(Course.courseID), nullable=False)
     enrolmentStatus = db.Column(db.String(100), nullable=False)
 
     def to_dict(self):
@@ -32,7 +36,6 @@ class EnrolmentList(db.Model):
         for column in columns:
             result[column] = getattr(self, column)
         return result
-
 
 
 @app.route("/enrolmentList")
@@ -58,12 +61,11 @@ def enrolments_by_learner(learnerID):
             "message": "No enrolments found."
         }), 404
 
-
 @app.route("/enrolmentList", methods=['POST'])
 def create_enrolment():
     data = request.get_json()
     if not all(key in data.keys() for
-               key in ('learnerID', 'classID')):
+               key in ('learnerID', 'classID', 'courseID')):
         return jsonify({
             "message": "Incorrect JSON object provided."
         }), 500
@@ -82,10 +84,16 @@ def create_enrolment():
             "message": "Learner is not valid."
         }), 500
 
+    course = Course.query.filter_by(courseID=data['courseID']).first()
+    if not course:
+        return jsonify({
+            "message": "Course is not valid."
+        }), 500
+
     # (4): Create enrolment record
     enrolment = EnrolmentList(
         classID=data['classID'], learnerID=data['learnerID'],
-        enrolmentStatus="Pending"
+         courseID=data['courseID'], enrolmentStatus="Pending"
     )
 
     # (5): Commit to DB

@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from courseClass import Course
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/lms'
@@ -12,16 +13,11 @@ db = SQLAlchemy(app)
 
 CORS(app)
 
+class Prerequisite(db.Model):
+    __tablename__ = 'prerequisite'
 
-class Employee(db.Model): 
-
-    __tablename__ = 'employee'
-
-    empID = db.Column(db.Integer, primary_key=True)
-    empName = db.Column(db.String(100), nullable=False)
-    department = db.Column(db.String(100), nullable=False)
-    username = db.Column(db.String(100), nullable=False)
-    roleType = db.Column(db.String(1), nullable=False)
+    courseID = db.Column(db.Integer, db.ForeignKey(Course.courseID) ,primary_key=True)
+    prerequisiteID = db.Column(db.Integer, primary_key=True)
 
     def to_dict(self):
         """
@@ -34,33 +30,30 @@ class Employee(db.Model):
             result[column] = getattr(self, column)
         return result
 
-
-@app.route("/employee")
-def employee():
-    employee_list = Employee.query.all()
+@app.route("/prerequisite")
+def prerequisite():
+    prerequisite = Prerequisite.query.all()
     return jsonify(
         {
-            "data": [employee.to_dict()
-                     for employee in employee_list]
+            "data": [prereq.to_dict()
+                     for prereq in prerequisite]
         }
     ), 200
 
 
-@app.route("/employee/<int:empID>")
-def employee_by_id(empID):
-    employee = Employee.query.filter_by(id=empID).first()
-    if employee:
+@app.route("/prerequisite/<int:courseID>")
+def prerequisite_by_courseID(courseID):
+    prerequisite = Prerequisite.query.filter_by(courseID=courseID).first()
+    if prerequisite:
         return jsonify({
-            "data": employee.to_dict()
+            "data": prerequisite.to_dict() 
         }), 200
     else:
         return jsonify({
-            "message": "Employee not found."
+            "message": "No prerequisite course."
         }), 404
 
 
 
-
-
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5006, debug=True)

@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from quizClass import Quiz
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/lms'
@@ -9,19 +10,16 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_size': 100,
                                            'pool_recycle': 280}
 
 db = SQLAlchemy(app)
-
 CORS(app)
 
+class Questions(db.Model):
+    __tablename__ = 'quizQuestions'
 
-class Employee(db.Model): 
-
-    __tablename__ = 'employee'
-
-    empID = db.Column(db.Integer, primary_key=True)
-    empName = db.Column(db.String(100), nullable=False)
-    department = db.Column(db.String(100), nullable=False)
-    username = db.Column(db.String(100), nullable=False)
-    roleType = db.Column(db.String(1), nullable=False)
+    quizID = db.Column(db.Integer, db.ForeignKey(Quiz.quizID), primary_key=True)
+    qnNo = db.Column(db.Integer, nullable=False)
+    question = db.Column(db.String(300), nullable=False)
+    options = db.Column(db.String(100), nullable=False)
+    answer = db.Column(db.String(50), nullable=False)
 
     def to_dict(self):
         """
@@ -34,33 +32,18 @@ class Employee(db.Model):
             result[column] = getattr(self, column)
         return result
 
-
-@app.route("/employee")
-def employee():
-    employee_list = Employee.query.all()
-    return jsonify(
-        {
-            "data": [employee.to_dict()
-                     for employee in employee_list]
-        }
-    ), 200
-
-
-@app.route("/employee/<int:empID>")
-def employee_by_id(empID):
-    employee = Employee.query.filter_by(id=empID).first()
-    if employee:
+@app.route("/question/<int:quizID>")
+def quizQuestions(quizID):
+    quizQuestions = Questions.query.filter_by(quizID=quizID)
+    if quizQuestions:
         return jsonify({
-            "data": employee.to_dict()
+            "data": [quizQuestions.to_dict()
+                     for quizQuestions in quizQuestions]
         }), 200
     else:
         return jsonify({
-            "message": "Employee not found."
+            "message": "No questions found."
         }), 404
 
-
-
-
-
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5013, debug=True)

@@ -1,6 +1,9 @@
-from flask import Flask, request, jsonify
+from flask import Flask, render_template, url_for, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+
+from LessonClass import Lesson
+# from questionClass import Questions
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/lms'
@@ -9,36 +12,63 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_size': 100,
                                            'pool_recycle': 280}
 
 db = SQLAlchemy(app)
-
 CORS(app)
 
-class Quiz():
-     
-    def __init__(self, quizID, quizQuestions, quizAnswers, quizDuration, passingCriteria, quizType, quizOption):
-        self.__quizID = quizID
-        self.__quizQuestions = quizQuestions
-        self.__quizAnswers = quizAnswers
-        self.__quizDuration = quizDuration
-        self.__passingCriteria = passingCriteria
-        self.__quizType = quizType
-        self.__quizOption = quizOption
-        self.__quizGrade = quizQuestions
+class Quiz(db.Model):
+    __tablename__ = 'quiz'
 
-    def getQuizID(self):
-        return self.__quizID
-    def getQuizQuestions(self):
-        return self.__quizQuestions
-    def getQuizAnswers(self):
-        return self.__quizAnswers
-    def getQuizDuration(self):
-        return self.__quizDuration
-    def getPassingCriteria(self):
-        return self.__passingCriteria
-    def getQuizType(self):
-        return self.__quizType
-    def getQuizOption(self):
-        return self.__quizOption
+    quizID = db.Column(db.Integer, primary_key=True)
+    quizDuration = db.Column(db.String(20), nullable=False)
+    passingCriteria = db.Column(db.String(5), nullable=False)
+    quizType = db.Column(db.String(2), nullable=False)
+    lessonID = db.Column(db.Integer, db.ForeignKey(Lesson.lessonID), nullable=False)
 
-    def getQuizGrade(self):
-        # Each question is worth 1 mark. Compare submitted answers to correct answers.
-        return self.__quizGrade
+
+    def to_dict(self):
+        """
+        'to_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
+
+
+@app.route("/quiz")
+def quizList():
+    quizList = Quiz.query.all()
+    return jsonify(
+        {
+            "data": [item.to_dict()
+                     for item in quizList]
+        }
+    ), 200
+
+@app.route('/quiz-create', methods=['POST'])
+def create_quiz():
+    data = request.get_json()
+    print(data)
+    # read data from the form and save in variable
+    question = request.form['inputQn']
+    # options = request.form['options']
+    options = 'True', 'False'
+    answer = request.form['correctAns']
+    print(question, answer)
+    if ( request.get_json() is not None ): 
+        # quizCreation = Questions(**data)
+        quizCreation = {question, answer}
+        print(quizCreation)
+        try:
+            # db.session.add(quizCreation)
+            # db.session.commit()
+            return jsonify(quizCreation.to_dict()), 201
+        except Exception:
+            return jsonify({
+                "message": "Unable to commit to database."
+            }), 500
+    
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5014, debug=True)
