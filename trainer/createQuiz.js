@@ -61,23 +61,21 @@ function addQuestion() {
 }
 
 function create() {
-    var lessonNum = 0
-    var graded = false
-    var questions = []
-    var answers = []
-    var quiz = []
-
     const form = document.getElementById("quizForm");
     formArr = form.elements;
 
+    var lessonNum = formArr["inputNum"].value
+    var quizType = "UG"
+    var quizDuration = formArr["inputDur"].value
+    var passingCriteria = formArr["inputPass"].value
+    var questions = []
+    var answers = []
+
     console.log(formArr);
     console.log(formArr[1].checked, formArr[2].checked);
-    console.log(formArr["option1"]);
-
-    lessonNum = formArr["inputNum"].value
 
     if (formArr[1].checked) {
-        graded = true
+      quizType = "G"
     } 
     // formArr["inputQn"].forEach(qns => {
     //     questions.push(qns.value);
@@ -85,48 +83,34 @@ function create() {
     // formArr["correctAns"].forEach(ans => {
     //     answers.push(ans.value);
     // });
-    var test = document.getElementById("test");
-    formElem = [lessonNum, graded], questions, answers
-    // console.log(formElem);
-    const quiz_data = {lessonNum, graded, questions, answers}
+    const quiz_data = {lessonNum, quizType, quizDuration, passingCriteria }
     console.log(quiz_data);
-    // const qnsElem = {
-    //     method: 'POST',
-    //     body: JSON.stringify(data)
-    // }
-    // fetch('/quiz/create', qnsElem);
-    $.ajax({
-      type: "POST",
-      url: "/quiz-create",
-      data: JSON.stringify(quiz_data),
-      contentType: "application/json",
-      dataType: 'json',
-      success: function(result) {
-        test.innerHTML = result.rows; 
-      } 
+    // $.ajax({
+    //   type: "POST",
+    //   url: "/quiz-create",
+    //   data: JSON.stringify(quiz_data),
+    //   contentType: "application/json",
+    //   dataType: 'json',
+    //   success: function(result) {
+    //     test.innerHTML = result.rows; 
+    //   } 
+    // });
+    fetch('http://localhost:5014/quiz-create', {
+      method: 'POST', // or 'PUT'
+      // mode: 'cors',
+      // credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(quiz_data),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Success:', data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
     });
-    // fetch('http://localhost/spm/trainer/quizCreation.html/quiz-create', {
-    //   method: 'POST', // or 'PUT'
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(data),
-    // })
-    // .then(response => response.json())
-    // .then(data => {
-    //   console.log('Success:', data);
-    // })
-    // .catch((error) => {
-    //   console.log('Data:', data);
-    //   console.error('Error:', error);
-    // });
-    // let response = await fetch('/quiz/create', {
-    //     method: 'POST',
-    //     body: new FormData(formElem)
-    // });
-    // let result = await response.json();
-
-    // alert(result.message);
 }
 
 function deleteBtn(ele) {
