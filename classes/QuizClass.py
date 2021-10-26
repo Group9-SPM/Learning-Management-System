@@ -1,9 +1,8 @@
-from flask import Flask, render_template, url_for, request, jsonify
+from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
 from LessonClass import Lesson
-# from questionClass import Questions
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/lms'
@@ -50,20 +49,15 @@ def quizList():
 def create_quiz():
     data = request.get_json()
     print(data)
-    # read data from the form and save in variable
-    question = request.form['inputQn']
-    # options = request.form['options']
-    options = 'True', 'False'
-    answer = request.form['correctAns']
-    print(question, answer)
+    item = Quiz(
+        quizDuration=data['quizDuration'], passingCriteria=data['passingCriteria'],
+        quizType=data['quizType'], lessonID=data['lessonID']
+    )
     if ( request.get_json() is not None ): 
-        # quizCreation = Questions(**data)
-        quizCreation = {question, answer}
-        print(quizCreation)
         try:
-            # db.session.add(quizCreation)
-            # db.session.commit()
-            return jsonify(quizCreation.to_dict()), 201
+            db.session.add(item)
+            db.session.commit()
+            return jsonify(item.to_dict()), 201
         except Exception:
             return jsonify({
                 "message": "Unable to commit to database."
