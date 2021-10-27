@@ -18,6 +18,7 @@ class Lesson(db.Model):
     __tablename__ = 'lesson'
 
     lessonID = db.Column(db.Integer, primary_key=True)
+    lessonNum = db.Column(db.Integer, nullable=False)
     classID = db.Column(db.Integer, db.ForeignKey(Classes.classID), nullable=False)
     lessonName = db.Column(db.String(100), nullable=False)
     lessonDesc = db.Column(db.String(500), nullable=False)

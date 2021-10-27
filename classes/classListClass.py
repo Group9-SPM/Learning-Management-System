@@ -96,7 +96,10 @@ def assign_learner():
     try:
         db.session.add(assignment)
         db.session.commit()
-        return jsonify(assignment.to_dict()), 201
+        return jsonify({
+            "data": assignment.to_dict(),
+            "message": "Learner assigned successfully"
+        }), 201
     except Exception as e:
         return jsonify({
             "message": "Unable to commit to database. " + str(e)
