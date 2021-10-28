@@ -82,7 +82,7 @@ CREATE TABLE enrolmentList (
 
 CREATE TABLE lesson (
     lessonID INT NOT NULL AUTO_INCREMENT,
-    lessonNum INT NOT NULL
+    lessonNum INT NOT NULL,
     classID INT NOT NULL,
     lessonName VARCHAR(100) NOT NULL,
     lessonDesc VARCHAR(500) NOT NULL,
