@@ -82,7 +82,7 @@ CREATE TABLE enrolmentList (
 
 CREATE TABLE lesson (
     lessonID INT NOT NULL AUTO_INCREMENT,
-    lessonNum INT NOT NULL
+    lessonNum INT NOT NULL,
     classID INT NOT NULL,
     lessonName VARCHAR(100) NOT NULL,
     lessonDesc VARCHAR(500) NOT NULL,
@@ -136,9 +136,12 @@ INSERT INTO course(courseName, courseDesc, courseDuration) VALUES("Repair 101", 
 INSERT INTO prerequisite VALUES(2, 1);
 
 INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
-VALUES("2021-08-01", "2021-11-15", 30, "12:00", "13:00", 10, 30, "2021-07-01", "2021-07-18", 1, NULL);
+VALUES("2021-11-20", "2021-12-31", 30, "12:00", "13:00", 10, 30, "2021-10-28", "2021-11-15", 1, NULL);
 INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
-VALUES("2021-08-05", "2021-11-19", 20, "15:00", "16:00", 10, 30, "2021-07-01", "2021-07-18", 1, 1);
+VALUES("2021-11-20", "2021-12-31", 20, "15:00", "16:00", 10, 30, "2021-11-05", "2021-11-25", 1, 1);
+INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
+VALUES("2021-11-20", "2021-12-31", 15, "09:00", "10:00", 10, 30, "2021-10-28", "2021-11-18", 1, 1);
+
 INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
 VALUES("2021-08-01", "2021-11-15", 15, "12:00", "15:00", 10, 30, "2021-07-01", "2021-07-18", 2, 2);
 INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
