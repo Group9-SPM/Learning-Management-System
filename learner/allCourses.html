@@ -236,7 +236,7 @@
 </div>
 
 <script>
-      localStorage.setItem("learnerID", "1")
+      sessionStorage.setItem("learnerID", "1")
 
       const enrolment = new Vue({
           el: '#enrolledCoursesTable',
@@ -244,7 +244,7 @@
               enrolmentList: [],
           },
           mounted: function() {
-              axios.get('http://localhost:5008/enrolmentList/'+ localStorage.learnerID)
+              axios.get('http://localhost:5008/enrolmentList/'+ sessionStorage.learnerID)
                   .then(response => {
                       this.enrolmentList = response.data.data;
                   })

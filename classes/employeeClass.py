@@ -48,7 +48,7 @@ def employee():
 
 @app.route("/employee/<int:empID>")
 def employee_by_id(empID):
-    employee = Employee.query.filter_by(id=empID).first()
+    employee = Employee.query.filter_by(empID=empID).first()
     if employee:
         return jsonify({
             "data": employee.to_dict()
