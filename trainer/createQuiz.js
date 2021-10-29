@@ -63,8 +63,7 @@ function addQuestion() {
 function create() {
     const form = document.getElementById("quizForm");
     formArr = form.elements;
-
-    var lessonNum = formArr["inputNum"].value
+    var lessonID = formArr["inputNum"].value
     var quizType = "UG"
     var quizDuration = formArr["inputDur"].value
     var passingCriteria = formArr["inputPass"].value
@@ -83,7 +82,7 @@ function create() {
     // formArr["correctAns"].forEach(ans => {
     //     answers.push(ans.value);
     // });
-    const quiz_data = {lessonNum, quizType, quizDuration, passingCriteria }
+    const quiz_data = {lessonID, quizType, quizDuration, passingCriteria }
     console.log(quiz_data);
     // $.ajax({
     //   type: "POST",
