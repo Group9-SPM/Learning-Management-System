@@ -108,23 +108,19 @@
       </div>
     </section><!-- End Breadcrumbs Section onclick="clear()"-->
 
-
-      <!-- Start of Header  -->
-      <div class="bg-img">
-        <div class="bg-text">
-            <h1 id = "courseTitle"class="display-4 font-weight-bold" style="color:black" > </h1>
-            <h5 id ="courseID"></h5>
+     <!-- Header-->
+     <header class="py-5">
+      <div class="container px-5 my-5">
+        <div class="text-center mb-5">
+            <h1 class="fw-bolder" id = "courseTitle">Courses</h1>
+            <p class="lead fw-normal text-muted mb-4" id ="courseID" ></p>
         </div>
-    </div>
-
-   
-
+    </header>
     <!-- End of Header -->
-
-    <br>
-    <br>
-    <p id = "courseDesc"></p>
-<br><br>
+    <div class="container px-5 my-5">
+      <p id = "courseDesc"></p>
+      <br><br>
+    </div>
 
      <script>
       document.getElementById("courseTitle").innerHTML = sessionStorage.courseName
@@ -137,36 +133,80 @@
     </script>
 
 
-    <table id = "classesTable"class="table table-hover">
+    <table id = "classesTable"class="table table-striped" style="text-align: center; font-size:small;" >
       <thead>
         <tr> 
             <th scope="col">Class</th> 
             <th scope="col">Start Date - End Date</th> 
-            <th scope="col">Start Time - End Time </th> 
-            <th scope="col">Current Class Size</th>
-            <th scope="col">Max number of Seats</th> 
+            <th scope="col">StartTime - EndTime </th> 
+            <th scope="col"> regStartDate </th>
+            <th scope="col"> regEndDate </th>
+            <th scope="col">Current Size</th>
+            <th scope="col">Max Seats</th> 
             <th scope="col">Trainer Name</th> 
             <th></th>
+            <th></th>
+            <th></th>
+    
         </tr>
       </thead>
       
     <tbody>
         <tr v-for="classs in classes">
-          <td>{{ classs.classID }}</td>
-          <td>{{ classs.startDate }} - {{ classs.endDate }} </td>
+          <td id = "classID">{{ classs.classID }}</td>
+          <td>{{ classs.startDate.substr(0, 16) }} - {{ classs.endDate.substr(0, 16) }} </td>
           <td>{{ classs.startTime }} - {{ classs.endTime }}</td>
-          <td>{{ classs.size }}</td>
-          <td>{{ classs.maxSlot }}</td>
+          <td id="regStartDate"> {{ classs.regStartDate}} </td>
+          <td id="regEndDate"> {{ classs.regEndDate }} </td>
+
+          <td v-if ="classs.maxSlot ==  classs.size" style='color: tomato;font-weight: bold;' id="size">{{ classs.size }}</td>
+          <td v-else style='color: green;font-weight: bold;'>{{ classs.size }}</td>
+
+          <td id='maxSlot'>{{ classs.maxSlot }}</td>
           <td>{{ classs.trainerID }}</td>
-          <td v-if = "classs.maxSlot  >  classs.size &&  "><button type="button" class="btn btn-primary" v-on:click="signUp(classs.classID)">  Sign Up </button></td>
+ <!---->
+            <td v-if = "okToSignUp"><button type="button" class="btn btn-primary" v-on:click="signUp(classs.classID)">  Sign Up </button></td>
           <td v-else><button type="button" class="btn btn-secondary" disabled>  Sign Up </button></td>
+         
+          <td v-if = "date <= classs.regStartDate"> date is either equal or after regStartDate </td>
+          <td v-else>checking fail</td>
+          <td v-if = "date > classs.regEndDate"> date is either equal or before regEndDate {{ date }} {{ classs.regEndDate }}</td>
+          <td v-else>checking fail</td>
       
         </tr>
       </tbody>
 
     </table>
-</main><!-- End #main-->
+
+
+
+</main><!-- End #main  
+
+i will bind the ID for registration & slots size and then i will getelementby id then check -->
 <script>
+
+    async function okToSignUp(){
+      var regStartDate = document.getElementById('regStartDate').innerHTML
+      var regEndDate = document.getElementById("regEndDate").innerHTML
+      var size = document.getElementById("size").innerHTML
+      var maxSlot = document.getElementById("maxSlot").innerHTML
+      var date = new Date().toISOString().substr(0, 10)
+
+      var check = true
+
+      if(size < maxSlot ){
+        check = true 
+      }
+
+      if (date <= classs.regStartDate){
+        check = true
+      }
+
+
+      console.log(check)
+      return check 
+
+    }
 
     const vm = new Vue({
       el: '#classesTable',
@@ -174,7 +214,18 @@
         classes: [],
         classID: 0,
         learnerID: sessionStorage.learnerID,
-        courseID: sessionStorage.courseID
+        courseID: sessionStorage.courseID,
+        date : new Date().toISOString().substr(0, 10),
+        check: false
+      },
+      mounted: function() {
+        axios.get('http://localhost:5010/classes/' + sessionStorage.courseID)
+            .then(response => {
+                this.classes = response.data.data;
+
+                window.console.log(this.date) 
+            })
+            .catch(error => alert(error)); 
       },
       methods: {
         signUp: function(id){
@@ -184,23 +235,21 @@
                     classID: this.classID,
                     learnerID: this.learnerID,
                     courseID: this.courseID
+                    
                 })
           .then(response => {
+
                   window.location.replace("allCourses.html");
                   return false;         
               })
           .catch(error => { console.log(error) });
         }        
       },
-      mounted: function() {
-          axios.get('http://localhost:5010/classes/' + sessionStorage.courseID)
-              .then(response => {
-                  this.classes = response.data.data;
-             
-              })
-              .catch(error => alert(error)); 
-        },
+      
     });
+
+    
+
 
 </script>
 

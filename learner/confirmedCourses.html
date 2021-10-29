@@ -123,7 +123,7 @@
     <table id="enrolledCoursesTable" class="table table-striped" style="text-align: center"> 
       <thead>
         <tr> 
-            <th scope="col">Course ID</th> 
+            <th scope="col">Course Name</th> 
             <th scope="col">Class ID</th> 
             <th scope="col">Start Date - End Date</th> 
             <th scope="col">Start Time - End Time</th>
@@ -138,11 +138,74 @@
 </main>
 
 <script>
+
+  sessionStorage.setItem("learnerID", "1")
+
+    function getCourseName(courseID){
+      $(async() => { 
+
+      var serviceURL = 'http://localhost:5007/course/' + courseID;
+      try {
+            const response =
+            await fetch(
+              serviceURL, { method: 'GET' }
+            );
+            const result = await response.json();
+            
+            if (response.ok) {
+                var courses = result.data;
+                var course = '';
+
+                course = result.data.courseName
+                console.log(course)
+
+                document.getElementById('courseName').innerHTML= course;  
+
+              }
+        
+            } catch (error) {
+
+            showError
+            ('There is a problem retrieving course name please try again later.' + error);
+              } 
+          }
+      )};
+
+      function getTrainerName(empID){
+      $(async() => { 
+
+      var serviceURL = 'http://localhost:5000/employee/' + empID;
+      try {
+            const response =
+            await fetch(
+              serviceURL, { method: 'GET' }
+            );
+            const result = await response.json();
+            
+            if (response.ok) {
+                var employee = result.data;
+                var trainer = '';
+
+                trainer = result.data.empName
+                console.log(trainer)
+
+                document.getElementById('trainerName').innerHTML= trainer;  
+
+              }
+        
+            } catch (error) {
+
+            showError
+            ('There is a problem retrieving trainer name please try again later.' + error);
+              } 
+          }
+      )};
+
   function showError(message) {
       $('#enrolledCoursesTable')
           .append("<label>"+message+"</label>");
   }
-
+      
   $(async() => {           
 
       var serviceURL = 'http://localhost:5012/classList/learner/' + sessionStorage.learnerID;
@@ -180,14 +243,15 @@
                   if (response.ok) {
                       var enrolledCourses = result.data; 
                       
-                      console.log(enrolledCourses);
+                      //console.log(enrolledCourses);
                       var rows = "";
                       for (const courses of enrolledCourses) {
-                          eachRow ="<td>" + courses.courseID + "</td>" +
-                          "<td>" + "<a href = '../courseOverview.html/info?courseID="+ courses.courseID + "&classID=" + courses.classID + "'>" + courses.classID + "</td>" +
+                        
+                          eachRow = "<td id='courseName'>" + getCourseName(courses.courseID) + "</td>" +
+                          "<td>" + courses.classID + "</td>" +
                           "<td>" + courses.startDate.substr(0, 16) + " - " +courses.endDate.substr(0, 16)  + "</td>"+
                           "<td>" + courses.startTime +" - " +courses.endTime + "</td>"+
-                          "<td>" + courses.trainerID + "</td>" ;
+                          "<td id='trainerName'>" + getTrainerName(courses.trainerID) + "</td>" ;
                           
                           rows += "<tr>" + eachRow + "</tr>";
                       }
@@ -201,6 +265,7 @@
       
       }
 </script>
+
 
   <!-- ======= Footer ======= -->
   <footer id="footer">
