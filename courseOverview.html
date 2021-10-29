@@ -28,6 +28,8 @@
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
 
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
   <!-- =======================================================
   * Template Name: Vesperr - v4.4.0
   * Template URL: https://bootstrapmade.com/vesperr-free-bootstrap-template/
@@ -50,16 +52,16 @@
     <div class="container d-flex align-items-center justify-content-between">
 
       <div class="logo">
-        <h1><a href="index.html">Vesperr</a></h1>
+        <h1><a href="index.html">Learning Management System</a></h1>
         <!-- Uncomment below if you prefer to use an image logo -->
         <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
       </div>
 
       <nav id="navbar" class="navbar">
         <ul>
-          <li><a class="nav-link scrollto " href="#hero">Home</a></li>
-          <li><a class="nav-link scrollto" href="#about">All Courses</a></li>
-          <li class="dropdown"><a href="#"><span>Alice</span> <i class="bi bi-chevron-down"></i></a>
+          <li><a class="nav-link scrollto " href="enrolledCourses.html">Home</a></li>
+          <li><a class="nav-link scrollto" href="./learner/allCourses.html">All Courses</a></li>
+          <li class="dropdown"><a href="#"><span>Learner</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
               <li><a href="#">Profile</a></li>
               <li><a href="#">Enrolled Courses</a></li>
@@ -91,42 +93,29 @@
       </div>
     </section><!-- End Breadcrumbs Section -->
 
-
     <!-- ======= Services Section ======= -->
     <section id="services" class="services">
         <div class="container">
   
           <div class="section-title" data-aos="fade-up">
-            <h2>RE101 - Repair Words 101 </h2>
-            <p>Overall Progress for this course: </p>
-            <br>
-            <div class="progress">
-                <div class="progress-bar bg-success" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
-              </div>
+            <h2 id='courseName'></h2>
+            <h5 id='courseDesc'></h5>
           </div>
   
           <div class="row">
-            <div class="col-md-6 col-lg-4 d-flex align-items-stretch mb-5 mb-lg-0">
+            <div class="col-md-6 col-lg-6 mb-5 mb-lg-5 ">
               <div class="icon-box" data-aos="fade-up" data-aos-delay="100" >
                 <div class="icon"><i class="bi bi-collection"></i></div>
                 <h4 class="title"><a href="courseContent.html">Content</a></h4>
-                <p class="description">Course Materials Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</p>
+                <p class="description">Course materials uploaded</p>
               </div>
             </div>
   
-            <div class="col-md-6 col-lg-4 d-flex align-items-stretch mb-5 mb-lg-0">
+            <div class="col-md-6 col-lg-6 mb-5 mb-lg-5">
               <div class="icon-box" data-aos="fade-up" data-aos-delay="200">
                 <div class="icon"><i class="bx bx-file"></i></div>
                 <h4 class="title"><a href="QuizContent.html">Quizzes</a></h4>
-                <p class="description">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</p>
-              </div>
-            </div>
-  
-            <div class="col-md-6 col-lg-4 d-flex align-items-stretch mb-5 mb-lg-0">
-              <div class="icon-box" data-aos="fade-up" data-aos-delay="300">
-                <div class="icon"><i class="bi bi-chat-quote"></i></div>
-                <h4 class="title"><a href="">Discussion</a></h4>
-                <p class="description">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia</p>
+                <p class="description">Quizzes to be taken after course materials have been viewed</p>
               </div>
             </div>
   
@@ -135,15 +124,44 @@
         </div>
       </section><!-- End Services Section -->
 
-
-
-
-
-
-
-
-
   </main><!-- End #main -->
+
+  <script>
+    /* retrieving courseID + classID from enrolledCourses.html*/
+    var url_string = window.location.href;
+    var url = new URL(url_string);
+    var courseID = url.searchParams.get("courseID");
+    var classID = url.searchParams.get("classID");
+
+    $(async() => {           
+            // Change serviceURL to your own change to wtv port number it is 
+            var serviceURL = "http://127.0.0.1:5007/course/" + courseID;
+    
+            try {
+                const response =
+                 await fetch(
+                   serviceURL, { method: 'GET' }
+                );
+                const result = await response.json();
+                 if (response.status === 200) {
+                    // success case
+                    var desc = result.data.courseDesc;
+                    var name = result.data.courseName;
+                    document.getElementById('courseName').innerHTML = name;
+                    document.getElementById('courseDesc').innerHTML = desc;
+
+                                } else {
+                                    // unexpected outcome, throw the error
+                                    throw response.status;
+                                }
+                            } catch (error) {
+                                // Errors when calling the service; such as network error, 
+                                // service offline, etc
+                                alert ('There is a problem retrieving data, please try again later.' + error);
+                            } // error
+                    }); 
+
+  </script>
 
   <!-- ======= Footer ======= -->
   <footer id="footer">
@@ -190,3 +208,4 @@
 </body>
 
 </html>
+
