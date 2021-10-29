@@ -159,7 +159,7 @@
                 course = result.data.courseName
                 console.log(course)
 
-                document.getElementById('courseName').innerHTML= course;  
+                document.getElementById(courseID).innerHTML= course;  
 
               }
         
@@ -189,7 +189,7 @@
                 trainer = result.data.empName
                 console.log(trainer)
 
-                document.getElementById('trainerName').innerHTML= trainer;  
+                document.getElementById(empID).innerHTML = trainer;  
 
               }
         
@@ -233,6 +233,7 @@
       function getCourse(classID){
         $(async() => {           
           var serviceURL = 'http://localhost:5010/classes/' + classID;
+          console.log(classID)
 
           try {
                   const response =
@@ -243,15 +244,17 @@
                   if (response.ok) {
                       var enrolledCourses = result.data; 
                       
-                      //console.log(enrolledCourses);
+                      console.log(enrolledCourses);
                       var rows = "";
+                      
                       for (const courses of enrolledCourses) {
                         
-                          eachRow = "<td id='courseName'>" + getCourseName(courses.courseID) + "</td>" +
+                        
+                          eachRow = "<td id='"+ courses.courseID +"'>" + await getCourseName(courses.courseID) + "</td>" +
                           "<td>" + courses.classID + "</td>" +
                           "<td>" + courses.startDate.substr(0, 16) + " - " +courses.endDate.substr(0, 16)  + "</td>"+
                           "<td>" + courses.startTime +" - " +courses.endTime + "</td>"+
-                          "<td id='trainerName'>" + getTrainerName(courses.trainerID) + "</td>" ;
+                          "<td id='"+ courses.trainerID+"'>"  + await getTrainerName(courses.trainerID) + "</td>" ;
                           
                           rows += "<tr>" + eachRow + "</tr>";
                       }

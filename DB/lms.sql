@@ -134,6 +134,7 @@ INSERT INTO  employee(empName, department, username, roleType) VALUES("Layla Cha
 
 INSERT INTO course(courseName, courseDesc, courseDuration) VALUES("Repair Words 101", "Learn how to speak repair words", "1h");
 INSERT INTO course(courseName, courseDesc, courseDuration) VALUES("Repair 101", "Learn how to repair things", "3h");
+INSERT INTO course(courseName, courseDesc, courseDuration) VALUES("Repair testing ", "Learn how to repair things testing ", "3h");
 
 INSERT INTO prerequisite VALUES(2, 1);
 
@@ -144,11 +145,11 @@ VALUES("2021-11-20", "2021-12-31", 20, "15:00", "16:00", 10, 30, "2021-11-05", "
 INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
 VALUES("2021-11-20", "2021-12-31", 15, "09:00", "10:00", 10, 30, "2021-10-25", "2021-11-18", 2, 6);
 INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
-VALUES("2021-11-20", "2021-12-31", 10, "11:00", "12:00", 10, 30, "2021-10-25", "2021-11-18", 2, 4);
+VALUES("2021-11-20", "2021-12-31", 10, "11:00", "12:00", 10, 30, "2021-10-25", "2021-11-18", 3, 6);
 INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
 VALUES("2021-08-01", "2021-11-15", 15, "12:00", "15:00", 10, 30, "2021-07-01", "2021-07-18", 2, 7);
 INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
-VALUES("2021-08-05", "2021-11-19", 30, "15:00", "18:00", 10, 30, "2021-07-01", "2021-07-18", 1, 7);
+VALUES("2021-08-05", "2021-11-19", 30, "15:00", "18:00", 10, 30, "2021-07-01", "2021-07-18", 3, 7);
 
 
 INSERT INTO learner VALUES(1, NULL);
