@@ -34,10 +34,7 @@ async function assignLearner(learnerID, classID) {
         },
         body: JSON.stringify({learnerID: learnerID, classID: classID})
     })
-        
-    .then( response => response.json())
     .then(data => {
-        result = data.message;
-        return result;
+        return data.json();
     })
 };
