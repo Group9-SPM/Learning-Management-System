@@ -142,7 +142,7 @@ VALUES("2021-11-20", "2021-12-31", 20, "15:00", "16:00", 10, 30, "2021-11-05", "
 INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
 VALUES("2021-11-20", "2021-12-31", 15, "09:00", "10:00", 10, 30, "2021-10-25", "2021-11-18", 1, 1);
 INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
-VALUES("2021-11-20", "2021-12-31", 10, "011:00", "12:00", 10, 30, "2021-10-25", "2021-11-18", 1, 2);
+VALUES("2021-11-20", "2021-12-31", 10, "11:00", "12:00", 10, 30, "2021-10-25", "2021-11-18", 1, 2);
 
 
 INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)

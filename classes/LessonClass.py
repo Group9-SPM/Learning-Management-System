@@ -33,6 +33,17 @@ class Lesson(db.Model):
             result[column] = getattr(self, column)
         return result
 
+@app.route("/lesson/<int:classID>/<int:lessonNum>")
+def lesson_by_num(classID, lessonNum):
+    lesson = Lesson.query.filter_by(classID=classID, lessonNum=lessonNum).first()
+    if lesson:
+        return jsonify({
+            "data": lesson.to_dict() 
+        }), 200
+    else:
+        return jsonify({
+            "message": "Lesson not found."
+        }), 404
     
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5005, debug=True)
