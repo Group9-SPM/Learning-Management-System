@@ -136,11 +136,14 @@ INSERT INTO course(courseName, courseDesc, courseDuration) VALUES("Repair 101", 
 INSERT INTO prerequisite VALUES(2, 1);
 
 INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
-VALUES("2021-11-20", "2021-12-31", 30, "12:00", "13:00", 10, 30, "2021-10-28", "2021-11-15", 1, NULL);
+VALUES("2021-11-20", "2021-12-31", 30, "12:00", "13:00", 10, 30, "2021-10-25", "2021-11-15", 1, NULL);
 INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
 VALUES("2021-11-20", "2021-12-31", 20, "15:00", "16:00", 10, 30, "2021-11-05", "2021-11-25", 1, 1);
 INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
-VALUES("2021-11-20", "2021-12-31", 15, "09:00", "10:00", 10, 30, "2021-10-28", "2021-11-18", 1, 1);
+VALUES("2021-11-20", "2021-12-31", 15, "09:00", "10:00", 10, 30, "2021-10-25", "2021-11-18", 1, 1);
+INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
+VALUES("2021-11-20", "2021-12-31", 10, "011:00", "12:00", 10, 30, "2021-10-25", "2021-11-18", 1, 2);
+
 
 INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
 VALUES("2021-08-01", "2021-11-15", 15, "12:00", "15:00", 10, 30, "2021-07-01", "2021-07-18", 2, 2);
@@ -152,6 +155,9 @@ INSERT INTO learner VALUES(2, "1");
 INSERT INTO learner VALUES(3, NULL);
 
 INSERT INTO classList VALUES(3, 1, 0, NULL);
+INSERT INTO classList VALUES(1, 1, 0, NULL);
+INSERT INTO classList VALUES(1, 2, 0, NULL);
+INSERT INTO classList VALUES(2, 1, 0, NULL);
 
 INSERT INTO enrolmentList VALUES(1, 1, 2,"Pending");
 INSERT INTO enrolmentList VALUES(2, 2 , 1 ,"Successful");

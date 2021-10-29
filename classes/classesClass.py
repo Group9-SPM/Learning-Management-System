@@ -68,5 +68,19 @@ def class_by_courseID(courseID):
             "message": "No available classes."
         }), 404
 
+
+@app.route("/classes/<int:classID>")
+def class_by_classID(classID):
+    classID = Classes.query.filter_by(classID=classID)
+    if classID:
+        return jsonify({
+            "data": [classs.to_dict()
+                     for classs in classID]
+        }), 200
+    else:
+        return jsonify({
+            "message": "No available classes."
+        }), 404
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5010, debug=True)

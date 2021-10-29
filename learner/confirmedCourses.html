@@ -35,24 +35,45 @@
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
 
+
+   <!-- Latest compiled and minified JavaScript -->
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+      integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+      crossorigin="anonymous"></script>
+
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+      integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+      crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
   <style>
       main{
         max-width: 1000px;
         margin: auto;
+      }
+
+      table{
+
+        border: 2px solid black;
+      }
+      
+      th,td{
+        padding: 12px;
       }
   </style>
 </head>
 
 <body>
 
-    <!-- ======= Header ======= -->
     <header id="header" class="fixed-top d-flex align-items-center">
       <div class="container d-flex align-items-center justify-content-between">
   
         <div class="logo">
           <h1><a href="index.html">Learning Management System</a></h1>
-          <!-- Uncomment below if you prefer to use an image logo -->
-          <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
         </div>
   
         <nav id="navbar" class="navbar">
@@ -70,14 +91,12 @@
             <li><a class="getstarted scrollto" href="#about">log out</a></li>
           </ul>
           <i class="bi bi-list mobile-nav-toggle"></i>
-        </nav><!-- .navbar -->
+        </nav>
 
     </div>
-  </header><!-- End Header -->
+  </header>
 
   <main id="main">
-
-    <!-- ======= Breadcrumbs Section ======= -->
     <section class="breadcrumbs">
       <div class="container">
 
@@ -90,42 +109,97 @@
         </div>
 
       </div>
-    </section><!-- End Breadcrumbs Section -->
-
-
-      <!-- Start of Header  -->
-      <div class="bg-img">
-        <div class="bg-text">
-            <h1 class="display-4 font-weight-bold" style="color:black; align-content: center;" >Enrolled Courses</h1>
+    </section>
+    <header class="py-5">
+      <div class="container px-5 my-5">
+        <div class="text-center mb-5">
+            <h1 class="fw-bolder">Enrolled Courses</h1>
         </div>
-    </div>
-    <!-- End of Header -->
+    </header>
 
-    <br>
-    <br>
-    
-    <table class="table table-hover"> 
+    <br><br>
+
+    <table id="enrolledCoursesTable" class="table table-striped" style="text-align: center"> 
+      <thead>
         <tr> 
-            <th scope="col">Course Name</th> 
-            <th scope="col">Class</th> 
+            <th scope="col">Course ID</th> 
+            <th scope="col">Class ID</th> 
             <th scope="col">Start Date - End Date</th> 
             <th scope="col">Start Time - End Time</th>
-            <th scope="col">Trainer Name</th>  
+            <th scope="col">Trainer ID</th>  
         </tr>
-        
-    <tr> 
-        <td><a href='courseDetails.html'>Repair 101</a></td>
-        <td>RE_1</td>
-        <td>10/12/2021-13/12/2021</td>
-        <td>1 : 00 PM - 3 : 00 PM</td>
-        <td>Amy Wong</td>
-    </tr>
-
+      </thead>  
     </table>
 
-<br><br>
+    <div class="card text-white bg-dark my-3 py-3 text-center">
+      <div class="card-body"><p class="text-white m-0" style="font-family: 'Courier New', Courier, monospace;"> “Learning never exhausts the mind.” </p></div>
+    </div>
+</main>
 
-  </main><!-- End #main -->
+<script>
+  function showError(message) {
+      $('#enrolledCoursesTable')
+          .append("<label>"+message+"</label>");
+  }
+
+  $(async() => {           
+
+      var serviceURL = 'http://localhost:5012/classList/learner/' + sessionStorage.learnerID;
+
+      try {
+          const response =
+          await fetch(
+             serviceURL, { method: 'GET' }
+          );
+          const result = await response.json();
+
+          if (response.ok) {
+              var allEnrolledClassses = result.data;
+              for (const eClasses of allEnrolledClassses) {
+                 getCourse(eClasses.classID)
+              }
+            }
+          } catch (error) {
+
+          showError
+          ('There is a problem retrieving class list history, please try again later.' + error);
+                  } 
+          });
+    
+      function getCourse(classID){
+        $(async() => {           
+          var serviceURL = 'http://localhost:5010/classes/' + classID;
+
+          try {
+                  const response =
+                  await fetch(
+                      serviceURL, { method: 'GET' }
+                  );
+                  const result = await response.json();
+                  if (response.ok) {
+                      var enrolledCourses = result.data; 
+                      
+                      console.log(enrolledCourses);
+                      var rows = "";
+                      for (const courses of enrolledCourses) {
+                          eachRow ="<td>" + courses.courseID + "</td>" +
+                          "<td>" + courses.classID + "</td>" +
+                          "<td>" + courses.startDate.substr(0, 16) + " - " +courses.endDate.substr(0, 16)  + "</td>"+
+                          "<td>" + courses.startTime +" - " +courses.endTime + "</td>"+
+                          "<td>" + courses.trainerID + "</td>" ;
+                          
+                          rows += "<tr>" + eachRow + "</tr>";
+                      }
+       
+                    $('#enrolledCoursesTable').append(rows);
+                }
+            } catch (error) {
+                showError('There is a problem retrieving enrolled classes data, please refresh the page or try again later.');
+            } 
+        });
+      
+      }
+</script>
 
   <!-- ======= Footer ======= -->
   <footer id="footer">
