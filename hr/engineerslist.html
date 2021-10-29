@@ -122,7 +122,7 @@
 
 <br><br>
 
-    <form>
+    <form id="engineerForm">
         <table id="engineers" class="table table-hover">
             <caption>List of Engineers</caption>
             
@@ -136,6 +136,7 @@
   </main><!-- End #main -->
 
   <script>
+        sessionStorage.setItem('classid','1')
         // Helper function to display error message
         function showError(message) {
     
@@ -151,6 +152,7 @@
             var serviceURL = "http://127.0.0.1:5011/learner";
     
             try {
+                // Retrieve list of all learners
                 const response =
                 await fetch(
                    serviceURL, { method: 'GET' }
@@ -158,13 +160,11 @@
                 const result = await response.json();
                 if (response.ok) {
                     // success case
-                    var allLearners = result.data; //the array is in hints within data of 
-                                                   // the returned result
-                    // for loop to setup all table rows with obtained hint data
-                    console.log(allLearners);
+                    var allLearners = result.data;
+                    // for loop to setup all table rows with obtained data
                     var rows = "";
                     for (const engineer of allLearners) {
-                        eachRow ="<td>" + engineer.empName + "</td><td><input id='" + engineer.empID +"' value='" + engineer.empID +  "' type='checkbox'></td>";
+                        eachRow ="<td>" + engineer.empName + "</td><td><input name='engineer' id='" + engineer.empID +"' value='" + engineer.empName +  "' type='checkbox'></td>";
                        
                         rows += "<tr>" + eachRow + "</tr>";
                     }
@@ -174,7 +174,7 @@
                     $('#engineers').append(
                         `<tr>
                             <td><a href="classList.html" class="btn btn-primary">Cancel</a></td>
-                            <td colspan="2" align="right"><button class="btn btn-primary" type="submit">Confirm</button></td>
+                            <td colspan="2" align="right"><button type="button" class="btn btn-primary" onclick="submitForm()">Confirm</button></td>
                         </tr>`);
                 }
             } catch (error) {
@@ -183,6 +183,19 @@
                 showError('There is a problem retrieving engineers data, please refresh the page or try again later.');
             } // error
         });
+
+        function submitForm() {
+            var selectedEngineers = document.querySelectorAll('input[name=engineer]:checked');
+            selectedEngineers.forEach(function(engineer){
+                assignLearner(engineer.id, sessionStorage.classid).then(function(result){
+                    if (result.code != 201){
+                        failed = result.data.learnerID
+                        learner = document.getElementById(failed).value;
+                        alert("Failed to assign " + learner + ". " + result.message)
+                    }
+                });
+            });
+        }
   </script>
 
   <!-- ======= Footer ======= -->
@@ -194,10 +207,6 @@
             &copy; Copyright <strong>Vesperr</strong>. All Rights Reserved
           </div>
           <div class="credits">
-            <!-- All the links in the footer should remain intact. -->
-            <!-- You can delete the links only if you purchased the pro version. -->
-            <!-- Licensing information: https://bootstrapmade.com/license/ -->
-            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/vesperr-free-bootstrap-template/ -->
             Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
           </div>
         </div>
@@ -214,6 +223,8 @@
   </footer><!-- End Footer -->
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <script src="dataAccess.js"></script>
 
   <!-- Vendor JS Files -->
   <script src="../assets/vendor/aos/aos.js"></script>
