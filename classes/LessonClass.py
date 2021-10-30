@@ -35,10 +35,11 @@ class Lesson(db.Model):
 
 @app.route("/lesson/<int:classID>/<int:lessonNum>")
 def lesson_by_num(classID, lessonNum):
-    lesson = Lesson.query.filter_by(classID=classID, lessonNum=lessonNum).first()
-    if lesson:
+    lessons = Lesson.query.filter_by(classID=classID, lessonNum=lessonNum)
+    if lessons:
         return jsonify({
-            "data": lesson.to_dict() 
+            "data": [lesson.to_dict()
+                     for lesson in lessons]
         }), 200
     else:
         return jsonify({
