@@ -250,7 +250,7 @@
                       for (const courses of enrolledCourses) {
                         
                         
-                          eachRow = "<td id='"+ courses.courseID +"'>" + await getCourseName(courses.courseID) + "</td>" +
+                          eachRow = "<td id='"+ courses.courseID +"'>" + "<a href = '../courseOverview.html?courseID="+ courses.courseID + "&classID=" + courses.classID + "'>" + await getCourseName(courses.courseID) + "</td>" +
                           "<td>" + courses.classID + "</td>" +
                           "<td>" + courses.startDate.substr(0, 16) + " - " +courses.endDate.substr(0, 16)  + "</td>"+
                           "<td>" + courses.startTime +" - " +courses.endTime + "</td>"+
