@@ -106,7 +106,7 @@
             <div class="col-md-6 col-lg-6 mb-5 mb-lg-5 ">
               <div class="icon-box" data-aos="fade-up" data-aos-delay="100" >
                 <div class="icon"><i class="bi bi-collection"></i></div>
-                <h4 class="title"><a href="courseContent.html">Content</a></h4>
+                <h4 class="title"><a id="content">Content</a></h4>
                 <p class="description">Course materials uploaded</p>
               </div>
             </div>
@@ -132,6 +132,8 @@
     var url = new URL(url_string);
     var courseID = url.searchParams.get("courseID");
     var classID = url.searchParams.get("classID");
+
+    document.getElementById('content').setAttribute('href', './courseContent.html?courseID=' + courseID + '&classID=' + classID);
 
     $(async() => {           
             // Change serviceURL to your own change to wtv port number it is 
