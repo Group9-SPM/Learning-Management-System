@@ -136,7 +136,9 @@ INSERT INTO course(courseName, courseDesc, courseDuration) VALUES("Repair Words 
 INSERT INTO course(courseName, courseDesc, courseDuration) VALUES("Repair 101", "Learn how to repair things", "3h");
 INSERT INTO course(courseName, courseDesc, courseDuration) VALUES("Repair testing ", "Learn how to repair things testing ", "3h");
 
+INSERT INTO prerequisite VALUES(1, 0);
 INSERT INTO prerequisite VALUES(2, 1);
+INSERT INTO prerequisite VALUES(3, 2);
 
 INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
 VALUES("2021-11-20", "2021-12-31", 30, "12:00", "13:00", 10, 30, "2021-10-25", "2021-11-15", 1, NULL);
