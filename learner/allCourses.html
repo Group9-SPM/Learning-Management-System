@@ -163,7 +163,7 @@
                       "<td id='courseName' onclick='findCourse()' style='color:blue; text-decoration: underline; '>" + course.courseName + "</td>" +
                       "<td id='courseDesc'>" + course.courseDesc + "</td>"+
                       "<td id='" +course.courseID+ "prereq"+"'>"+ findPreReq(course.courseID) + "</td>"+
-                      "<td id='"+course.courseID +"eligibility' >"+"<button type='button' class='btn btn-dark onclick='findEligibility(sessionStorage.learnerID,"+ course.courseID+")'>Check Eligibility</button>" + "</td>" ;
+                      "<td id='"+course.courseID +"eligibility' >"+"<button type='button' class='btn btn-dark' onclick='findEligibility(sessionStorage.learnerID,"+ course.courseID+")'>Check Eligibility</button>" + "</td>" ;
                       rows += "<tr>" + eachRow + "</tr>";
                 }
                 $('#coursesTable').append(rows);
