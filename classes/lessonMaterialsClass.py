@@ -34,7 +34,7 @@ class LessonMaterials(db.Model):
 
 @app.route("/lessonMaterials/<int:lessonID>")
 def lessonMaterials_by_lesson(lessonID):
-    lessonMaterials = LessonMaterials.query.filter_by(lessonID=lessonID)
+    lessonMaterials = LessonMaterials.query.filter_by(lessonID=lessonID).all()
     if lessonMaterials:
         return jsonify({
             "data": [lessonMaterial.to_dict()
@@ -43,7 +43,7 @@ def lessonMaterials_by_lesson(lessonID):
     else:
         return jsonify({
             "message": "No lesson materials found."
-        }), 404
+        }), 201
 
 
 if __name__ == '__main__':
