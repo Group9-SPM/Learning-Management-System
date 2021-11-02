@@ -135,54 +135,79 @@
 
     </table>
 
-    <table class="table table-hover">
+    <table id="students" class="table table-hover">
         
         <tr> 
             <th scope="col">Student Name</th> 
             <th scope="col">Course Progress</th>
-            <th scope="col"></th> 
+            <th scope="col">Final Quiz Grade</th> 
          
         </tr>
         
-    <tr> 
-        <td>Amy Tan</td>
-        <td><a href='courseProgress.html'>80%</a></td>
-        <td align='right'><button type="button" class="btn btn-danger">Withdraw</button></td>
-    </tr>
-       
+        <tr> 
+            <td>Amy Tan</td>
+            <td><a href='#'>80%</a></td>
+            <td> - </td>
+            <td align='right'><button type="button" class="btn btn-danger">Withdraw</button></td>
+        </tr>
 
-    <tr>
-        <td>Amy Tan</td>
-        <td><a href='courseProgress.html'>80%</a></td>
-        <td align='right'><button type="button" class="btn btn-danger">Withdraw</button></td>
-    </tr>
-    
-    <tr> 
-        <td>Amy Tan</td>
-        <td><a href='courseProgress.html'>80%</a></td>
-        <td align='right'><button type="button" class="btn btn-danger">Withdraw</button></td>
-    </tr>
-
-    <tr> 
-        <td>Amy Tan</td>
-        <td><a href='courseProgress.html'>80%</a></td>
-        <td align='right'><button type="button" class="btn btn-danger">Withdraw</button></td>
-    </tr>
-
-    <tr> 
-        <td>Amy Tan</td>
-        <td><a href='courseProgress.html'>80%</a></td>
-        <td align='right'><button type="button" class="btn btn-danger">Withdraw</button></td>
-    </tr>
-       	
-    <tr>
-	    <td colspan='3' class="w-100"><a href="engineerslist.html" class="btn btn-outline-primary">Assign Engineers</a></td>
-	</tr>
 
     </table>
 
 
   </main><!-- End #main -->
+
+  <script>
+        sessionStorage.setItem('classid','1')
+        // Helper function to display error message
+        function showError(message) {
+    
+            // Display an error under the main container
+            $('#students')
+                .append("<label>"+message+"</label>");
+        }
+    
+        // anonymous async function 
+        // - using await requires the function that calls it to be async
+        $(async() => {           
+            // Change serviceURL to your own change to wtv port number it is 
+            var serviceURL = "http://127.0.0.1:5012/classList/" + sessionStorage.classid;
+    
+            try {
+                // Retrieve list of all students in the class
+                const response =
+                await fetch(
+                   serviceURL, { method: 'GET' }
+                );
+                const result = await response.json();
+                if (response.ok) {
+                    // success case
+                    var allStudents = result.data;
+                    // for loop to setup all table rows with obtained data
+                    var rows = "";
+                    for (const student of allStudents) {
+                        eachRow =`<td>${student.empName}</td>
+                                <td>${student.progressPercentage}</td>
+                                <td>${student.progressPercentage ?? "-"}</td>
+                                <td align='right'><button type='button' class='btn btn-danger'>Withdraw</button></td>`;
+                       
+                        rows += "<tr>" + eachRow + "</tr>";
+                    }
+                    // add all the rows to the table
+                    $('#students').append(rows);
+                    
+                    $('#students').append(
+                        `<tr>
+                            <td colspan='3' class="w-100"><a href="engineerslist.html" class="btn btn-outline-primary">Assign Engineers</a></td>
+                        </tr>`);
+                }
+            } catch (error) {
+                // Errors when calling the service; such as network error, 
+                // service offline, etc
+                showError('There is a problem retrieving engineers data, please refresh the page or try again later.');
+            } // error
+        });
+  </script>
 
   <!-- ======= Footer ======= -->
   <footer id="footer">
