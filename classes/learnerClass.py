@@ -44,7 +44,17 @@ def learner():
         }
     ), 200
     
-
+@app.route("/learner/<int:empID>")
+def learner_by_id(empID):
+    learner = Learner.query.filter_by(empID=empID).first()
+    if learner:
+        return jsonify({
+            "data": learner.to_dict()
+        }), 200
+    else:
+        return jsonify({
+            "message": "Learner not found."
+        }), 404
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5011, debug=True)

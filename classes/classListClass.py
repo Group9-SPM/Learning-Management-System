@@ -41,7 +41,7 @@ def classList_by_class(classID):
     classlist = ClassList.query.filter_by(classID=classID)
     if classlist:
         return jsonify({
-            "data": [learner.to_dict()
+            "data": [dict(learner.to_dict(), **Learner.query.filter_by(empID=learner.learnerID).first().to_dict())
                      for learner in classlist]
         }), 200
     else:
