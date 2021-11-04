@@ -2,6 +2,10 @@
 var optionCount = 3;
 var questionCount = 2;
 
+function cancel() {
+  window.history.back();
+}
+
 function addOption(current) {
     var optionElement = current.parentNode;
     var length = optionElement.childNodes.length;
@@ -9,12 +13,20 @@ function addOption(current) {
     newNode.classList.add("form-check");
 
     var newOption = `<input class="form-check-input" type="radio" value="option${optionCount}">
-                    <input type="text" class="form-control" id="option${optionCount}" placeholder="Option ${optionCount}" style="display: inline; width: 625px;">
+                    <input type="text" class="form-control" id="option${optionCount}" value="${optionCount}" placeholder="Option ${optionCount}" style="display: inline; width: 625px;">
                     <button class="btn btn-secondary" type="button"><i class="ri-delete-bin-fill"></i></button>
                     `;
     newNode.innerHTML = newOption;
-
-    console.log(optionElement.parentNode.parentNode.childNodes);
+    curr = optionElement.parentNode;
+    curQnNode = curr.parentNode.childNodes;
+    console.log(curr.childNodes[3].childNodes);
+    console.log(curr.childNodes[3].childNodes[length - 3].childNodes[2].childNodes);
+    
+    if (curQnNode.length == 11) {
+      console.log(curQnNode[1].innerText);
+    } else {
+      console.log(curQnNode[0].innerText);
+    }
     optionElement.insertBefore(newNode, optionElement.childNodes[length - 2]);
 
     optionCount++;
@@ -124,8 +136,7 @@ function create() {
     });
 }
 
-function allOption(params) {
-  const form = document.getElementById("quizForm");
+function allOption(formArr) {
   formArr = form.elements;
   
 }
@@ -146,8 +157,4 @@ function createQns(question_data) {
     alert('There is a problem, please try again later.');
     console.error('Error:', error);
   });
-}
-
-function deleteBtn(ele) {
-  var parent = ele.parentNode;
 }
