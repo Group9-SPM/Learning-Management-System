@@ -36,7 +36,66 @@
   ======================================================== -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
-
+<script>
+  $(async() => {           
+    var courseID = sessionStorage.courseID;
+    var serviceURL = "http://localhost:5010/classes/" + courseID;
+    try {
+      const response =
+      await fetch(
+        serviceURL, { method: 'GET' }
+      );
+      const result = await response.json();
+      if (response.ok) {
+        var allClasses = result.data;
+        var eachRow = "";
+        for (const item of allClasses) {
+          eachRow = `<div class="col-lg-4 col-md-4 mt-4 mt-md-0">
+                      <div class="icon-box">
+                        <i class="ri-store-line" style="color: #5578ff;"></i>
+                        <h3 id="classID" onclick='findClass()'>Class ${item.classID}</h3>
+                      </div>
+                    </div>`;
+          $('#classTable').append(eachRow);
+        }
+      }
+    } catch (error) {
+      showError('There is a problem retrieving courses data, please refresh the page or try again later.');
+    }
+  });
+  async function findClass() {
+    // var courseID = sessionStorage.courseID;
+    var classID = document.getElementById('classID').innerHTML;
+    classID = classID.substr(6, classID.length);
+    var serviceURL = "http://localhost:5010/classes/" + Number(classID);
+    var found = false;
+    try {
+      const response =
+      await fetch(
+        serviceURL, { method: 'GET' }
+      );
+      const data = await response.json();
+      if (response.ok) { 
+        var allClass = data.data;
+        for (const item of allClass) {
+          if (classID == item.classID) {
+            sessionStorage.classID = item.classID;
+            found = true;
+            window.location.replace("content.html");
+          } 
+        }
+        if(!found) {
+          alert("Cant find class.");
+        }
+      } else {
+        alert("Theres an issue with the data.");
+      }
+    }
+    catch (error) {
+      alert('There is a problem, please try again later.');
+    }
+  };
+</script>
 <body>
   <!-- ======= Header ======= -->
   <header id="header" class="fixed-top d-flex align-items-center">
@@ -66,67 +125,7 @@
           <h2>Classes</h2>
           <h3 id="courseInfo"></h3>
         </div>
-        <script>
-          $(async() => {           
-            var courseID = sessionStorage.courseID;
-            var serviceURL = "http://localhost:5010/classes/" + courseID;
-            try {
-              const response =
-              await fetch(
-                serviceURL, { method: 'GET' }
-              );
-              const result = await response.json();
-              if (response.ok) {
-                var allClasses = result.data;
-                var eachRow = "";
-                for (const item of allClasses) {
-                  eachRow = `<div class="col-lg-4 col-md-4 mt-4 mt-md-0">
-                              <div class="icon-box">
-                                <i class="ri-store-line" style="color: #5578ff;"></i>
-                                <h3><p id="classID" onclick='findClass()'>Class ${item.classID}</p></h3>
-                              </div>
-                            </div>`;
-                  $('#classTable').append(eachRow);
-                }
-              }
-            } catch (error) {
-              showError('There is a problem retrieving courses data, please refresh the page or try again later.');
-            }
-          });
-          async function findClass() {
-            // var courseID = sessionStorage.courseID;
-            var classID = document.getElementById('classID').innerHTML;
-            classID = classID.substr(5, classID.length);
-            var serviceURL = "http://localhost:5010/classes/" + Number(classID);
-            try {
-              const response =
-              await fetch(
-                serviceURL, { method: 'GET' }
-              );
-              const data = await response.json();
-              if (response.ok) { 
-                var found = false;
-                var allClass = data.data;
-                for (const item of allClass) {
-                  if (classID == item.classID) {
-                    sessionStorage.classID = data.data.classID;
-                    sessionStorage.courseID = data.data.courseID;
-                    found = true;
-                    window.location.replace("content.html");
-                  } 
-                }
-                if(!found) {
-                  alert("Cant find class.");
-                }
-              } else {
-                alert("Theres an issue with the data.");
-              }
-            }
-            catch (error) {
-              alert('There is a problem, please try again later.');
-            }
-          };
-        </script>
+        
         <div id="classTable" class="row" data-aos="fade-up" data-aos-delay="300">
         </div>
 
