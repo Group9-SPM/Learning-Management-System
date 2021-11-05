@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
-from lessonClass import Lesson
+from LessonClass import Lesson
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/lms'
@@ -48,7 +48,6 @@ def quizList():
 @app.route('/quiz-create', methods=['POST'])
 def create_quiz():
     data = request.get_json()
-    print(data)
     item = Quiz(
         quizDuration=data['quizDuration'], passingCriteria=data['passingCriteria'],
         quizType=data['quizType'], lessonID=data['lessonID']
@@ -63,6 +62,5 @@ def create_quiz():
                 "message": "Unable to commit to database."
             }), 500
     
-
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5014, debug=True)
