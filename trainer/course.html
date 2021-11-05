@@ -67,7 +67,7 @@
         <script>
           async function findCourse() {
             var courseName = sessionStorage.courseName;
-            var serviceURL = "http://localhost:5007/course/" + courseName;
+            var serviceURL = "http://localhost:5000/course/" + courseName; //5007
             try {
               const response =
               await fetch(
@@ -79,7 +79,6 @@
                 if (courseName == name) {
                   sessionStorage.courseName = data.data.courseName;
                   sessionStorage.courseID = data.data.courseID;
-
                   window.location.assign("./classes.html");
                 } else {
                   alert("Cant find course.");
@@ -117,7 +116,6 @@
   </main><!-- End #main -->
 
   <script>
-    console.log(sessionStorage);
     var courseInfo = document.getElementById("courseInfo");
     courseInfo.innerHTML = sessionStorage.courseID + " - " + sessionStorage.courseName;
     var courseDesc = document.getElementById("courseDesc");
