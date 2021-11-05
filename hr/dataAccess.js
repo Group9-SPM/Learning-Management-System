@@ -1,6 +1,6 @@
-// Retrieve list of all learners
-async function retrieveLearners() {
-    var serviceURL = "http://127.0.0.1:5011/learner";
+// Retrieve list of all students of a class
+async function retrieveStudents() {
+    "http://127.0.0.1:5012/classList/" + sessionStorage.classid;
 
     try {
         const response =

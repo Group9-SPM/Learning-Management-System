@@ -89,7 +89,8 @@ CREATE TABLE lesson (
     lessonDesc VARCHAR(500) NOT NULL,
 
     CONSTRAINT lesson_pk PRIMARY KEY (lessonID),
-    CONSTRAINT lesson_fk FOREIGN KEY (classID) REFERENCES classes(classID)
+    CONSTRAINT lesson_fk FOREIGN KEY (classID) REFERENCES classes(classID),
+    CONSTRAINT lesson_fk FOREIGN KEY (courseID) REFERENCES classes(courseID)
 );
 
 CREATE TABLE lessonMaterials (

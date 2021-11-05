@@ -43,7 +43,6 @@ def learner():
                      for learner in learner_list]
         }
     ), 200
-    
 
 @app.route("/learner/<int:empID>")
 def learner_by_empID(empID):
