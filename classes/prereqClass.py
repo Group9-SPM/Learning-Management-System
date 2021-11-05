@@ -50,10 +50,8 @@ def prerequisite_by_courseID(courseID):
         }), 200
     else:
         return jsonify({
-            "message": "No prerequisite course."
+            "message": "Error getting prerequisite course."
         }), 404
-
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5006, debug=True)

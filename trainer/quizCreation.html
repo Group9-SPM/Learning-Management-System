@@ -62,20 +62,14 @@
 
         <div class="section-title" data-aos="fade-up">
           <h2>Quiz Creation</h2>
-          <h3>RE101 - HP OfficeJet All-in-One 8010, 8020, Pro 8030, 8020e, 8030e Printers</h3>
+          <h3 id="courseInfo"></h3>
         </div>
 
         <div class="row" data-aos="fade-up" data-aos-delay="200">
           <div class="col-lg-2"></div>
             <div class="col-lg-8 col-md-12">
             <h3>New Quiz</h3>
-            <form  method="post" id="quizForm"> <!-- action="/classes/quizClass.py" -->
-              <div class="row mb-3">
-                <label for="inputNum" class="col-sm-2 col-form-label">Lesson Number</label>
-                <div class="col-sm-10">
-                  <input type="number" class="form-check form-control" id="inputNum">
-                </div>
-              </div>
+            <form method="post" id="quizForm">
               <div class="mb-3">
                 <label class="col-sm-2 form-label">Quiz Type</label>
                 <div class="form-check form-check-inline">
@@ -90,8 +84,9 @@
               <!-- Quiz Duration -->
               <div class="row mb-3">
                 <label for="inputDur" class="col-sm-2 col-form-label">Quiz Duration</label>
-                <div class="col-sm-10">
+                <div class="col-sm-3" style="display: inline;">
                   <input type="number" class="form-check form-control" id="inputDur">
+                  <span style="float: right;">min</span>
                 </div>
               </div>
               <!-- Passing Criteria -->
@@ -101,7 +96,7 @@
                   <input type="number" class="form-check form-control" id="inputPass">
                 </div>
               </div>
-              <!-- Question 1 -->
+
               <div class="mb-3">
                 <div class="row mb-3">
                   <label for="inputQn" class="col-sm-2 col-form-label">Question 1</label>
@@ -141,7 +136,7 @@
                   </button>
                 </div>
               </div><br>
-              <button type="button" class="btn btn-danger">Cancel</button>
+              <button type="button" onclick="cancel()" class="btn btn-danger">Cancel</button>
               <button type="button" onclick="create()" class="btn btn-success">Create</button>
             </form>
             <p id="test"></p>
@@ -153,6 +148,12 @@
     </section><!-- End Features Section -->
     
   </main><!-- End #main -->
+
+  <script>
+    console.log(sessionStorage);
+    var courseInfo = document.getElementById("courseInfo");
+    courseInfo.innerHTML = sessionStorage.courseID + " - " + sessionStorage.courseName + " | " + sessionStorage.lessonNum + " - " + sessionStorage.lessonName;
+  </script>
 
   <!-- ======= Footer ======= -->
   <footer id="footer">

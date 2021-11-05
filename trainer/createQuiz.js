@@ -2,6 +2,10 @@
 var optionCount = 3;
 var questionCount = 2;
 
+function cancel() {
+  window.history.back();
+}
+
 function addOption(current) {
     var optionElement = current.parentNode;
     var length = optionElement.childNodes.length;
@@ -9,12 +13,20 @@ function addOption(current) {
     newNode.classList.add("form-check");
 
     var newOption = `<input class="form-check-input" type="radio" value="option${optionCount}">
-                    <input type="text" class="form-control" id="option${optionCount}" placeholder="Option ${optionCount}" style="display: inline; width: 625px;">
+                    <input type="text" class="form-control" id="option${optionCount}" value="${optionCount}" placeholder="Option ${optionCount}" style="display: inline; width: 625px;">
                     <button class="btn btn-secondary" type="button"><i class="ri-delete-bin-fill"></i></button>
                     `;
     newNode.innerHTML = newOption;
-
-    console.log(optionElement.parentNode.parentNode.childNodes);
+    curr = optionElement.parentNode;
+    curQnNode = curr.parentNode.childNodes;
+    console.log(curr.childNodes[3].childNodes);
+    console.log(curr.childNodes[3].childNodes[length - 3].childNodes[2].childNodes);
+    
+    if (curQnNode.length == 11) {
+      console.log(curQnNode[1].innerText);
+    } else {
+      console.log(curQnNode[0].innerText);
+    }
     optionElement.insertBefore(newNode, optionElement.childNodes[length - 2]);
 
     optionCount++;
@@ -62,42 +74,25 @@ function addQuestion() {
 
 function create() {
     const form = document.getElementById("quizForm");
-    formArr = form.elements;
-    var lessonID = formArr["inputNum"].value
-    var quizType = "UG"
-    var quizDuration = formArr["inputDur"].value
-    var passingCriteria = formArr["inputPass"].value
-    var questions = []
-    var answers = []
+    var formArr = form.elements;
+    var lessonID = sessionStorage.lessonID;
+    var quizType = "UG";
+    var quizDuration = String(formArr["inputDur"].value) + "min";
+    var passingCriteria = formArr["inputPass"].value;
+    var qnNo = 1
+    var options = ""
+    var question = ""
+    var answer = ""
 
     console.log(formArr);
-    console.log(formArr[1].checked, formArr[2].checked);
 
-    if (formArr[1].checked) {
-      quizType = "G"
+    if (formArr[0].checked) {
+      quizType = "G";
     } 
-    // formArr["inputQn"].forEach(qns => {
-    //     questions.push(qns.value);
-    // });
-    // formArr["correctAns"].forEach(ans => {
-    //     answers.push(ans.value);
-    // });
-    const quiz_data = {lessonID, quizType, quizDuration, passingCriteria }
-    console.log(quiz_data);
-    // $.ajax({
-    //   type: "POST",
-    //   url: "/quiz-create",
-    //   data: JSON.stringify(quiz_data),
-    //   contentType: "application/json",
-    //   dataType: 'json',
-    //   success: function(result) {
-    //     test.innerHTML = result.rows; 
-    //   } 
-    // });
+
+    const quiz_data = { lessonID, quizType, quizDuration, passingCriteria };
     fetch('http://localhost:5014/quiz-create', {
-      method: 'POST', // or 'PUT'
-      // mode: 'cors',
-      // credentials: 'include',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -105,13 +100,61 @@ function create() {
     })
     .then(response => response.json())
     .then(data => {
-      console.log('Success:', data);
+      var quizID = data.quizID;
+      var question_data = {}
+      var questions = []
+      var answers = []
+      if (formArr["inputQn"].length) {
+        formArr["inputQn"].forEach(qns => {
+          questions.push(qns.value);
+        });
+        formArr["correctAns"].forEach(ans => {
+          answers.push(ans.value);
+        });
+      } 
+      if (Array.isArray(questions)) {
+        for (let i = 0; i < questions.length; i++) {
+          qnNo = i+1;
+          question = questions[i];
+          answer = answers[i];
+          options = formArr["option1"][i].value + "," + formArr["option2"][i].value;
+          console.log(options);
+          question_data = { quizID, qnNo, question, options, answer }
+          createQns(question_data);
+        }
+      } else {
+        question = formArr["inputQn"].value;
+        answer = formArr["correctAns"].value;
+        options = formArr["option1"].value + "," + formArr["option2"].value;
+        question_data = { quizID, qnNo, question, options, answer }
+        createQns(question_data);
+      }
     })
     .catch((error) => {
+      alert('There is a problem, please try again later.');
       console.error('Error:', error);
     });
 }
 
-function deleteBtn(ele) {
-    var parent = ele.parentNode;
+function allOption(formArr) {
+  formArr = form.elements;
+  
+}
+
+function createQns(question_data) {
+  fetch('http://localhost:5013/question-create', {
+    method: 'POST', 
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(question_data),
+  })
+  .then(response => response.json())
+  .then((data) => {
+    console.log();('Success:', data);
+  })
+  .catch((error) => {
+    alert('There is a problem, please try again later.');
+    console.error('Error:', error);
+  });
 }

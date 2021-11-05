@@ -86,7 +86,7 @@
             <li class="dropdown"><a href="#"><span>Name<i class="bi bi-chevron-down"></i></a>
               <ul>
                 <li><a href="profile.html">Profile</a></li>
-              <li><a href="enrolledCourses.html">Enrolled Courses</a></li>
+              <li><a href="confirmedCourses.html">Enrolled Courses</a></li>
               </ul>
             </li>
             <li><a class="getstarted scrollto" href="#about">log out</a></li>
@@ -127,9 +127,10 @@
             <th scope="col">Class ID</th> 
             <th scope="col">Start Date - End Date</th> 
             <th scope="col">Start Time - End Time</th>
-            <th scope="col">Trainer ID</th>  
+            <th scope="col">Trainer Name</th>  
         </tr>
       </thead>  
+      <tbody></tbody>
     </table>
 
     <div class="card text-white bg-dark my-3 py-3 text-center">
@@ -144,7 +145,7 @@
     function getCourseName(courseID){
       $(async() => { 
 
-      var serviceURL = 'http://localhost:5007/course/' + courseID;
+      var serviceURL = 'http://localhost:5000/course/' + courseID;
       try {
             const response =
             await fetch(
@@ -157,10 +158,7 @@
                 var course = '';
 
                 course = result.data.courseName
-                console.log(course)
-
                 document.getElementById(courseID).innerHTML= course;  
-
               }
         
             } catch (error) {
@@ -187,7 +185,6 @@
                 var trainer = '';
 
                 trainer = result.data.empName
-                console.log(trainer)
 
                 document.getElementById(empID).innerHTML = trainer;  
 
@@ -208,7 +205,7 @@
       
   $(async() => {           
 
-      var serviceURL = 'http://localhost:5012/classList/learner/' + sessionStorage.learnerID;
+      var serviceURL = 'http://localhost:5000/classList/learner/' + sessionStorage.learnerID;
 
       try {
           const response =
@@ -232,7 +229,7 @@
     
       function getCourse(classID){
         $(async() => {           
-          var serviceURL = 'http://localhost:5010/classes/' + classID;
+          var serviceURL = 'http://localhost:5000/classes/' + classID;
           console.log(classID)
 
           try {

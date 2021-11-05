@@ -84,6 +84,7 @@ CREATE TABLE lesson (
     lessonID INT NOT NULL AUTO_INCREMENT,
     lessonNum INT NOT NULL,
     classID INT NOT NULL,
+    courseID INT NOT NULL,
     lessonName VARCHAR(100) NOT NULL,
     lessonDesc VARCHAR(500) NOT NULL,
 
@@ -136,10 +137,12 @@ INSERT INTO course(courseName, courseDesc, courseDuration) VALUES("Repair Words 
 INSERT INTO course(courseName, courseDesc, courseDuration) VALUES("Repair 101", "Learn how to repair things", "3h");
 INSERT INTO course(courseName, courseDesc, courseDuration) VALUES("Repair testing ", "Learn how to repair things testing ", "3h");
 
+INSERT INTO prerequisite VALUES(1, 0);
 INSERT INTO prerequisite VALUES(2, 1);
+INSERT INTO prerequisite VALUES(3, 2);
 
 INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
-VALUES("2021-11-20", "2021-12-31", 30, "12:00", "13:00", 10, 30, "2021-10-25", "2021-11-15", 1, NULL);
+VALUES("2021-11-20", "2021-12-31", 30, "12:00", "13:00", 10, 30, "2021-10-25", "2021-11-15", 1, 4);
 INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
 VALUES("2021-11-20", "2021-12-31", 20, "15:00", "16:00", 10, 30, "2021-11-05", "2021-11-25", 1, 4);
 INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
@@ -164,17 +167,20 @@ INSERT INTO classList VALUES(2, 1, 0, NULL);
 INSERT INTO enrolmentList VALUES(1, 1, 2,"Pending");
 INSERT INTO enrolmentList VALUES(2, 2 , 1 ,"Successful");
 
-INSERT INTO lesson(lessonNum, classID, lessonName, lessonDesc) VALUES(1, 1, "Basic English", "Basic English words.");
-INSERT INTO lesson(lessonNum, classID, lessonName, lessonDesc) VALUES(2, 1, "Advanced English", "Advanced English words.");
-INSERT INTO lesson(lessonNum, classID, lessonName, lessonDesc) VALUES(3, 1, "Repair English", "English repair words.");
-INSERT INTO lesson(lessonNum, classID, lessonName, lessonDesc) VALUES(1, 2, "Using Hands", "How to use your hands to repair things.");
-INSERT INTO lesson(lessonNum, classID, lessonName, lessonDesc) VALUES(2, 2, "Using Tools", "How to use tools to repair things.");
+INSERT INTO lesson(lessonNum, classID, courseID, lessonName, lessonDesc) VALUES(1, 1, 1,"Basic English", "Basic English words.");
+INSERT INTO lesson(lessonNum, classID, courseID, lessonName, lessonDesc) VALUES(2, 1, 1,"Advanced English", "Advanced English words.");
+INSERT INTO lesson(lessonNum, classID, courseID, lessonName, lessonDesc) VALUES(3, 1, 1,"Repair English", "English repair words.");
+INSERT INTO lesson(lessonNum, classID, courseID, lessonName, lessonDesc) VALUES(1, 2, 2,"Using Hands", "How to use your hands to repair things.");
+INSERT INTO lesson(lessonNum, classID, courseID, lessonName, lessonDesc) VALUES(2, 2, 2, "Using Tools", "How to use tools to repair things.");
 
-INSERT INTO lessonMaterials(content, lessonID) VALUES("basic.pdf", 1);
-INSERT INTO lessonMaterials(content, lessonID) VALUES("advanced.pdf", 2);
-INSERT INTO lessonMaterials(content, lessonID) VALUES("repair.pdf", 3);
-INSERT INTO lessonMaterials(content, lessonID) VALUES("hands.pptx", 1);
-INSERT INTO lessonMaterials(content, lessonID) VALUES("tools.pdf", 2);
+INSERT INTO lessonMaterials(content, lessonID) VALUES("Basic_1.pdf", 1);
+INSERT INTO lessonMaterials(content, lessonID) VALUES("Advanced.pdf", 2);
+INSERT INTO lessonMaterials(content, lessonID) VALUES("Repair.docx", 3);
+INSERT INTO lessonMaterials(content, lessonID) VALUES("Basic_2.pptx", 1);
+INSERT INTO lessonMaterials(content, lessonID) VALUES("Extra_Materials.docx", 2);
+INSERT INTO lessonMaterials(content, lessonID) VALUES("Solution.pdf", 4);
+INSERT INTO lessonMaterials(content, lessonID) VALUES("Exercises.pdf", 5);
+INSERT INTO lessonMaterials(content, lessonID) VALUES("Additional_Exercise.pptx", 4);
 
 INSERT INTO quiz(quizDuration, passingCriteria, quizType, lessonID) VALUES("10min", "3", "UG", 1);
 INSERT INTO quiz(quizDuration, passingCriteria, quizType, lessonID) VALUES("10min", "3", "UG", 2);

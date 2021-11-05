@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from quizClass import Quiz
+from QuizClass import Quiz
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/lms'
@@ -48,9 +48,8 @@ def quizQuestions(quizID):
 @app.route('/question-create', methods=['POST'])
 def create_quiz():
     data = request.get_json()
-    # quizID = Quiz.query. get latest QuizID
     item = Questions(
-        qnNo=data['qnNo'], question=data['question'],
+        quizID=data['quizID'], qnNo=data['qnNo'], question=data['question'],
         options=data['options'], answer=data['answer']
     )
     if ( request.get_json() is not None ): 

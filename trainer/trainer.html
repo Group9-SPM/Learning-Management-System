@@ -34,8 +34,103 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
 
+<script>
+  $(async() => {           
+    var serviceURL = "http://localhost:5007/courses";
+
+    try {
+      const response =
+      await fetch(
+        serviceURL, { method: 'GET' }
+      );
+      const result = await response.json();
+      if (response.ok) {
+        var allCourses = result.data;
+        var eachRow = "";
+        for (const course of allCourses) {
+          preReq = findPreReq(course.courseID);
+          console.log(preReq);
+          eachRow = `<div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+                      <div class="col-lg-3">
+                        <p>${course.courseID}</p>
+                      </div>
+                      <div class="col-lg-3">
+                        <a id='courseName' onclick='findCourse()' style="cursor: pointer; color: #3498db;">${course.courseName}</a>
+                      </div>
+                      <div class="col-lg-3">
+                        <p>${course.courseDesc}</p>
+                      </div>
+                      <div class="col-lg-3">
+                        <p>${preReq}</p>
+                      </div>
+                    </div>`;
+          $('#coursesTable').append(eachRow);
+        }
+      }
+    } catch (error) {
+      showError('There is a problem retrieving courses data, please refresh the page or try again later.');
+    }
+  });
+  async function findCourse() {
+    var courseName = document.getElementById('courseName').innerHTML;
+    var serviceURL = "http://localhost:5007/course/" + courseName;
+    try {
+      const response =
+      await fetch(
+        serviceURL, { method: 'GET' }
+      );
+      const data = await response.json();
+      if (response.ok) { 
+        var name = data.data.courseName;
+        console.log(data.data);
+        if (courseName == name) {
+          sessionStorage.courseName = data.data.courseName;
+          sessionStorage.courseID = data.data.courseID;
+          sessionStorage.courseDesc = data.data.courseDesc;
+
+          window.location.assign("./course.html");
+        } else {
+          alert("Cant find course.");
+        }
+      } else {
+        alert("Theres an issue with the data.");
+      }
+    }
+    catch (error) {
+      alert('There is a problem, please try again later.');
+    }
+  };
+  function findPreReq(courseID) {
+    $(async() => { 
+      var serviceURL = 'http://localhost:5006/prerequisite/' + courseID;
+      try {
+        const response =
+        await fetch(
+          serviceURL, { method: 'GET' }
+        );
+        const result = await response.json();
+
+        if (response.ok) {
+          var preReqCourses = result.data;
+          var preReq = result.data.prerequisiteID;
+
+          if(preReq == 0) {
+            return "No prerequisite course";
+          }
+          else {
+            console.log(preReq);
+            return preReq;
+          }
+        }
+      } catch (error) {
+        showError('There is a problem retrieving prerequisite course please try again later.' + error);
+      } 
+    })
+  };
+</script>
 <body>
 
   <!-- ======= Header ======= -->
@@ -60,15 +155,6 @@
   </header><!-- End Header -->
 
   <main id="main">
-
-    <!-- ======= Breadcrumbs Section ======= -->
-    <!-- <section class="breadcrumbs">
-      <div class="container">
-        <h1>Welcome Trainer!</h1>
-      </div>
-    </section> -->
-    <!-- End Breadcrumbs Section -->
-
     <!-- ======= F.A.Q Section ======= -->
     <section id="faq" class="faq">
       <div class="container">
@@ -91,81 +177,7 @@
             <h4>Pre-requisite Course</h4>
           </div>
         </div>
-
-        <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
-          <div class="col-lg-3">
-            <a href="./course.html">RE101</a>
-          </div>
-          <div class="col-lg-3">
-            <p>HP OfficeJet All-in-One 8010, 8020, Pro 8030, 8020e, 8030e Printers</p>
-          </div>
-          <div class="col-lg-3">
-            <p>This course will cover on the set up to troubleshooting of HP OfficeJet All-in-One 8010, 8020, Pro 8030, 8020e, 8030e Printers.</p>
-          </div>
-          <div class="col-lg-3">
-            <p>NIL</p>
-          </div>
-        </div><!-- End Item 1-->
-
-        <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
-          <div class="col-lg-3">
-            <p>CS201</p>
-          </div>
-          <div class="col-lg-3">
-            <p>ABC course</p>
-          </div>
-          <div class="col-lg-3">
-            <p>Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-          </div>
-          <div class="col-lg-3">
-            <p>CS101</p>
-          </div>
-        </div><!-- End Item 2-->
-
-        <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="300">
-          <div class="col-lg-3">
-            <p>IS201</p>
-          </div>
-          <div class="col-lg-3">
-            <p>ABC course</p>
-          </div>
-          <div class="col-lg-3">
-            <p>ABC course description</p>
-          </div>
-          <div class="col-lg-3">
-            <p>IS101</p>
-          </div>
-        </div><!-- End Item 3-->
-
-        <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="400">
-          <div class="col-lg-3">
-            <p>EN101</p>
-          </div>
-          <div class="col-lg-3">
-            <p>ABC course</p>
-          </div>
-          <div class="col-lg-3">
-            <p>ABC course description</p>
-          </div>
-          <div class="col-lg-3">
-            <p>RE101</p>
-          </div>
-        </div><!-- End Item 4-->
-
-        <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="500">
-          <div class="col-lg-3">
-            <p>EE101</p>
-          </div>
-          <div class="col-lg-3">
-            <p>ABC course</p>
-          </div>
-          <div class="col-lg-3">
-            <p>ABC course description</p>
-          </div>
-          <div class="col-lg-3">
-            <p>EN101</p>
-          </div>
-        </div><!-- End Item 5-->
+        <div id="coursesTable"></div>
 
       </div>
     </section><!-- End F.A.Q Section -->
