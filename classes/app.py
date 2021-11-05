@@ -585,7 +585,7 @@ def quizQuestions(quizID):
         }), 404
 
 @app.route('/question-create', methods=['POST'])
-def create_quiz():
+def create_question():
     data = request.get_json()
     # quizID = Quiz.query. get latest QuizID
     item = Questions(
