@@ -142,7 +142,7 @@
 
   sessionStorage.setItem("learnerID", "1")
 
-    function getCourseName(courseID){
+    function getCourseName(courseID, classID){
       $(async() => { 
 
       var serviceURL = 'http://localhost:5000/course/' + courseID;
@@ -157,8 +157,8 @@
                 var courses = result.data;
                 var course = '';
 
-                course = result.data.courseName
-                document.getElementById(courseID).innerHTML= course;  
+                course = "<a href = '../courseOverview.html?courseID="+ courseID + "&classID=" + classID + "'>"+result.data.courseName+"</a>";
+                document.getElementById("class_"+classID).innerHTML= course;  
               }
         
             } catch (error) {
@@ -169,7 +169,7 @@
           }
       )};
 
-      function getTrainerName(empID){
+    function getTrainerName(empID, classID){
       $(async() => { 
 
       var serviceURL = 'http://localhost:5000/employee/' + empID;
@@ -186,8 +186,8 @@
 
                 trainer = result.data.empName
 
-                document.getElementById(empID).innerHTML = trainer;  
-
+                document.getElementById("trainer_"+classID).innerHTML = trainer;  
+              
               }
         
             } catch (error) {
@@ -229,7 +229,7 @@
     
       function getCourse(classID){
         $(async() => {           
-          var serviceURL = 'http://localhost:5000/classes/' + classID;
+          var serviceURL = 'http://localhost:5000/classes/byClass/' + classID;
           console.log(classID)
 
           try {
@@ -244,14 +244,14 @@
                       console.log(enrolledCourses);
                       var rows = "";
                       
-                      for (const courses of enrolledCourses) {
+                      for (var courses of enrolledCourses) {
                         
-                        
-                          eachRow = "<td id='"+ courses.courseID +"'>" + "<a href = '../courseOverview.html?courseID="+ courses.courseID + "&classID=" + courses.classID + "'>" + await getCourseName(courses.courseID) + "</td>" +
+
+                          eachRow = "<td id='class_"+ courses.classID +"'>"  + await getCourseName(courses.courseID, courses.classID) + "</td>" +
                           "<td>" + courses.classID + "</td>" +
                           "<td>" + courses.startDate.substr(0, 16) + " - " +courses.endDate.substr(0, 16)  + "</td>"+
                           "<td>" + courses.startTime +" - " +courses.endTime + "</td>"+
-                          "<td id='"+ courses.trainerID+"'>"  + await getTrainerName(courses.trainerID) + "</td>" ;
+                          "<td id='trainer_"+ courses.classID+"'>"  + await getTrainerName(courses.trainerID, courses.classID) + "</td>" ;
                           
                           rows += "<tr>" + eachRow + "</tr>";
                       }

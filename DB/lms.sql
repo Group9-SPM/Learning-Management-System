@@ -90,16 +90,29 @@ CREATE TABLE lesson (
 
     CONSTRAINT lesson_pk PRIMARY KEY (lessonID),
     CONSTRAINT lesson_fk FOREIGN KEY (classID) REFERENCES classes(classID),
-    CONSTRAINT lesson_fk FOREIGN KEY (courseID) REFERENCES classes(courseID)
+    CONSTRAINT lesson_fk2 FOREIGN KEY (courseID) REFERENCES classes(courseID)
 );
 
 CREATE TABLE lessonMaterials (
     materialID INT NOT NULL AUTO_INCREMENT,
+    materialURL varchar(256) NOT NULL,
     content varchar(100) NOT NULL,
     lessonID INT NOT NULL,
 
     CONSTRAINT lessonMaterials_pk PRIMARY KEY (materialID),
     CONSTRAINT lessonMaterials_fk FOREIGN KEY (lessonID) REFERENCES lesson(lessonID)
+);
+
+CREATE TABLE lessonMaterialsViewed (
+    materialID INT NOT NULL,
+    learnerID INT NOT NULL,
+    lessonID INT NOT NULL,
+    completed TINYINT NOT NULL,
+
+    CONSTRAINT lessonMaterialsViewed_pk PRIMARY KEY (materialID,learnerID),
+    CONSTRAINT lessonMaterialsViewed_fk1 FOREIGN KEY (learnerID) REFERENCES learner(empID),
+    CONSTRAINT lessonMaterialsViewed_fk2 FOREIGN KEY (materialID) REFERENCES lessonMaterials(materialID),
+    CONSTRAINT lessonMaterialsViewed_fk3 FOREIGN KEY (lessonID) REFERENCES lesson(lessonID)
 );
 
 CREATE TABLE quiz (
@@ -173,15 +186,20 @@ INSERT INTO lesson(lessonNum, classID, courseID, lessonName, lessonDesc) VALUES(
 INSERT INTO lesson(lessonNum, classID, courseID, lessonName, lessonDesc) VALUES(3, 1, 1,"Repair English", "English repair words.");
 INSERT INTO lesson(lessonNum, classID, courseID, lessonName, lessonDesc) VALUES(1, 2, 2,"Using Hands", "How to use your hands to repair things.");
 INSERT INTO lesson(lessonNum, classID, courseID, lessonName, lessonDesc) VALUES(2, 2, 2, "Using Tools", "How to use tools to repair things.");
+INSERT INTO lesson(lessonNum, classID, courseID, lessonName, lessonDesc) VALUES(1, 2, 1, "Repair Words Lesson 1", "How to repair using words 1.");
+INSERT INTO lesson(lessonNum, classID, courseID, lessonName, lessonDesc) VALUES(2, 2, 1, "Repair Words Lesson 2", "How to repair using words 2.");
 
-INSERT INTO lessonMaterials(content, lessonID) VALUES("Basic_1.pdf", 1);
-INSERT INTO lessonMaterials(content, lessonID) VALUES("Advanced.pdf", 2);
-INSERT INTO lessonMaterials(content, lessonID) VALUES("Repair.docx", 3);
-INSERT INTO lessonMaterials(content, lessonID) VALUES("Basic_2.pptx", 1);
-INSERT INTO lessonMaterials(content, lessonID) VALUES("Extra_Materials.docx", 2);
-INSERT INTO lessonMaterials(content, lessonID) VALUES("Solution.pdf", 4);
-INSERT INTO lessonMaterials(content, lessonID) VALUES("Exercises.pdf", 5);
-INSERT INTO lessonMaterials(content, lessonID) VALUES("Additional_Exercise.pptx", 4);
+INSERT INTO lessonMaterials(content, materialURL, lessonID) VALUES("Basic_1.pdf", "https://drive.google.com/file/d/1tbOmz0GipcX-_c2oXj4MnzZNodiN85x-/view?usp=sharing" , 1);
+INSERT INTO lessonMaterials(content, materialURL, lessonID) VALUES("Advanced.pdf","https://drive.google.com/file/d/1_ZojoH5my2eVY9ONHXiDQGXVJhGQ88Dq/view?usp=sharing", 2);
+INSERT INTO lessonMaterials(content, materialURL, lessonID) VALUES("Repair.docx","https://docs.google.com/document/d/1tbu7DVxYJaXgtcqQnDaGQptpEgdqjQah/edit?usp=sharing&ouid=104361878523867233103&rtpof=true&sd=true", 3);
+INSERT INTO lessonMaterials(content, materialURL, lessonID) VALUES("Basic_2.pptx","https://docs.google.com/presentation/d/1Ma2ttgemZqUiNdN51Dw7MvgIiDTtM4ha/edit?usp=sharing&ouid=104361878523867233103&rtpof=true&sd=true", 1);
+INSERT INTO lessonMaterials(content, materialURL, lessonID) VALUES("Extra_Materials.docx","https://docs.google.com/document/d/1Ly2bwHkbwFl4-7uHjg8OmaUShsXxat9J/edit?usp=sharing&ouid=104361878523867233103&rtpof=true&sd=true", 2);
+INSERT INTO lessonMaterials(content, materialURL, lessonID) VALUES("Solution.pdf","https://drive.google.com/file/d/1eBvoGvbmaM7R_KkhwtY-qbrXYUf9zNN6/view?usp=sharing", 4);
+INSERT INTO lessonMaterials(content, materialURL, lessonID) VALUES("Exercises.pdf","https://drive.google.com/file/d/1Lkxv3OCAmBI-Z1G4UXnrYkWmKk5Lcati/view?usp=sharing", 5);
+INSERT INTO lessonMaterials(content, materialURL, lessonID) VALUES("Additional_Exercise.pptx","https://docs.google.com/presentation/d/1-ZS61Jq0cqy1UQh9Q15kObhNXuJm7cnR/edit?usp=sharing&ouid=104361878523867233103&rtpof=true&sd=true", 4);
+INSERT INTO lessonMaterials(content, materialURL, lessonID) VALUES("Exercises.pdf","https://drive.google.com/file/d/1Lkxv3OCAmBI-Z1G4UXnrYkWmKk5Lcati/view?usp=sharing", 6);
+INSERT INTO lessonMaterials(content, materialURL, lessonID) VALUES("Additional_Exercise.pptx","https://docs.google.com/presentation/d/1-ZS61Jq0cqy1UQh9Q15kObhNXuJm7cnR/edit?usp=sharing&ouid=104361878523867233103&rtpof=true&sd=true", 6);
+INSERT INTO lessonMaterials(content, materialURL, lessonID) VALUES("Extra_Materials.docx","https://docs.google.com/document/d/1Ly2bwHkbwFl4-7uHjg8OmaUShsXxat9J/edit?usp=sharing&ouid=104361878523867233103&rtpof=true&sd=true", 7);
 
 INSERT INTO quiz(quizDuration, passingCriteria, quizType, lessonID) VALUES("10min", "3", "UG", 1);
 INSERT INTO quiz(quizDuration, passingCriteria, quizType, lessonID) VALUES("10min", "3", "UG", 2);

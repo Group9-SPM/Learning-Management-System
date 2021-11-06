@@ -185,14 +185,36 @@ class Lesson(db.Model):
             result[column] = getattr(self, column)
         return result
 
-#LESSON MATERIAL
+
+#LESSON MATERIAL CLASS
 class LessonMaterials(db.Model): 
     
     __tablename__ = 'lessonMaterials'
 
     materialID = db.Column(db.Integer, primary_key=True)
+    materialURL = db.Column(db.String(500), nullable=False)
     lessonID = db.Column(db.Integer, db.ForeignKey('lesson.lessonID'), nullable=False)
     content = db.Column(db.String(500), nullable=False)
+
+    def to_dict(self):
+        """
+        'to_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
+
+#LESSON MATERIAL VIEWED CLASS
+class LessonMaterialsViewed(db.Model):
+    __tablename__ = 'lessonMaterialsViewed'
+
+    materialID = db.Column(db.Integer, db.ForeignKey(LessonMaterials.materialID), primary_key=True)
+    learnerID = db.Column(db.Integer, db.ForeignKey(Learner.empID), nullable=False)
+    lessonID = db.Column(db.Integer, db.ForeignKey(Lesson.lessonID), nullable=False)
+    completed = db.Column(db.Boolean, default=False)
 
     def to_dict(self):
         """
@@ -247,11 +269,6 @@ class Questions(db.Model):
         for column in columns:
             result[column] = getattr(self, column)
         return result
-
-
-
-
-
 
 
 #EMPLOYEE
@@ -434,9 +451,9 @@ def class_by_courseID(courseID):
         }), 404
 
 
-@app.route("/classes/<int:classID>")
+@app.route("/classes/byClass/<int:classID>")
 def class_by_classID(classID):
-    classID = Classes.query.filter_by(classID=classID)
+    classID = Classes.query.join(Course).filter(Classes.classID==classID)
     if classID:
         return jsonify({
             "data": [classs.to_dict()
@@ -517,6 +534,106 @@ def create_enrolment():
             "message": "Unable to commit to database. " + str(e)
         }), 500        
 
+
+#LESSON
+@app.route("/lesson/<int:classID>/<int:lessonNum>/<int:courseID>")
+def lesson_by_num(classID, lessonNum, courseID):
+    lessons = Lesson.query.filter_by(classID=classID, lessonID=lessonNum, courseID=courseID).all()
+    if lessons:
+        return jsonify({
+            "data": [lesson.to_dict()
+                     for lesson in lessons]
+        }), 200
+    else:
+        return jsonify({
+            "message": "No lessons materials available yet."
+        }), 201
+
+@app.route("/lesson/<int:classID>/<int:courseID>")
+def retrieve_all_lessons_by_class(classID, courseID):
+    lessons = Lesson.query.filter_by(classID=classID, courseID=courseID).all()
+    if lessons:
+        return jsonify({
+            "data": [lesson.to_dict()
+                     for lesson in lessons]
+        }), 200
+    else:
+        return jsonify({
+            "message": "No lessons available yet."
+        }), 201
+
+#LESSONMATERIALS
+@app.route("/lessonMaterials/<int:lessonID>")
+def lessonMaterials_by_lesson(lessonID):
+    lessonMaterials = LessonMaterials.query.filter_by(lessonID=lessonID).all()
+    if lessonMaterials:
+        return jsonify({
+            "data": [lessonMaterial.to_dict()
+                     for lessonMaterial in lessonMaterials]
+        }), 200
+    else:
+        return jsonify({
+            "message": "No lesson materials found."
+        }), 201
+
+#LESSONMATERIALSVIEWED
+@app.route("/lessonMaterialsViewed/check/<int:materialID>/<int:learnerID>/<int:lessonID>")
+def lessonMaterialsViewed_by_lesson_material(materialID, learnerID, lessonID):
+    lessonMaterialsViewed = LessonMaterialsViewed.query.filter_by(materialID=materialID, learnerID=learnerID, lessonID=lessonID).first()
+    if lessonMaterialsViewed:
+        return jsonify({
+            "data": lessonMaterialsViewed.to_dict(),
+            "status": "success"
+        }), 200
+    else:
+        return jsonify({
+            "message": "No lesson materials found.",
+            "status": "not found"
+        }), 201
+
+#ADD TO DB THAT ITS VIEWED
+@app.route("/lessonMaterialsViewed/add/<int:materialID>/<int:learnerID>/<int:lessonID>")
+def lessonMaterialsViewed_add_by_lesson_material(materialID, learnerID, lessonID):
+    lessonMaterialsViewed = LessonMaterialsViewed.query.filter_by(materialID=materialID, learnerID=learnerID, lessonID=lessonID).first()
+    if lessonMaterialsViewed:
+        return jsonify({
+            "message": "Lesson Material already viewed."
+        }), 201
+    else:
+        newMaterial = LessonMaterialsViewed(
+            materialID=materialID, 
+            learnerID=learnerID,
+            lessonID=lessonID,
+            completed=False
+        )
+        try:
+            db.session.add(newMaterial)
+            db.session.commit()
+            return jsonify({
+                "message": "Viewed Material."
+            }), 200
+        except Exception:
+            return jsonify({
+                "message": "Unable to commit to database."
+            }), 500
+
+#UPDATE COMPLETED
+@app.route("/lessonMaterialsViewed/update/<int:materialID>/<int:learnerID>/<int:lessonID>")
+def lessonMaterialsViewed_update_by_lesson_material(materialID, learnerID, lessonID):
+    lessonMaterialsViewed = LessonMaterialsViewed.query.filter_by(materialID=materialID, learnerID=learnerID, lessonID=lessonID).first()
+    lessonMaterialsViewed.completed = True 
+    try:
+        db.session.commit()
+        return jsonify({
+            "message": "Updated Completed."
+        }), 200
+    except Exception:
+        return jsonify({
+            "message": "Unable to commit to database."
+        }), 500
+
+
+
 #PREREQ        
 @app.route("/prerequisite")
 def prerequisite():
@@ -539,6 +656,7 @@ def prerequisite_by_courseID(courseID):
         return jsonify({
             "message": "Error getting prerequisite course."
         }), 404
+
 
 #LESSON CLASS
 @app.route("/lesson/<int:classID>/<int:lessonNum>/<int:courseID>")
