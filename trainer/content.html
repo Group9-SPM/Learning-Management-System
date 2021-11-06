@@ -38,7 +38,7 @@
 </head>
 <script>
   $(async() => {
-    var serviceURL = "http://localhost:5005/lesson/" + sessionStorage.classID + "/" + sessionStorage.courseID;
+    var serviceURL = "http://localhost:5000/lesson/" + sessionStorage.classID + "/" + sessionStorage.courseID; //5005
     try {
       const response =
       await fetch(
@@ -71,7 +71,7 @@
   });
   async function findLesson(btnInfo) {
     var lessonNum = Number(btnInfo.value);
-    var serviceURL = "http://localhost:5005/lesson/" + sessionStorage.classID + "/" + lessonNum + "/" + sessionStorage.courseID;
+    var serviceURL = "http://localhost:5000/lesson/" + sessionStorage.classID + "/" + lessonNum + "/" + sessionStorage.courseID; //5005
     try {
       const response =
       await fetch(
@@ -132,7 +132,6 @@
   </main><!-- End #main -->
 
   <script>
-    console.log(sessionStorage);
     var courseInfo = document.getElementById("courseInfo");
     courseInfo.innerHTML = sessionStorage.courseID + " - " + sessionStorage.courseName;
   </script>

@@ -39,8 +39,7 @@
 
 <script>
   $(async() => {           
-    var serviceURL = "http://localhost:5007/courses";
-
+    var serviceURL = "http://localhost:5000/courses"; //5007
     try {
       const response =
       await fetch(
@@ -76,7 +75,7 @@
   });
   async function findCourse() {
     var courseName = document.getElementById('courseName').innerHTML;
-    var serviceURL = "http://localhost:5007/course/" + courseName;
+    var serviceURL = "http://localhost:5000/course/" + courseName; //5007
     try {
       const response =
       await fetch(
@@ -90,7 +89,6 @@
           sessionStorage.courseName = data.data.courseName;
           sessionStorage.courseID = data.data.courseID;
           sessionStorage.courseDesc = data.data.courseDesc;
-
           window.location.assign("./course.html");
         } else {
           alert("Cant find course.");
@@ -105,7 +103,7 @@
   };
   function findPreReq(courseID) {
     $(async() => { 
-      var serviceURL = 'http://localhost:5006/prerequisite/' + courseID;
+      var serviceURL = 'http://localhost:5000/prerequisite/' + courseID; //5006
       try {
         const response =
         await fetch(
