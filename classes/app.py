@@ -657,48 +657,6 @@ def prerequisite_by_courseID(courseID):
             "message": "Error getting prerequisite course."
         }), 404
 
-
-#LESSON CLASS
-@app.route("/lesson/<int:classID>/<int:lessonNum>/<int:courseID>")
-def lesson_by_num(classID, lessonNum, courseID):
-    lessons = Lesson.query.filter_by(classID=classID, lessonNum=lessonNum, courseID=courseID).all()
-    if lessons:
-        return jsonify({
-            "data": lesson.to_dict()
-                     for lesson in lessons
-        }), 200
-    else:
-        return jsonify({
-            "message": "No lessons available yet."
-        }), 201
-
-@app.route("/lesson/<int:classID>/<int:courseID>")
-def retrieve_all_lessons_by_class(classID, courseID):
-    lessons = Lesson.query.filter_by(classID=classID, courseID=courseID).all()
-    if lessons:
-        return jsonify({
-            "data": [lesson.to_dict()
-                     for lesson in lessons]
-        }), 200
-    else:
-        return jsonify({
-            "message": "No lessons available yet."
-        }), 201
-        
-#LESSONMATERIAL
-@app.route("/lessonMaterials/<int:lessonID>")
-def lessonMaterials_by_lesson(lessonID):
-    lessonMaterials = LessonMaterials.query.filter_by(lessonID=lessonID).all()
-    if lessonMaterials:
-        return jsonify({
-            "data": [lessonMaterial.to_dict()
-                     for lessonMaterial in lessonMaterials]
-        }), 200
-    else:
-        return jsonify({
-            "message": "No lesson materials found."
-        }), 201
-
 #QUIZCLASS
 @app.route("/quiz")
 def quizList():
