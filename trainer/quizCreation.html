@@ -47,7 +47,7 @@
       <nav id="navbar" class="navbar">
         <ul>
           <li><a class="nav-link" href="./trainer.html">Home</a></li>
-          <li><a class="nav-link" href="./course.html">Course</a></li>
+          <li><a class="nav-link" href="./quizCreated.html">Course</a></li>
           <li><a class="getstarted" href="../index.html">Logout</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
@@ -150,7 +150,6 @@
   </main><!-- End #main -->
 
   <script>
-    console.log(sessionStorage);
     var courseInfo = document.getElementById("courseInfo");
     courseInfo.innerHTML = sessionStorage.courseID + " - " + sessionStorage.courseName + " | " + sessionStorage.lessonNum + " - " + sessionStorage.lessonName;
   </script>

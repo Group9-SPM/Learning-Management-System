@@ -67,7 +67,7 @@ function addQuestion() {
     newNode.innerHTML = newQuestion;
 
     var buttonElement = document.getElementById("questionBtn").parentNode;
-    var length = buttonElement.childNodes.length
+    var length = buttonElement.childNodes.length;
     buttonElement.insertBefore(newNode, buttonElement.childNodes[length - 7]);
     questionCount++;
 }
@@ -79,61 +79,45 @@ function create() {
     var quizType = "UG";
     var quizDuration = String(formArr["inputDur"].value) + "min";
     var passingCriteria = formArr["inputPass"].value;
+    var question_data = []
     var qnNo = 1
     var options = ""
     var question = ""
     var answer = ""
-
-    console.log(formArr);
+    var questions = []
+    var answers = []
 
     if (formArr[0].checked) {
       quizType = "G";
     } 
-
-    const quiz_data = { lessonID, quizType, quizDuration, passingCriteria };
-    fetch('http://localhost:5014/quiz-create', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(quiz_data),
-    })
-    .then(response => response.json())
-    .then(data => {
-      var quizID = data.quizID;
-      var question_data = {}
-      var questions = []
-      var answers = []
-      if (formArr["inputQn"].length) {
-        formArr["inputQn"].forEach(qns => {
-          questions.push(qns.value);
-        });
-        formArr["correctAns"].forEach(ans => {
-          answers.push(ans.value);
-        });
-      } 
-      if (Array.isArray(questions)) {
-        for (let i = 0; i < questions.length; i++) {
-          qnNo = i+1;
-          question = questions[i];
-          answer = answers[i];
-          options = formArr["option1"][i].value + "," + formArr["option2"][i].value;
-          console.log(options);
-          question_data = { quizID, qnNo, question, options, answer }
-          createQns(question_data);
-        }
-      } else {
-        question = formArr["inputQn"].value;
-        answer = formArr["correctAns"].value;
-        options = formArr["option1"].value + "," + formArr["option2"].value;
-        question_data = { quizID, qnNo, question, options, answer }
-        createQns(question_data);
+    var quiz_data = { lessonID, quizType, quizDuration, passingCriteria };
+    
+    if (formArr["inputQn"].length) {
+      formArr["inputQn"].forEach(qns => {
+        questions.push(qns.value);
+      });
+      formArr["correctAns"].forEach(ans => {
+        answers.push(ans.value);
+      });
+      for (let i = 0; i < questions.length; i++) {
+        qnNo = i+1;
+        question = questions[i];
+        answer = answers[i];
+        options = formArr["option1"][i].value + "," + formArr["option2"][i].value;
+        data = { qnNo, question, options, answer };
+        question_data.push(data);
+        sessionStorage.multiple = true;
       }
-    })
-    .catch((error) => {
-      alert('There is a problem, please try again later.');
-      console.error('Error:', error);
-    });
+    } else {
+      question = formArr["inputQn"].value;
+      answer = formArr["correctAns"].value;
+      options = formArr["option1"].value + "," + formArr["option2"].value;
+      question_data = [ qnNo, question, options, answer ];
+      sessionStorage.multiple = false;
+    }
+    sessionStorage.quizData = JSON.stringify(quiz_data);
+    sessionStorage.qnsData = JSON.stringify(question_data);
+    window.location.assign("./quizConfirm.html");
 }
 
 function allOption(formArr) {
@@ -141,8 +125,56 @@ function allOption(formArr) {
   
 }
 
+function createQuiz(quizData, questionData) {
+  console.log(quizData);
+  quizData = JSON.parse(quizData);
+  lessonID = Number(quizData.lessonID);
+  passingCriteria = quizData.passingCriteria;
+  quizType = quizData.quizType
+  quizDuration = quizData.quizDuration
+
+  const quiz_data = { lessonID, quizType, quizDuration, passingCriteria };
+  console.log(quiz_data);
+  fetch('http://localhost:5000/quiz-create', { //5014
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(quiz_data),
+  })
+  .then(response => response.json())
+  .then(data => {
+    var quizID = data.quizID;
+    var question_data = {};
+    questionData = JSON.parse(questionData);
+
+    if (sessionStorage.multiple == "true") {
+      for (let i = 0; i < questionData.length; i++) {
+        console.log(questionData[i]);
+        qnNo = questionData[i].qnNo;
+        question = questionData[i].question;
+        options = questionData[i].options;
+        answer = questionData[i].answer;
+        question_data = { quizID, qnNo, question, options, answer };
+        createQns(question_data);
+      }
+    } else {
+      qnNo = questionData[0];
+      question = questionData[1];
+      options = questionData[2];
+      answer = questionData[3];
+      question_data = { quizID, qnNo, question, options, answer };
+      createQns(question_data);
+    }
+  })
+  .catch((error) => {
+    alert('There is a problem, please try again later.');
+    console.error('Error:', error);
+  });
+}
+
 function createQns(question_data) {
-  fetch('http://localhost:5013/question-create', {
+  fetch('http://localhost:5000/question-create', { //5013
     method: 'POST', 
     headers: {
       'Content-Type': 'application/json',
@@ -151,7 +183,7 @@ function createQns(question_data) {
   })
   .then(response => response.json())
   .then((data) => {
-    console.log();('Success:', data);
+    window.location.replace("./content.html")
   })
   .catch((error) => {
     alert('There is a problem, please try again later.');

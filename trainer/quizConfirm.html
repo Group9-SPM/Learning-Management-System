@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Course - Content</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="../assets/img/favicon.png" rel="icon">
+  <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="../assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="../assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="../assets/css/style.css" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: Vesperr - v4.4.0
+  * Template URL: https://bootstrapmade.com/vesperr-free-bootstrap-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<script>
+  async function findQuiz() {
+    var quizID = sessionStorage.quizID;
+    var serviceURL = "http://localhost:5000/course/" + quizID; //5007
+    try {
+      const response =
+      await fetch(
+        serviceURL, { method: 'GET' }
+      );
+      const data = await response.json();
+      if (response.ok) { 
+        var name = data.data.courseName;
+        if (courseName == name) {
+          sessionStorage.courseName = data.data.courseName;
+          sessionStorage.courseID = data.data.courseID;
+
+          window.location.assign("./classes.html");
+        } else {
+          alert("Cant find course.");
+        }
+      } else {
+        alert("Theres an issue with the data.");
+      }
+    }
+    catch (error) {
+      alert('There is a problem, please try again later.');
+    }
+  };
+</script>
+
+<body>
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container d-flex align-items-center justify-content-between">
+      <div class="logo">
+        <h1><a href="./trainer.html">Learning Management System</a></h1>
+        <!-- Uncomment below if you prefer to use an image logo -->
+        <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+      </div>
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link" href="./trainer.html">Home</a></li>
+          <li><a class="nav-link" href="./course.html">Course</a></li>
+          <li><a class="getstarted" href="../index.html">Logout</a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav>
+    </div>
+  </header><!-- End Header -->
+
+  <main id="main">
+    <!-- ======= Features Section ======= -->
+    <section id="features" class="features">
+      <div class="container">
+
+        <div class="section-title" data-aos="fade-up">
+          <h2>Confirm Create Quiz ?</h2>
+          <h3 id="courseInfo"></h3>
+        </div>
+
+        <div class="row" data-aos="fade-up" data-aos-delay="200">
+          <div class="col-lg-2"></div>
+          <div id="quiz" class="col-lg-8 col-md-12">
+            <!-- Quiz Type -->
+            <div class="row mb-3">
+              <label for="quizType" class="col-sm-2">Quiz Type</label>
+              <div class="col-sm-2">
+                <h5 id="quizType"></h5>
+              </div>
+            </div>
+            <!-- Quiz Duration -->
+            <div class="row mb-3">
+              <label for="duration" class="col-sm-2">Quiz Duration</label>
+              <div class="col-sm-2">
+                <h5 id="duration"></h5>
+              </div>
+            </div>
+            <!-- Passing Criteria -->
+            <div class="row mb-3">
+              <label for="passCriteria" class="col-sm-2">Passing Criteria</label>
+              <div class="col-sm-2">
+                <h5 id="passCriteria"></h5>
+              </div>
+            </div>
+            <button type="button" onclick="createQuiz(sessionStorage.quizData, sessionStorage.qnsData)" class="btn btn-success">Confirm</button>
+          </div>
+          <div class="col-lg-2"></div>
+        </div>
+
+      </div>
+    </section><!-- End Features Section -->
+
+  </main><!-- End #main -->
+
+  <script>
+    console.log(sessionStorage);
+    var courseInfo = document.getElementById("courseInfo");
+    courseInfo.innerHTML = sessionStorage.courseID + " - " + sessionStorage.courseName + " | " + sessionStorage.lessonNum + " - " + sessionStorage.lessonName;
+    
+    var quizData = JSON.parse(sessionStorage.quizData);
+    var qnsData = JSON.parse(sessionStorage.qnsData);
+    
+    var quiz = document.getElementById("quiz");
+    var length = quiz.childNodes.length;
+    var quizType = document.getElementById("quizType");
+    var duration = document.getElementById("duration");
+    var passCriteria = document.getElementById("passCriteria");
+
+    quizType.innerHTML = quizData.quizType;
+    duration.innerHTML = quizData.quizDuration;
+    passCriteria.innerHTML = quizData.passingCriteria + "marks";
+    if (sessionStorage.multiple == "true") {
+      for (let i = 0; i < qnsData.length; i++) {
+        var options = qnsData[i].options;
+        options = options.split(',');
+
+        var newNode = document.createElement("div");
+        newNode.classList.add("mb-3");
+        var newQuestion = `<div class="row mb-3">
+                            <label for="qn1" class="col-sm-2">Question ${qnsData[i].qnNo}</label>
+                            <div class="col-sm-2">
+                              <h5 id="qn1">${qnsData[i].question}</h5>
+                            </div>
+                          </div>
+                          <div class="row mb-3">
+                            <label for="options" class="col-sm-2">Options</label>
+                            <div class="col-sm-2">
+                              <div>
+                                <input type="radio" value="option1">
+                                <span id="option1">${options[0]}</span>
+                              </div>
+                              <div>
+                                <input type="radio" value="option2">
+                                <span id="option2">${options[1]}</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row mb-3">
+                            <label for="correctAns" class="col-sm-2">Correct Answer</label>
+                            <div class="col-sm-10">
+                              <h5 id="correctAns">${qnsData[i].answer}</h5>
+                            </div>
+                          </div>`;
+        newNode.innerHTML = newQuestion;
+        quiz.insertBefore(newNode, quiz.childNodes[length-2]);
+      } 
+    } else {
+      options = qnsData[2].split(',');
+      var newNode = document.createElement("div");
+      newNode.classList.add("mb-3");
+      var newQuestion = `<div class="row mb-3">
+                          <label for="qn1" class="col-sm-2">Question ${qnsData[0]}</label>
+                          <div class="col-sm-2">
+                            <h5 id="qn1">${qnsData[1]}</h5>
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                          <label for="options" class="col-sm-2">Options</label>
+                          <div class="col-sm-2">
+                            <div>
+                              <input type="radio" value="option1">
+                              <span id="option1">${options[0]}</span>
+                            </div>
+                            <div>
+                              <input type="radio" value="option2">
+                              <span id="option2">${options[1]}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                          <label for="correctAns" class="col-sm-2">Correct Answer</label>
+                          <div class="col-sm-10">
+                            <h5 id="correctAns">${qnsData[3]}</h5>
+                          </div>
+                        </div>`;
+      newNode.innerHTML = newQuestion;
+      quiz.insertBefore(newNode, quiz.childNodes[length-2]);
+    }
+  </script>
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="container">
+      <div class="row d-flex align-items-center">
+        <div class="col-lg-6 text-lg-left text-center">
+          <div class="copyright">
+            &copy; Copyright <strong>Vesperr</strong>. All Rights Reserved
+          </div>
+          <div class="credits">
+            <!-- All the links in the footer should remain intact. -->
+            <!-- You can delete the links only if you purchased the pro version. -->
+            <!-- Licensing information: https://bootstrapmade.com/license/ -->
+            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/vesperr-free-bootstrap-template/ -->
+            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <nav class="footer-links text-lg-right text-center pt-2 pt-lg-0">
+            <a href="#intro" class="scrollto">Home</a>
+            <a href="#about" class="scrollto">About</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Use</a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="../assets/vendor/aos/aos.js"></script>
+  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="../assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="../assets/vendor/php-email-form/validate.js"></script>
+  <script src="../assets/vendor/purecounter/purecounter.js"></script>
+  <script src="../assets/vendor/swiper/swiper-bundle.min.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="../assets/js/main.js"></script>
+  <script src="./createQuiz.js" type="text/javascript"></script>
+
+</body>
+
+</html>

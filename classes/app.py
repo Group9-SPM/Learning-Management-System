@@ -213,7 +213,7 @@ class Quiz(db.Model):
     quizDuration = db.Column(db.String(20), nullable=False)
     passingCriteria = db.Column(db.String(5), nullable=False)
     quizType = db.Column(db.String(2), nullable=False)
-    #lessonID = db.Column(db.Integer, db.ForeignKey(Lesson.lessonID), nullable=False)
+    lessonID = db.Column(db.Integer, db.ForeignKey(Lesson.lessonID), nullable=False)
 
 
     def to_dict(self):
