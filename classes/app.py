@@ -163,7 +163,6 @@ class Prerequisite(db.Model):
             result[column] = getattr(self, column)
         return result
 
-
 #LESSON CLASS
 class Lesson(db.Model):
     __tablename__ = 'lesson'
@@ -297,7 +296,6 @@ def employee_by_id(empID):
         }), 404
 
 #LEARNER
-
 @app.route("/learner")
 def learner():
     learner_list = Learner.query.all()
@@ -385,7 +383,6 @@ def classList_by_learner(learnerID):
             "message": "No assigned classes."
         }), 404
 
-
 @app.route("/classList", methods=['POST'])
 def assign_learner():
     data = request.get_json()
@@ -429,10 +426,7 @@ def assign_learner():
             "message": "Unable to commit to database. " + str(e)
         }), 500
 
-
-
 #CLASSES
-
 @app.route("/classes")
 def classes():
     class_list = Classes.query.all()
@@ -540,6 +534,7 @@ def create_enrolment():
             "message": "Unable to commit to database. " + str(e)
         }), 500        
 
+
 #LESSON
 @app.route("/lesson/<int:classID>/<int:lessonNum>/<int:courseID>")
 def lesson_by_num(classID, lessonNum, courseID):
@@ -637,6 +632,8 @@ def lessonMaterialsViewed_update_by_lesson_material(materialID, learnerID, lesso
             "message": "Unable to commit to database."
         }), 500
 
+
+
 #PREREQ        
 @app.route("/prerequisite")
 def prerequisite():
@@ -647,7 +644,6 @@ def prerequisite():
                      for prereq in prerequisite]
         }
     ), 200
-
 
 @app.route("/prerequisite/<int:courseID>")
 def prerequisite_by_courseID(courseID):
@@ -661,8 +657,49 @@ def prerequisite_by_courseID(courseID):
             "message": "Error getting prerequisite course."
         }), 404
 
-#QUIZCLASS
 
+#LESSON CLASS
+@app.route("/lesson/<int:classID>/<int:lessonNum>/<int:courseID>")
+def lesson_by_num(classID, lessonNum, courseID):
+    lessons = Lesson.query.filter_by(classID=classID, lessonNum=lessonNum, courseID=courseID).all()
+    if lessons:
+        return jsonify({
+            "data": lesson.to_dict()
+                     for lesson in lessons
+        }), 200
+    else:
+        return jsonify({
+            "message": "No lessons available yet."
+        }), 201
+
+@app.route("/lesson/<int:classID>/<int:courseID>")
+def retrieve_all_lessons_by_class(classID, courseID):
+    lessons = Lesson.query.filter_by(classID=classID, courseID=courseID).all()
+    if lessons:
+        return jsonify({
+            "data": [lesson.to_dict()
+                     for lesson in lessons]
+        }), 200
+    else:
+        return jsonify({
+            "message": "No lessons available yet."
+        }), 201
+        
+#LESSONMATERIAL
+@app.route("/lessonMaterials/<int:lessonID>")
+def lessonMaterials_by_lesson(lessonID):
+    lessonMaterials = LessonMaterials.query.filter_by(lessonID=lessonID).all()
+    if lessonMaterials:
+        return jsonify({
+            "data": [lessonMaterial.to_dict()
+                     for lessonMaterial in lessonMaterials]
+        }), 200
+    else:
+        return jsonify({
+            "message": "No lesson materials found."
+        }), 201
+
+#QUIZCLASS
 @app.route("/quiz")
 def quizList():
     quizList = Quiz.query.all()
@@ -676,7 +713,6 @@ def quizList():
 @app.route('/quiz-create', methods=['POST'])
 def create_quiz():
     data = request.get_json()
-    print(data)
     item = Quiz(
         quizDuration=data['quizDuration'], passingCriteria=data['passingCriteria'],
         quizType=data['quizType'], lessonID=data['lessonID']
@@ -692,7 +728,6 @@ def create_quiz():
             }), 500
 
 #QUESTIONCLASS
-
 @app.route("/question/<int:quizID>")
 def quizQuestions(quizID):
     quizQuestions = Questions.query.filter_by(quizID=quizID)
@@ -709,9 +744,8 @@ def quizQuestions(quizID):
 @app.route('/question-create', methods=['POST'])
 def create_question():
     data = request.get_json()
-    # quizID = Quiz.query. get latest QuizID
     item = Questions(
-        qnNo=data['qnNo'], question=data['question'],
+        quizID=data['quizID'], qnNo=data['qnNo'], question=data['question'],
         options=data['options'], answer=data['answer']
     )
     if ( request.get_json() is not None ): 

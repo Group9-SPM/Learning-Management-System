@@ -178,8 +178,7 @@
         var courseID = document.getElementById("courseID").innerHTML
         var courseDesc = document.getElementById("courseDesc").innerHTML
         var preReq = document.getElementById(courseID + "prereq").innerHTML 
-
-
+   
         var serviceURL = "http://localhost:5000/course/" + courseName;
 
         try {
@@ -191,14 +190,16 @@
         const data = await response.json();
         if (response.ok) { 
             var name = data.data.courseName;
+            var prereq = data.data.preReq;
             if (courseName == name) {
                 sessionStorage.courseName = data.data.courseName;
                 sessionStorage.courseID = data.data.courseID;
                 sessionStorage.courseDesc = data.data.courseDesc;
-                sessionStorage.preReq = data.data.preReq;
+                sessionStorage.setItem("preReqID", preReq)
+                console.log(sessionStorage.preReqID)
                 //sessionStorage.learnerID = 1;
 
-                window.location.replace("course.html");
+               window.location.replace("course.html");
 
                 //sessionStorageStorage.clear();
             } else {
