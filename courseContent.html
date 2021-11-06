@@ -218,7 +218,7 @@
             {
               if(data.data.completed)
               {
-                $('#lessonmaterials_div').append("<div class = 'd-flex'><div class ='p-2 flex-grow-1 '><a href='" + lesson_content['materialURL'] + "'/" + " target='_blank'>"+lesson_content['content']+"</a></div>" + "<div class='p-2 pt-3'>Completed !</div></div>");
+                $('#lessonmaterials_div').append("<div class = 'd-flex'><div class ='p-2 flex-grow-1 '><a href='" + lesson_content['materialURL'] + "'/" + " target='_blank'>"+lesson_content['content']+"</a></div>" + "<div class='p-2 pt-3'>Completed!</div></div>");
               }
               else 
               {
@@ -248,7 +248,7 @@
         function updateLessonViewedCompleted(materialID, lessonID) {
           var serviceURL = "http://localhost:5000/lessonMaterialsViewed/update/" + materialID + "/" + learnerID + "/" + lessonID;
           $.get(serviceURL, function(data, status) {
-            document.getElementById("lesson_mat_div_"+materialID).innerHTML = "Completed !";
+            document.getElementById("lesson_mat_div_"+materialID).innerHTML = "Completed!";
           });
         }
         
