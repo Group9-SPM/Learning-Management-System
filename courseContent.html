@@ -28,6 +28,8 @@
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
 
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
   <!-- =======================================================
   * Template Name: Vesperr - v4.4.0
   * Template URL: https://bootstrapmade.com/vesperr-free-bootstrap-template/
@@ -50,7 +52,7 @@
     <div class="container d-flex align-items-center justify-content-between">
 
       <div class="logo">
-        <h1><a href="index.html">Vesperr</a></h1>
+        <h1><a href="index.html">Learning Management System</a></h1>
         <!-- Uncomment below if you prefer to use an image logo -->
         <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
       </div>
@@ -58,15 +60,15 @@
       <nav id="navbar" class="navbar">
         <ul>
           <li><a class="nav-link scrollto " href="#hero">Home</a></li>
-          <li><a class="nav-link scrollto" href="#about">All Courses</a></li>
-          <li class="dropdown"><a href="#"><span>Alice</span> <i class="bi bi-chevron-down"></i></a>
+          <li><a class="nav-link scrollto" href="">All Courses</a></li>
+          <li class="dropdown"><a href="#"><span>Learner</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
               <li><a href="#">Profile</a></li>
               <li><a href="#">Enrolled Courses</a></li>
               <li><a href="#">Completed Courses</a></li>
             </ul>
           </li>
-          <li><a class="getstarted scrollto" href="#about">Log Out</a></li>
+          <li><a class="getstarted scrollto" href="index.html">Log Out</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
@@ -83,7 +85,7 @@
         <div class="d-flex justify-content-between align-items-center">
          <p></p>
           <ol>
-            <li><a href="courses.html">Courses</a></li>
+            <li><a href="./learner/course.html">Courses</a></li>
             <li>Course Content</li>
           </ol>
         </div>
@@ -91,58 +93,237 @@
       </div>
     </section><!-- End Breadcrumbs Section -->
 
-
       <!-- Start of Header  -->
       <div class="bg-img">
         <div class="bg-text">
-            <h1 class="display-4 font-weight-bold" style="color:black" >Repair of Words</h1>
-            <h5>RE101</h5>
+            <h1 class="display-4 font-weight-bold mt-4 mb-0" style="color:black" id ='courseName'></h1>
         </div>
     </div>
     <!-- End of Header -->
 
     <br>
+      <h2 id='courseName'></h2>
+      <h5 id='classID'></h5>
     <br>
-    <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed interdum eros turpis, vel maximus ex tincidunt sit amet. Praesent at augue hendrerit, molestie arcu nec, venenatis justo. Suspendisse nec sem sed turpis viverra convallis. Phasellus dui orci, sagittis ut pharetra in, imperdiet in turpis. Pellentesque bibendum ipsum eget maximus venenatis. Morbi tincidunt, velit a suscipit dignissim, tortor lorem semper metus, eget pharetra est augue et augue. Vivamus sit amet tincidunt sem. Nunc purus felis, facilisis et massa ut, convallis rhoncus urna.
-ficitur dictum lectus lectus id sapien. Suspendisse feugiat at massa porttitor bibendum. Fusce eu eros eget lacus consequat egestas. Praesent volutpat quam arcu, molestie euismod nisi maximus nec. Sed scelerisque tellus commodo rutrum hendrerit. Vivamus sollicitudin ante
-    </p>
-<br><br>
 
     
 <div class="b-example-divider"></div>
 
-<div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px;">
-  <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-    <svg class="bi me-2" width="40" height="40"><use xlink:href="#bootstrap"/></svg>
-    <span class="fs-4">Content</span>
-  </a>
-  <hr>
-  <ul class="nav nav-pills flex-column mb-auto">
-    <li class="nav-item">
-      <a href="chapter.html" class="nav-link active" aria-current="page">
-        <svg class="bi me-2" width="16" height="16"><use xlink:href="#"/></svg>
-        Chapter 1
+<div class="row">
+  <div class="col-md-4 col-sm-12">
+    <div class="d-flex flex-column flex-shrink-3 p-3 bg-light">
+      <a class="d-flex align-items-center m-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+        <svg class="bi me-2" width="40" height="40"><use xlink:href="#bootstrap"/></svg>
+        <span class="fs-4">Content</span>
       </a>
-    </li>
-    <li>
-      <a href="#" class="nav-link link-dark">
-        <svg class="bi me-2" width="16" height="16"><use xlink:href="#"/></svg>
-        Chapter 2
-      </a>
-    </li>
-    <li>
-      <a href="#" class="nav-link link-dark">
-        <svg class="bi me-2" width="16" height="16"><use xlink:href="#"/></svg>
-        Chapter 3
-      </a>
-    </li>
-  </ul>
-  <hr>
+      <hr>
+      <ul class="nav nav-pills flex-column mb-auto" id="lesson_content_list">
 
+      </ul>
+      <hr>
+    </div>
+  </div>
+  <!-- <iframe id='iframe_display' style='border:none;' name='materials' height='300px' width='300px'></iframe> -->
+  <div class="col-md-8 col-sm-6">
+      <div id="lessonmaterials_div"></div>
+  </div>
 </div>
 
+
+
   </main><!-- End #main -->
+
+  <script>
+      var url_string = window.location.href;
+      var url = new URL(url_string);
+      var courseID = url.searchParams.get("courseID");
+      var classID = url.searchParams.get("classID");
+      var learnerID = sessionStorage.learnerID;
+      var courseName = "";
+
+      document.getElementById('classID').innerHTML = 'Class: ' + classID;
+
+      // To change the attribute inside a content
+      // $('#progresslessonbar').attr('aria-valuenow', 75);
+      // $('#progresslessonbar').attr('style', 'width: 75%');
+      // $('#progresslessonbar').html('75%'); 
+
+      $(async() => {           
+            // Change serviceURL to your own change to wtv port number it is 
+            var serviceURL = "http://localhost:5000/course/" + courseID;
+    
+            try {
+                const response =
+                 await fetch(
+                   serviceURL, { method: 'GET' }
+                );
+                const result = await response.json();
+                 if (response.status === 200) {
+                    // success case
+                    var desc = result.data.courseDesc;
+                    var courseName = result.data.courseName;
+                    document.getElementById('courseName').innerHTML = courseName;
+                    $('#lessonmaterials_div').html('<h5>Welcome to '+courseName+'!</h5><p>Please click on to the lesson content on the left to view lesson materials</p>');
+                                } else {
+                                    // unexpected outcome, throw the error
+                                    throw response.status;
+                                }
+                            } catch (error) {
+                                // Errors when calling the service; such as network error, 
+                                // service offline, etc
+                                alert ('There is a problem retrieving data, please try again later.' + error);
+                            } // error
+                  }); 
+
+      $(async() => {           
+            // Change serviceURL to your own change to wtv port number it is 
+            var serviceURL = "http://localhost:5000/lesson/" + classID+"/"+courseID;
+    
+            try {
+                const response =
+                 await fetch(
+                   serviceURL, { method: 'GET' }
+                );
+                const result = await response.json();
+                 if (response.status === 200) {
+                    // success case
+                    var lesson_list_html = "";
+                    for(let n_lessons = 0; n_lessons < result.data.length; n_lessons++ )
+                    {
+                      var current_n = n_lessons+1;
+                      lesson_list_html += '<li class="nav-item"><a href="#" class="nav-link link-dark" aria-current="page" onclick="lessonNum(\''+result.data[n_lessons]["lessonID"]+'\',\''+result.data[n_lessons]["lessonName"]+'\')">Lesson '+current_n+' <br>('+result.data[n_lessons]["lessonName"]+')</a></li>';
+                    }
+                    $('#lesson_content_list').html(lesson_list_html);
+
+                                } else if (response.status == 201) {
+                                  $('#lessonmaterials_div').html(result.message);
+                                } else {
+                                    // unexpected outcome, throw the error
+                                    throw response.status;
+                                }
+                            } catch (error) {
+                                // Errors when calling the service; such as network error, 
+                                // service offline, etc
+                                alert ('There is a problem retrieving data, please try again later.' + error);
+                            } // error
+                  }); 
+
+        // Check if lesson is viewed
+
+        function checkLessonViewed(materialID, lessonID, lesson_content) {
+          var serviceURL = "http://localhost:5000/lessonMaterialsViewed/check/" + materialID + "/" + learnerID + "/" + lessonID;
+          $.get(serviceURL, function(data,status) {
+            console.log(data);
+            if(data.status == "success")
+            {
+              if(data.data.completed)
+              {
+                $('#lessonmaterials_div').append("<div class = 'd-flex'><div class ='p-2 flex-grow-1 '><a href='" + lesson_content['materialURL'] + "'/" + " target='_blank'>"+lesson_content['content']+"</a></div>" + "<div class='p-2 pt-3'>Completed !</div></div>");
+              }
+              else 
+              {
+                $('#lessonmaterials_div').append("<div class = 'd-flex'><div class ='p-2 flex-grow-1 '><a href='" + lesson_content['materialURL'] + "'/" + "target='_blank'>"+lesson_content['content']+"</a></div>" + "<div class='p-2 pt-3' id='lesson_mat_div_"+lesson_content["materialID"]+"'> <input type='checkbox' onclick='updateLessonViewedCompleted("+lesson_content['materialID']+","+lesson_content['lessonID']+")'  id='lesson_mat_v_"+lesson_content["materialID"]+"'></div></div>");
+              }
+            }
+            else
+            {
+              console.log(lesson_content);
+              // Disable checkbox if not viewed
+              $('#lessonmaterials_div').append("<div class = 'd-flex'><div class ='p-2 flex-grow-1 '><a href='" + lesson_content['materialURL'] + "' onclick='updateLessonViewed("+lesson_content['materialID']+","+lesson_content['lessonID']+")' " + "target='_blank'>"+lesson_content['content']+"</a></div>" + "<div class='p-2 pt-3' id='lesson_mat_div_"+lesson_content["materialID"]+"'> <input type='checkbox' disabled onclick='updateLessonViewedCompleted("+lesson_content['materialID']+","+lesson_content['lessonID']+")'  id='lesson_mat_v_"+lesson_content["materialID"]+"'></div></div>");
+            }
+          });
+        }
+
+        // Add User Viewed
+
+        function updateLessonViewed(materialID, lessonID) {
+          var serviceURL = "http://localhost:5000/lessonMaterialsViewed/add/" + materialID + "/" + learnerID + "/" + lessonID;
+          $.get(serviceURL, function(data, status) {
+            document.getElementById("lesson_mat_v_"+materialID).removeAttribute("disabled");
+          });
+        }
+
+        // Mark Completed
+
+        function updateLessonViewedCompleted(materialID, lessonID) {
+          var serviceURL = "http://localhost:5000/lessonMaterialsViewed/update/" + materialID + "/" + learnerID + "/" + lessonID;
+          $.get(serviceURL, function(data, status) {
+            document.getElementById("lesson_mat_div_"+materialID).innerHTML = "Completed !";
+          });
+        }
+        
+        function lessonNum(number, lessonName) {
+
+          $(async() => {           
+            // Change serviceURL to your own change to wtv port number it is 
+            var serviceURL = "http://localhost:5000/lesson/" + classID + "/" + number + "/" + courseID;
+    
+            try {
+                const response =
+                 await fetch(
+                   serviceURL, { method: 'GET' }
+                );
+                const result = await response.json();
+                 if (response.status === 200) {
+                    // success case;
+                    var lessonID = result.data[0].lessonID;
+                    return getLessonMaterial(lessonID, lessonName);
+                                } else if (response.status === 201) {
+                                  $('#lessonmaterials_div').html(result.message);
+                                } else {
+                                    // unexpected outcome, throw the error
+                                    throw response.status;
+                                }
+                            } catch (error) {
+                                // Errors when calling the service; such as network error, 
+                                // service offline, etc
+                                alert ('There is a problem retrieving data, please try again later.' + error);
+                            } // error
+                  }); 
+        
+        }
+
+        function getLessonMaterial(lessonNum, lessonName) {
+
+          $(async() => {           
+            // Change serviceURL to your own change to wtv port number it is 
+            var serviceURL = "http://localhost:5000/lessonMaterials/" + lessonNum;
+
+            try {
+                const response =
+                await fetch(
+                  serviceURL, { method: 'GET' }
+                );
+                const result = await response.json();
+                if (response.status === 200) {
+                    // success case
+                    var lesson_content = result.data
+                    $('#lessonmaterials_div').html("");
+                    var html_content = "<h2>"+lessonName+"</h2><hr>";
+                    $('#lessonmaterials_div').append(html_content);
+                    for(let lesson_c = 0; lesson_c < lesson_content.length;lesson_c++)
+                    {
+                      // Check if Lesson was viewed before
+                      checkLessonViewed(lesson_content[lesson_c]["materialID"],lesson_content[lesson_c]["lessonID"], lesson_content[lesson_c]) 
+                      // document.getElementById('iframe_display').src = "./materials/" + lesson_content[lesson_c]['content'];
+                    }
+                                } else if (response.status === 201) {
+                                  $('#lessonmaterials_div').html(result.message);
+                                } else {
+                                    // unexpected outcome, throw the error
+                                    throw response.status;
+                                }
+                            } catch (error) {
+                                // Errors when calling the service; such as network error, 
+                                // service offline, etc
+                                alert ('There is a problem retrieving data, please try again later.' + error);
+                            } // error
+                  }); 
+                
+
+        }
+
+</script>
 
   <!-- ======= Footer ======= -->
   <footer id="footer">
@@ -189,3 +370,4 @@ ficitur dictum lectus lectus id sapien. Suspendisse feugiat at massa porttitor b
 </body>
 
 </html>
+
