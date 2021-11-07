@@ -72,8 +72,6 @@
   
         <div class="logo">
           <h1><a href="index.html">Learning Management System</a></h1>
-          <!-- Uncomment below if you prefer to use an image logo -->
-          <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
         </div>
         <nav id="navbar" class="navbar">
           <ul>
@@ -90,9 +88,9 @@
             <li><a class="getstarted scrollto" href="#about">log out</a></li>
           </ul>
           <i class="bi bi-list mobile-nav-toggle"></i>
-        </nav><!-- .navbar -->
+        </nav>
     </div>
-  </header><!-- End Header -->
+  </header>
 
   <main id="main">
     <section class="breadcrumbs">
@@ -121,7 +119,6 @@
         </div>
       </div>
     
-      <br>
       <br>
       <table id="coursesTable" class="table table-striped" style="text-align: center"> 
         <thead>
@@ -160,7 +157,7 @@
                 var rows = "";
                 for (const course of allCourses) {
                       eachRow = "<td id='courseID'>" + course.courseID + "</td>" +
-                      "<td id='courseName' onclick='findCourse()' style='color:blue; text-decoration: underline; '>" + course.courseName + "</td>" +
+                      "<td id='courseName_" + course.courseID + "'>"+ findCourse(course.courseID,course.courseName,course.courseDesc) +"</td>" +
                       "<td id='courseDesc'>" + course.courseDesc + "</td>"+
                       "<td id='" +course.courseID+ "prereq"+"'>"+ findPreReq(course.courseID) + "</td>"+
                       "<td id='"+course.courseID +"eligibility' >"+"<button type='button' class='btn btn-dark' onclick='findEligibility(sessionStorage.learnerID,"+ course.courseID+")'>Check Eligibility</button>" + "</td>" ;
@@ -173,88 +170,72 @@
         }
       });
 
-      async function findCourse() {
-        var courseName = document.getElementById('courseName').innerHTML
-        var courseID = document.getElementById("courseID").innerHTML
-        var courseDesc = document.getElementById("courseDesc").innerHTML
-        var preReq = document.getElementById(courseID + "prereq").innerHTML 
-   
-        var serviceURL = "http://localhost:5000/course/" + courseName;
+      function findCourse(courseID,courseName, courseDesc) {
+        $(async() => {
+          var serviceURL = "http://localhost:5000/course/" + courseID;
+          try {
+              const response =
+              await fetch(
+                serviceURL, { method: 'GET' }
+              );
+              const result = await response.json();
 
-        try {
-            const response =
-            await fetch(
-              serviceURL, { method: 'GET' }
-            );
-
-        const data = await response.json();
-        if (response.ok) { 
-            var name = data.data.courseName;
-            var prereq = data.data.preReq;
-            if (courseName == name) {
-                sessionStorage.courseName = data.data.courseName;
-                sessionStorage.courseID = data.data.courseID;
-                sessionStorage.courseDesc = data.data.courseDesc;
-                sessionStorage.setItem("preReqID", preReq)
-                console.log(sessionStorage.preReqID)
-                //sessionStorage.learnerID = 1;
-
-               window.location.replace("course.html");
-
-                //sessionStorageStorage.clear();
-            } else {
-                alert("Cant find course.");
-            }
-        } else {
-            alert("Theres an issue with the data.");
-        }
-    }
-    catch (error) {
-        alert('There is a problem, please try again later.');
-    }
-  };
-
-  function findPreReq(courseID) {
-    $(async() => { 
-        var serviceURL = 'http://localhost:5000/prerequisite/' + courseID;
-        try {
-            const response =
-            await fetch(
-              serviceURL, { method: 'GET' }
-            );
-            const result = await response.json();
-
-            if (response.ok) {
-                var preReqCourses = result.data;
-                var preReq = '';
-                preReq = result.data.prerequisiteID
-
-                if(preReq == 0){
-                  document.getElementById(courseID + "prereq").innerHTML = "No prerequisite course";
-                }
-                else{
-                  document.getElementById(courseID + "prereq").innerHTML = preReq;
-                }
+              if (response.ok) { 
+                var courses = result.data;
+                var course = '';
+                course = "<a href = './course.html?courseID="+ courseID  + "&courseName=" + courseName + "'>"+result.data.courseName+"</a>";
+                document.getElementById('courseName_' + courseID).innerHTML = course;
+              } else {
+                  alert("Theres an issue with the data.");
               }
-            } catch (error) {
-            showError
-            (
-              'There is a problem retrieving prerequisite course please try again later.' + error);
-            } 
           }
-        )};
+          catch (error) {
+              alert('There is a problem, please try again later.');
+        }
+  
+      }
+    )};
 
-      function findEligibility(learnerID, courseID) {
-        $(async() => { 
+    function findPreReq(courseID) {
+      $(async() => { 
+          var serviceURL = 'http://localhost:5000/prerequisite/' + courseID;
+          try {
+              const response =
+              await fetch(
+                serviceURL, { method: 'GET' }
+              );
+              const result = await response.json();
 
-            var serviceURL = 'http://localhost:5000/learner/' + learnerID;
-            try {
-                const response =
-                await fetch(
-                  serviceURL, { method: 'GET' }
-                );
-                const result = await response.json();
-                if (response.ok) {
+              if (response.ok) {
+                  var preReqCourses = result.data;
+                  var preReq = '';
+                  preReq = result.data.prerequisiteID
+
+                  if(preReq == 0){
+                    document.getElementById(courseID + "prereq").innerHTML = "No prerequisite course";
+                  }
+                  else{
+                    document.getElementById(courseID + "prereq").innerHTML = preReq;
+                  }
+                }
+              } catch (error) {
+              showError
+              (
+                'There is a problem retrieving prerequisite course please try again later.' + error);
+              } 
+            }
+          )};
+
+          function findEligibility(learnerID, courseID) {
+            $(async() => { 
+              var serviceURL = 'http://localhost:5000/learner/' + learnerID;
+              try {
+                  const response =
+                  await fetch(
+                    serviceURL, { method: 'GET' }
+                  );
+                  const result = await response.json();
+                  if (response.ok) {
                     var learner = result.data;
                     var badges = '';
                     var preReqCourse = document.getElementById(courseID + "prereq").innerHTML
@@ -277,16 +258,13 @@
             )};
   </script>
 
-
-
 <div class="container px-5 my-5">
- <!-- Start of Header  -->
   <div class="bg-img">
     <div class="bg-text">
       <h3 class="fw-bolder mb-3">Applied Courses</h3>
     </div>
   </div>
-<!-- End of Header -->
+
   <br>
   <table id="enrolledCoursesTable" class="table table-striped" style="text-align: center"> 
     <thead>
@@ -307,31 +285,29 @@
 </div>
 
 <script>
-      sessionStorage.setItem("learnerID", "1")
-
-      const enrolment = new Vue({
-          el: '#enrolledCoursesTable',
-          data: {
-              enrolmentList: [],
-          },
-          mounted: function() {
-              axios.get('http://localhost:5000/enrolmentList/'+ sessionStorage.learnerID)
-                  .then(response => {
-                      this.enrolmentList = response.data.data;
-                  })
-                  .catch(error => alert(error));
-          }
-      });
+  sessionStorage.setItem("learnerID", "1")
+  const enrolment = new Vue({
+    el: '#enrolledCoursesTable',
+    data: {
+        enrolmentList: [],
+    },
+    mounted: function() {
+        axios.get('http://localhost:5000/enrolmentList/'+ sessionStorage.learnerID)
+            .then(response => {
+                this.enrolmentList = response.data.data;
+            })
+            .catch(error => alert(error));
+      }
+  });
 </script>
 
 <br><br>
 
-<!-- Call to Action-->
 <div class="card text-white bg-dark my-3 py-3 text-center">
   <div class="card-body"><p class="text-white m-0" style="font-family: 'Courier New', Courier, monospace;"> "Keep learning because knowledge is the key to power" </p></div>
 </div>
 
-  </main><!-- End #main -->
+</main>
 
   <!-- ======= Footer ======= -->
   <footer id="footer">
