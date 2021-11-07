@@ -105,16 +105,19 @@
     <br>
     <br>
     <p id="quiz_desc">
+        
+    </p>
+    <p id="quiz_time">
     </p>
 
-    <div class="d-flex flex-row-reverse">
-      <div class="p-1">
-        <a href="#" class="btn btn-secondary" id="back_refferer">Cancel</a>
-      </div> 
-      <div class="p-1">
-        <a href="#" class="btn btn-primary" id="attempt_quiz_btn">Attempt Quiz</a>
+    <form method="POST">
+      <div id="question_fields">
+
       </div>
-    </div>
+      <div class="form-group mt-3">
+        <input type="submit" class="btn btn-success" value="Submit Quiz"/>
+      </div>
+    </form>
 
 <br><br>
     
@@ -126,8 +129,7 @@
     var url = new URL(url_string);
     var lessonID = url.searchParams.get("lessonID");
     var learnerID = sessionStorage.learnerID;
-    document.getElementById('back_refferer').setAttribute('href', document.referrer);
-    document.getElementById('attempt_quiz_btn').setAttribute('href', './QuizStart.html?lessonID='+lessonID);
+
     $(async() => {           
             // Change serviceURL to your own change to wtv port number it is 
             var serviceURL = "http://localhost:5000/lesson/lessonByID/" + lessonID;
@@ -143,6 +145,110 @@
                     $('#quiz_desc').html(result.data.lessonDesc);
                                 } else if (response.status == 201) {
                                   return false;
+                                } else {
+                                    // unexpected outcome, throw the error
+                                    throw response.status;
+                                }
+                            } catch (error) {
+                                // Errors when calling the service; such as network error, 
+                                // service offline, etc
+                                alert ('There is a problem retrieving data, please try again later.' + error);
+                            } // error
+                  }); 
+    $(async() => {           
+            // Change serviceURL to your own change to wtv port number it is 
+            var serviceURL = "http://localhost:5000/quiz/check/" + lessonID;
+    
+            try {
+                const response =
+                 await fetch(
+                   serviceURL, { method: 'GET' }
+                );
+                const result = await response.json();
+                 if (response.status === 200) {
+                    quizID = result.data.quizID;
+                    quiz_duration = 0;
+                    // Retrieve duration of quiz in minutes, if got hours just add more criteria
+                    if(result.data.quizDuration.includes("min"))
+                    {
+                      quiz_duration = parseInt(result.data.quizDuration.split("min")[0]);
+                    }
+                    var current_dt = new Date();
+                    current_dt.setTime(current_dt.getTime() + quiz_duration * 60 * 1000);
+                    var countDownDate = current_dt.getTime();
+                    // Update the count down every 1 second
+                    var x = setInterval(function() {
+                      // Get today's date and time
+                      var now = new Date().getTime();
+                      // Find the distance between now and the count down date
+                      var distance = countDownDate - now;
+                      // Time calculations for days, hours, minutes and seconds
+                      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                      // Display the result in the element with id="demo"
+                      if(hours > 0)
+                      {
+                        document.getElementById("quiz_time").innerHTML = "Time left: " + hours + " hours " + minutes + " minutes " + seconds + " seconds ";
+                      }
+                      else 
+                      {
+                        document.getElementById("quiz_time").innerHTML = "Time left: " + minutes + " minutes " + seconds + " seconds ";
+                      }
+
+                      // If the count down is finished, write some text
+                      if (distance < 0) {
+                        clearInterval(x);
+                        document.getElementById("quiz_time").innerHTML = "Time is up!";
+                        alert("Your time is up. Please submit the quiz to avoid penalty.");
+                      }
+                    }, 1000);
+                    $(async() => {           
+                      // Change serviceURL to your own change to wtv port number it is 
+                      var serviceURLNEXT = "http://localhost:5000/question/" + quizID;
+                      try {
+                          const response =
+                          await fetch(
+                            serviceURLNEXT, { method: 'GET' }
+                          );
+                          const result = await response.json();
+                          if (response.status === 200) {
+                              var lesson_list_html = "";
+                              for(let n_questions = 0; n_questions < result.data.length; n_questions++ )
+                              {
+                                var current_n = n_questions+1;
+                                lesson_list_html += '<div class="form-group"><label>Question '+current_n+': '+result.data[n_questions].question+'</label>';
+                                
+                                // retrieve options
+                                var option_split = result.data[n_questions].options.split(',');
+                                for(let n_o = 0; n_o < option_split.length; n_o++)
+                                {
+                                  lesson_list_html += '<div class="form-check"><input class="form-check-input" type="radio" name="qn_'+current_n+'" value="'+option_split[n_o]+'" id="qn_'+current_n+'_'+n_o+'"><label class="form-check-label" for="qn_'+current_n+'_'+n_o+'">'+option_split[n_o]+'</label></div>';
+                                }  
+                                lesson_list_html += '</div>';
+                              }
+
+                              $('#question_fields').html(lesson_list_html);
+                            
+                                          } else if (response.status == 201) {
+                                            alert("Quiz not found");
+                                            // Redirect back when quiz is not found
+                                            window.location.href = document.referrer;
+                                          } else {
+                                              // unexpected outcome, throw the error
+                                              throw response.status;
+                                          }
+                                      } catch (error) {
+                                          // Errors when calling the service; such as network error, 
+                                          // service offline, etc
+                                          alert ('There is a problem retrieving data, please try again later.' + error);
+                                      } // error
+                            }); 
+                                } else if (response.status == 201) {
+                                  alert("Quiz not found");
+                                  // Redirect back when quiz is not found
+                                  window.location.href = document.referrer;
                                 } else {
                                     // unexpected outcome, throw the error
                                     throw response.status;

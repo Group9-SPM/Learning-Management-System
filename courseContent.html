@@ -126,6 +126,7 @@
   <!-- <iframe id='iframe_display' style='border:none;' name='materials' height='300px' width='300px'></iframe> -->
   <div class="col-md-8 col-sm-6">
       <div id="lessonmaterials_div"></div>
+      <div id="quiz_div" class="p-2"></div>
   </div>
 </div>
 
@@ -191,7 +192,7 @@
                     for(let n_lessons = 0; n_lessons < result.data.length; n_lessons++ )
                     {
                       var current_n = n_lessons+1;
-                      lesson_list_html += '<li class="nav-item"><a href="#" class="nav-link link-dark" aria-current="page" onclick="lessonNum(\''+result.data[n_lessons]["lessonID"]+'\',\''+result.data[n_lessons]["lessonName"]+'\')">Lesson '+current_n+' <br>('+result.data[n_lessons]["lessonName"]+')</a></li>';
+                      lesson_list_html += '<li class="nav-item"><a href="#" class="nav-link link-dark" aria-current="page" onclick="lessonNum(\''+result.data[n_lessons]["lessonID"]+'\',\''+result.data[n_lessons]["lessonName"]+'\',\''+result.data[n_lessons]["lessonNum"]+'\')">Lesson '+current_n+' <br>('+result.data[n_lessons]["lessonName"]+')</a></li>';
                     }
                     $('#lesson_content_list').html(lesson_list_html);
 
@@ -213,7 +214,6 @@
         function checkLessonViewed(materialID, lessonID, lesson_content) {
           var serviceURL = "http://localhost:5000/lessonMaterialsViewed/check/" + materialID + "/" + learnerID + "/" + lessonID;
           $.get(serviceURL, function(data,status) {
-            console.log(data);
             if(data.status == "success")
             {
               if(data.data.completed)
@@ -227,7 +227,6 @@
             }
             else
             {
-              console.log(lesson_content);
               // Disable checkbox if not viewed
               $('#lessonmaterials_div').append("<div class = 'd-flex'><div class ='p-2 flex-grow-1 '><a href='" + lesson_content['materialURL'] + "' onclick='updateLessonViewed("+lesson_content['materialID']+","+lesson_content['lessonID']+")' " + "target='_blank'>"+lesson_content['content']+"</a></div>" + "<div class='p-2 pt-3' id='lesson_mat_div_"+lesson_content["materialID"]+"'> <input type='checkbox' disabled onclick='updateLessonViewedCompleted("+lesson_content['materialID']+","+lesson_content['lessonID']+")'  id='lesson_mat_v_"+lesson_content["materialID"]+"'></div></div>");
             }
@@ -252,7 +251,7 @@
           });
         }
         
-        function lessonNum(number, lessonName) {
+        function lessonNum(number, lessonName, lessonNum) {
 
           $(async() => {           
             // Change serviceURL to your own change to wtv port number it is 
@@ -267,7 +266,7 @@
                  if (response.status === 200) {
                     // success case;
                     var lessonID = result.data[0].lessonID;
-                    return getLessonMaterial(lessonID, lessonName);
+                    return getLessonMaterial(lessonID, lessonName, lessonNum);
                                 } else if (response.status === 201) {
                                   $('#lessonmaterials_div').html(result.message);
                                 } else {
@@ -283,11 +282,15 @@
         
         }
 
-        function getLessonMaterial(lessonNum, lessonName) {
+        function enableQuiz(lessonID) {
+          var serviceURL = "http://localhost:5000/lessonMaterialsViewed/update/" + materialID + "/" + learnerID + "/" + lessonID;
+        }
+
+        function getLessonMaterial(lessonID, lessonName, lessonNum) {
 
           $(async() => {           
             // Change serviceURL to your own change to wtv port number it is 
-            var serviceURL = "http://localhost:5000/lessonMaterials/" + lessonNum;
+            var serviceURL = "http://localhost:5000/lessonMaterials/" + lessonID + "/" + learnerID;
 
             try {
                 const response =
@@ -307,8 +310,12 @@
                       checkLessonViewed(lesson_content[lesson_c]["materialID"],lesson_content[lesson_c]["lessonID"], lesson_content[lesson_c]) 
                       // document.getElementById('iframe_display').src = "./materials/" + lesson_content[lesson_c]['content'];
                     }
+                    $('#quiz_div').html("<a href='./QuizContent.html?lessonID="+lessonID+"'>Lesson "+lessonNum+" Quiz</a>")
                                 } else if (response.status === 201) {
                                   $('#lessonmaterials_div').html(result.message);
+                                } else if (response.status === 202) {
+                                  
+                                  alert(result.message);
                                 } else {
                                     // unexpected outcome, throw the error
                                     throw response.status;
