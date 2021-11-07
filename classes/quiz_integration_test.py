@@ -21,7 +21,7 @@ class TestApp(flask_testing.TestCase):
 
 class TestCreateQuiz(TestApp):
     def test_create_quiz(self):
-        quiz = Quiz(quizID=10, quizDuration='10',
+        quiz = Quiz(quizID=5, quizDuration='10',
                     passingCriteria='5', quizType='UG', lessonID=1)
 
         request_body = {
@@ -36,13 +36,14 @@ class TestCreateQuiz(TestApp):
                                     data=json.dumps(request_body),
                                     content_type='application/json')
         self.assertEqual(response.json, {
-            'quizID': 10,
+            'quizID': 5,
             'quizDuration': '10',
             'passingCriteria': '5',
             'quizType': 'UG',
             'lessonID': 1
         })
         
+class TestCreateQuestion(TestApp):
     def test_create_quiz_question(self):
         qns = Questions(quizID=10, qnNo=1,
                      question='You are great today.', options='True,False', answer='True')
