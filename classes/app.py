@@ -270,6 +270,26 @@ class Questions(db.Model):
             result[column] = getattr(self, column)
         return result
 
+#QUESTION CLASS
+class QuizAttempt(db.Model):
+    __tablename__ = 'quizAttempt'
+
+    quizID = db.Column(db.Integer, db.ForeignKey(Quiz.quizID), primary_key=True)
+    qnNo = db.Column(db.Integer, nullable=False)
+    learnerID = db.Column(db.Integer, db.ForeignKey(Learner.empID), nullable=False)
+    answer = db.Column(db.String(50), nullable=False)
+
+    def to_dict(self):
+        """
+        'to_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
+
 
 #EMPLOYEE
 @app.route("/employee")
@@ -562,19 +582,49 @@ def retrieve_all_lessons_by_class(classID, courseID):
             "message": "No lessons available yet."
         }), 201
 
-#LESSONMATERIALS
-@app.route("/lessonMaterials/<int:lessonID>")
-def lessonMaterials_by_lesson(lessonID):
-    lessonMaterials = LessonMaterials.query.filter_by(lessonID=lessonID).all()
-    if lessonMaterials:
+@app.route("/lesson/lessonByID/<int:lessonID>")
+def retrieve_lesson_by_lessonID(lessonID):
+    lessons = Lesson.query.filter_by(lessonID=lessonID).first()
+    if lessons:
         return jsonify({
-            "data": [lessonMaterial.to_dict()
-                     for lessonMaterial in lessonMaterials]
+            "data": lessons.to_dict()
         }), 200
     else:
         return jsonify({
-            "message": "No lesson materials found."
+            "message": "No lessons available yet."
         }), 201
+
+#LESSONMATERIALS
+@app.route("/lessonMaterials/<int:lessonID>/<int:learnerID>")
+def lessonMaterials_by_lesson(lessonID, learnerID):
+    # Retrieve lesson info
+    lesson = Lesson.query.filter_by(lessonID=lessonID).first()
+    material_available = True
+    # If the lesson is not the first lesson
+    if(lesson.lessonNum > 1):
+        for ls in range(1, lesson.lessonNum):
+            checkLesson = Lesson.query.filter_by(lessonNum=ls,classID=lesson.classID, courseID=lesson.courseID).first()
+            # if quiz is done
+            quiz_done = QuizAttempt.query.join(Quiz).filter(Quiz.lessonID==checkLesson.lessonID, QuizAttempt.learnerID==learnerID).first() is not None
+            if(not quiz_done):
+                material_available = False 
+                break
+
+    if(material_available):
+        lessonMaterials = LessonMaterials.query.filter_by(lessonID=lessonID).all()
+        if lessonMaterials:
+            return jsonify({
+                "data": [lessonMaterial.to_dict()
+                        for lessonMaterial in lessonMaterials]
+            }), 200
+        else:
+            return jsonify({
+                "message": "No lesson materials found."
+            }), 201
+    else:
+        return jsonify({
+            "message": "Please attempt the previous lesson quizzes to view this lesson."
+        }), 202
 
 #LESSONMATERIALSVIEWED
 @app.route("/lessonMaterialsViewed/check/<int:materialID>/<int:learnerID>/<int:lessonID>")
@@ -685,14 +735,26 @@ def create_quiz():
                 "message": "Unable to commit to database."
             }), 500
 
+@app.route('/quiz/check/<int:lessonID>')
+def retrieve_quiz_by_lessonID(lessonID):
+    quiz = Quiz.query.filter_by(lessonID=lessonID).first()
+    if quiz:
+        return jsonify({
+            "data": quiz.to_dict()
+        }), 200
+    else:
+        return jsonify({
+            "message": "Quiz not found"
+        }), 201
+
 #QUESTIONCLASS
 @app.route("/question/<int:quizID>")
 def quizQuestions(quizID):
-    quizQuestions = Questions.query.filter_by(quizID=quizID)
-    if quizQuestions:
+    r_quizQuestions = Questions.query.filter(quizID==quizID).all()
+    if r_quizQuestions:
         return jsonify({
-            "data": [quizQuestions.to_dict()
-                     for quizQuestions in quizQuestions]
+            "data": [quizQuestion.to_dict()
+                     for quizQuestion in r_quizQuestions],           
         }), 200
     else:
         return jsonify({
@@ -715,6 +777,8 @@ def create_question():
             return jsonify({
                 "message": "Unable to commit to database."
             }), 500
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
