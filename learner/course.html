@@ -80,7 +80,7 @@
           <li class="dropdown"><a href="#"><span>Name<i class="bi bi-chevron-down"></i></a>
             <ul>
               <li><a href="profile.html">Profile</a></li>
-              <li><a href="enrolledCourses.html">Enrolled Courses</a></li>
+              <li><a href="confirmedCourses.html">Enrolled Courses</a></li>
             </ul>
           </li>
           <li><a class="getstarted scrollto" href="#about">log out</a></li>
@@ -108,7 +108,6 @@
       </div>
     </section><!-- End Breadcrumbs Section onclick="clear()"-->
 
-     <!-- Header-->
      <header class="py-5">
       <div class="container px-5 my-5">
         <div class="text-center mb-5">
@@ -116,21 +115,39 @@
             <p class="lead fw-normal text-muted mb-4" id ="courseID" ></p>
         </div>
     </header>
-    <!-- End of Header -->
     <div class="container px-5 my-5">
+      <p id = "coursePrereq"></p>
       <p id = "courseDesc"></p>
       <br><br>
     </div>
 
-     <script>
-      document.getElementById("courseTitle").innerHTML = sessionStorage.courseName
-      document.getElementById("courseID").innerHTML = sessionStorage.courseID
-      document.getElementById("courseDesc").innerHTML = sessionStorage.courseDesc
+<script>
+  var url_string = window.location.href;
+  var url = new URL(url_string);
+  var courseID = url.searchParams.get("courseID");
+  var courseName = url.searchParams.get("courseName");
 
-      //function clear(){
-        //sessionStorage.clear();
-      //}
-    </script>
+  $(async() => {           
+      var serviceURL = "http://localhost:5000/course/" + courseID;
+      try {
+          const response =
+            await fetch(
+              serviceURL, { method: 'GET' }
+          );
+          const result = await response.json();
+            if (response.ok) {
+              document.getElementById('courseTitle').innerHTML = result.data.courseName;
+              document.getElementById('courseDesc').innerHTML = result.data.courseDesc;
+              document.getElementById('courseID').innerHTML = result.data.courseID;
+
+            } else {
+                throw response.status;
+            }
+        } catch (error) {
+            alert ('There is a problem retrieving data, please try again later.' + error);
+        } 
+  }); 
+</script>
 
 
     <table id = "classesTable"class="table table-striped" style="text-align: center; font-size:small;" >
@@ -144,15 +161,11 @@
             <th scope="col">Current Size</th>
             <th scope="col">Max Seats</th> 
             <th scope="col">Trainer Name</th> 
-            <th></th>
-            <th></th>
-            <th></th>
-    
+            <th scope="col"></th>
         </tr>
       </thead>
-      
     <tbody>
-        <tr v-for="classs in classes">
+        <!-- <th scope="col">></th<tr v-for="classs in classes">
           <td id = "classID">{{ classs.classID }}</td>
           <td>{{ classs.startDate.substr(0, 16) }} - {{ classs.endDate.substr(0, 16) }} </td>
           <td>{{ classs.startTime }} - {{ classs.endTime }}</td>
@@ -164,92 +177,283 @@
 
           <td id='maxSlot'>{{ classs.maxSlot }}</td>
           <td>{{ classs.trainerID }}</td>
- <!---->
+
             <td v-if = "okToSignUp"><button type="button" class="btn btn-primary" v-on:click="signUp(classs.classID)">  Sign Up </button></td>
           <td v-else><button type="button" class="btn btn-secondary" disabled>  Sign Up </button></td>
          
           <td v-if = "date <= classs.regStartDate"> date is either equal or after regStartDate </td>
           <td v-else>checking fail</td>
           <td v-if = "date > classs.regEndDate"> date is either equal or before regEndDate {{ date }} {{ classs.regEndDate }}</td>
-          <td v-else>checking fail</td>
-      
-        </tr>
+          <td v-else>checking fail</td> 
+        </tr>-->
       </tbody>
-
     </table>
+</main> 
 
-
-
-</main><!-- End #main  
-
-i will bind the ID for registration & slots size and then i will getelementby id then check -->
 <script>
+    learnerID = sessionStorage.learnerID;
 
-    async function okToSignUp(){
-      var regStartDate = document.getElementById('regStartDate').innerHTML
-      var regEndDate = document.getElementById("regEndDate").innerHTML
-      var size = document.getElementById("size").innerHTML
-      var maxSlot = document.getElementById("maxSlot").innerHTML
-      var date = new Date().toISOString().substr(0, 10)
+     function okToSignUp(classid){
 
-      var check = true
+       // var courseID = url.searchParams.get("courseID");
 
-      if(size < maxSlot ){
-        check = true 
+        var regStartDate = document.getElementById('regStartDate').innerHTML
+        var regEndDate = document.getElementById("regEndDate").innerHTML
+        var size = document.getElementById(classid+ "size").innerHTML
+        var maxSlot = document.getElementById(classid + "maxSlot").innerHTML
+        var date = new Date().toISOString().substr(0, 10).split('-')
+
+        var regStartDate = new Date(regStartDate).toISOString().substr(0, 10).split('-')
+        var regEndDate = new Date(regStartDate).toISOString().substr(0, 10).split('-')
+        
+        console.log("goes into oktosignup")
+        // console.log(date)
+        // console.log(regStartDate)
+
+     // console.log(date[2])
+      //if(date[0] == regStartDate[0] && date[1] >= regStartDate && date[2] >= regStartDate[2]){
+        //checkDate = true
+      //}
+      //else if (date[0] == regStartDate[0] && date[1] >= regStartDate && date[2] >= regStartDate[2])
+    
+        var checkDate = true;
+        var checkSize = true;
+        var eligibility = findEligibility(learnerID);
+        var checkEnrolment = checkEnrolmentList(learnerID, courseID)
+        //console.log(eligibility);
+
+        if(size < maxSlot){
+          checkSize = true
+          console.log("size ok")
+        }
+        else if ( size > maxSlot || size == maxSlot){
+          checkSize = false
+          console.log("size not ok")
+        }
+        if (date <= regStartDate){
+          checkDate = true
+          console.log("good date")
+        }
+        else{
+          checkDate = false
+          console.log("bad date")
+        }
+
+        if (checkSize == true && eligibility && checkEnrolment ){
+          signUp(classid)
+        }
+      else{
+        alert("Please ensure the current date is during the registration period or ensure that the class is not full! ");
       }
-
-      if (date <= classs.regStartDate){
-        check = true
-      }
-
-
-      console.log(check)
-      return check 
-
     }
 
-    const vm = new Vue({
-      el: '#classesTable',
-      data: {
-        classes: [],
-        classID: 0,
-        learnerID: sessionStorage.learnerID,
-        courseID: sessionStorage.courseID,
-        date : new Date().toISOString().substr(0, 10),
-        check: false
-      },
-      mounted: function() {
-        axios.get('http://localhost:5010/classes/' + sessionStorage.courseID)
-            .then(response => {
-                this.classes = response.data.data;
+    async function checkEnrolmentList(learnerID, courseID){
+      var serviceURL = 'http://localhost:5000/enrolmentList/' + learnerID;
+      try {
+            const response =
+            await fetch(
+              serviceURL, { method: 'GET' }
+            );
+            const result = await response.json();
+            if (response.ok ) {
+                var learnerEnrolledcourseID = result.data;
+                let check = true;
+                for (const learner of learnerEnrolledcourseID){
+                  if (courseID == learner.courseID){
+                      check = false;
+                      return check
+                  }
+                }
+                return check
+              }
+              else{
+                return check
+              }
+            } catch (error) {
+            showError
+            ('There is a problem retrieving enrolment list please try again later.' + error);
+              } 
+          }
+        
 
-                window.console.log(this.date) 
-            })
-            .catch(error => alert(error)); 
-      },
-      methods: {
-        signUp: function(id){
-          event.preventDefault();
-          this.classID = id;
-          axios.post('http://localhost:5008/enrolmentList', {
-                    classID: this.classID,
-                    learnerID: this.learnerID,
-                    courseID: this.courseID
+    function getTrainerName(empID ,classID){
+      $(async() => { 
+        var serviceURL = 'http://localhost:5000/employee/' + empID;
+        try {
+              const response =
+              await fetch(
+                serviceURL, { method: 'GET' }
+              );
+              const result = await response.json();
+              
+              if (response.ok ) {
+                  var employee = result.data;
+                  var trainer = '';
+                  trainer = result.data.empName
+                  document.getElementById(classID+"trainerID").innerHTML = trainer;  
+                }
+              } catch (error) {
+              showError
+              ('There is a problem retrieving trainer name please try again later.' + error);
+                } 
+            }
+        )};
+
+      window.onload = function findPreReq() {
+        var courseID = url.searchParams.get("courseID");
+        $(async() => { 
+          var serviceURL = 'http://localhost:5000/prerequisite/' + courseID;
+          try {
+              const response =
+              await fetch(
+                serviceURL, { method: 'GET' }
+              );
+              const result = await response.json();
+              if (response.ok) {
+                var preReqCourses = result.data;
+                var preReq = '';
+                preReq = result.data.prerequisiteID
+
+                if(preReq == 0){
+                  document.getElementById("coursePrereq").innerHTML = "No prerequisite course";
+                }
+                else{
+                  findCourse(preReq);
+                }
+              }
+            } catch (error) {
+            showError
+            (
+              'There is a problem retrieving prerequisite course please try again later.' + error);
+            } 
+          }
+        )};
+        function findCourse(courseID) {
+          $(async() => {
+
+            var serviceURL = "http://localhost:5000/course/" + courseID;
+            try {
+                const response =
+                await fetch(
+                  serviceURL, { method: 'GET' }
+                );
+                const result = await response.json();
+
+                if (response.ok) { 
+                  var courses = result.data;
+                  var course = result.data.courseName;
+                  document.getElementById("coursePrereq").innerHTML = "Prerequisite course for this course: " + course;
+                  } else {
+                    alert("Theres an issue with the data.");
+                }
+              }
+              catch (error) {
+              alert('There is a problem, please try again later.');
+              }
+            }
+          )};
+
+      async function findEligibility(learnerID) {
+        var serviceURL = 'http://localhost:5000/learner/' + learnerID;
+        try {
+            const response =
+            await fetch(
+              serviceURL, { method: 'GET' }
+            );
+            const result = await response.json();
+            if (response.ok) {
+                var learner = result.data;
+                var badges = '';
+                var preReqCourse = document.getElementById("coursePrereq").innerHTML
+                badges = result.data.badges
+                //let check = ""
+
+                if (badges == null){
+                  badges = 0
+                }  
+                if (badges == preReqCourse || preReqCourse == "No prerequisite course"){
+                  //check = true
+                  return true             
+                }
+                else{
+                  //check = false
+                  return false 
+                }
+              }
+            } catch (error) {
+            showError
+            ('There is a problem retrieving eligibility please try again later.' + error);
+            } 
+        };
+
+        async function signUp(id){
+          var classID = id;
+          var learnerID = sessionStorage.learnerID ;
+          var courseID = url.searchParams.get("courseID");
+          var serviceURL = "http://localhost:5000/enrolmentList";
+
+          try {
+                const response =
+                await fetch(
+                    serviceURL, { 
+                      method: 'POST',
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ classID: classID, learnerID:learnerID, courseID:courseID })
+                });
+                const data = await response.json();
+                const information = await data;
+                if (response.ok)  {
+                  alert("Class successfully enrolled!");
+                 // window.location.replace("allCourses.html");
+                } 
+                else {
+                  alert("You have previously enrolled into this course!");
+              }
+            } catch (error) {
+                showError('There is an issue enrolling into new class.');
+            }
+        };
+
+        function showError(message) {
+          $('#classesTable')
+              .append("<label>"+message+"</label>");
+          }
+
+        $(async() => {         
+            // console.log(courseID)
+            var serviceURL = "http://localhost:5000/classes/" + courseID;
+            try {
+                const response =
+                await fetch(
+                    serviceURL, { method: 'GET' }
+                );
+                const result = await response.json();
+                if (response.ok) {
+                    var allClasses = result.data;
+                    console.log(allClasses);
                     
-                })
-          .then(response => {
-
-                  window.location.replace("allCourses.html");
-                  return false;         
-              })
-          .catch(error => { console.log(error) });
-        }        
-      },
+                    var rows = "";
+                    for (const classs of allClasses) {
+                          eachRow = "<td id='classID'>" + classs.classID + "</td>" +
+                          "<td>" + classs.startDate.substr(0, 16) + " - " + classs.endDate.substr(0, 16) + "</td>" +
+                          "<td>" + classs.startTime + " - " + classs.endTime + "</td>"+
+                          "<td id= 'regStartDate'>"+ classs.regStartDate.substr(0, 16) + "</td>"+
+                          "<td id= 'regEndDate'>"+ classs.regEndDate.substr(0, 16) + "</td>"+
       
-    });
-
-    
-
+                          "<td id= '" + classs.classID + "size'>"+ classs.size + "</td>"+
+                          "<td id='" + classs.classID + "maxSlot'>"+ classs.maxSlot + "</td>"+
+                          "<td id='" + classs.classID + "trainerID'>" + getTrainerName(classs.trainerID,classs.classID ) + "</td>"+
+                          "<td id='"+classs.classID +"eligibility'>" + 
+                          "<button type='button' class='btn btn-primary' onclick='okToSignUp(" + classs.classID + ")'> Sign up </button>"
+                          + "</td>" ;
+                          rows += "<tr>" + eachRow + "</tr>";
+                    }
+                    $('#classesTable').append(rows);
+                }
+            } catch (error) {
+                showError('There is a problem retrieving classes data, please refresh the page or try again later.');
+            }
+          });
 
 </script>
 
