@@ -1,7 +1,8 @@
 import unittest
 import flask_testing
 import json
-from app import app, db, ClassList, EnrolmentList, Quiz, Questions
+from app import app, db, ClassList, EnrolmentList, Quiz, Questions, Lesson
+from classes.LessonClass import lesson_by_num
 
 class TestApp(flask_testing.TestCase):
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://"
@@ -21,8 +22,12 @@ class TestApp(flask_testing.TestCase):
 
 class TestCreateQuiz(TestApp):
     def test_create_quiz(self):
+        lesson = Lesson(lessonID=5, lessonNum='10',
+                    classID=1, courseID=5, lessonName='Fixing Printers', lessonDesc='How to fix printers')
         quiz = Quiz(quizID=5, quizDuration='10',
-                    passingCriteria='5', quizType='UG', lessonID=1)
+                    passingCriteria='5', quizType='UG', lessonID=lesson.lessonID)
+        db.session.add(lesson)
+        db.session.commit()
 
         request_body = {
             'quizID': quiz.quizID,
@@ -42,7 +47,26 @@ class TestCreateQuiz(TestApp):
             'quizType': 'UG',
             'lessonID': 1
         })
-        
+    def test_create_quiz_invalid_lesson(self):
+        quiz = Quiz(quizID=5, quizDuration='10',
+                    passingCriteria='5', quizType='UG', lessonID=lesson.lessonID)
+        db.session.add(lesson)
+
+        request_body = {
+            'quizID': quiz.quizID,
+            'quizDuration': quiz.quizDuration,
+            'passingCriteria': quiz.passingCriteria,
+            'quizType': quiz.quizType,
+            'lessonID': quiz.lessonID
+        }
+
+        response = self.client.post("/quiz-create",
+                                    data=json.dumps(request_body),
+                                    content_type='application/json')
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(response.json, {
+            'message': 'LessonID not valid.'
+        }) 
 class TestCreateQuestion(TestApp):
     def test_create_quiz_question(self):
         qns = Questions(quizID=10, qnNo=1,
