@@ -561,8 +561,8 @@ def lesson_by_num(classID, lessonNum, courseID):
     lessons = Lesson.query.filter_by(classID=classID, lessonID=lessonNum, courseID=courseID).all()
     if lessons:
         return jsonify({
-            "data": [lesson.to_dict()
-                     for lesson in lessons]
+            "data": lesson.to_dict()
+                     for lesson in lessons
         }), 200
     else:
         return jsonify({
