@@ -1,6 +1,7 @@
 import unittest
 import flask_testing
 import json
+from classes.app import app, db, Course, EnrolmentList, Classes, Course, Learner, ClassList, EnrolmentList, Quiz, Questions
 import datetime
 from app import app, db, ClassList, Quiz, EnrolmentList, Learner, Classes
 
