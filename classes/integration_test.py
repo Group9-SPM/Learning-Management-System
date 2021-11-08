@@ -1,4 +1,4 @@
 import unittest
 import flask_testing
 import json
-from app import app, db, ClassList, Quiz, EnrolmentList
+from classes.app import app, db, Course, EnrolmentList, Classes, Course, Learner, ClassList, EnrolmentList, Quiz, Questions
