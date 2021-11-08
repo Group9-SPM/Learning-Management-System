@@ -110,11 +110,14 @@
     <p id="quiz_time">
     </p>
 
-    <form method="POST">
+    <form method="POST" id="quiz_form">
       <div id="question_fields">
 
       </div>
       <div class="form-group mt-3">
+        <input type="hidden" id="quiz_id" name="quiz_id" value="" />
+        <input type="hidden" id="learner_id" name="learner_id" value="" />
+        <input type="hidden" id="lesson_id" name="lesson_id" value="" />
         <input type="submit" class="btn btn-success" value="Submit Quiz"/>
       </div>
     </form>
@@ -132,7 +135,7 @@
 
     $(async() => {           
             // Change serviceURL to your own change to wtv port number it is 
-            var serviceURL = "http://localhost:5000/lesson/lessonByID/" + lessonID;
+            var serviceURL = "http://localhost:5000/lesson/lessonByID/" + lessonID + "/" + learnerID;
     
             try {
                 const response =
@@ -167,6 +170,9 @@
                 const result = await response.json();
                  if (response.status === 200) {
                     quizID = result.data.quizID;
+                    $('#quiz_id').val(quizID);
+                    $('#learner_id').val(learnerID);
+                    $('#lesson_id').val(lessonID);
                     quiz_duration = 0;
                     // Retrieve duration of quiz in minutes, if got hours just add more criteria
                     if(result.data.quizDuration.includes("min"))
@@ -218,13 +224,13 @@
                               for(let n_questions = 0; n_questions < result.data.length; n_questions++ )
                               {
                                 var current_n = n_questions+1;
-                                lesson_list_html += '<div class="form-group"><label>Question '+current_n+': '+result.data[n_questions].question+'</label>';
+                                lesson_list_html += '<div class="form-group py-2"><label>Question '+current_n+': '+result.data[n_questions].question+'</label>';
                                 
                                 // retrieve options
                                 var option_split = result.data[n_questions].options.split(',');
                                 for(let n_o = 0; n_o < option_split.length; n_o++)
                                 {
-                                  lesson_list_html += '<div class="form-check"><input class="form-check-input" type="radio" name="qn_'+current_n+'" value="'+option_split[n_o]+'" id="qn_'+current_n+'_'+n_o+'"><label class="form-check-label" for="qn_'+current_n+'_'+n_o+'">'+option_split[n_o]+'</label></div>';
+                                  lesson_list_html += '<div class="form-check ml-2"><input class="form-check-input" type="radio" name="qn_'+current_n+'" value="'+option_split[n_o]+'" id="qn_'+current_n+'_'+n_o+'" required><label class="form-check-label" for="qn_'+current_n+'_'+n_o+'">'+option_split[n_o]+'</label></div>';
                                 }  
                                 lesson_list_html += '</div>';
                               }
@@ -259,6 +265,28 @@
                                 alert ('There is a problem retrieving data, please try again later.' + error);
                             } // error
                   }); 
+      
+        $(document).ready(function() {
+          $("#quiz_form").submit(function(e) {
+
+          e.preventDefault(); // avoid to execute the actual submit of the form.
+
+          var form = $(this);
+          var url = "http://localhost:5000/submitQuiz";;
+
+          $.ajax({
+                type: "POST",
+                url: url,
+                data: form.serialize(), // serializes the form's elements.
+                success: function(data)
+                {
+                    window.location.href = "./QuizContent.html?lessonID="+lessonID+"&success=1";
+                }
+              });
+
+
+          });
+        });
   </script>
 
   <!-- ======= Footer ======= -->
