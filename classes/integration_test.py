@@ -30,8 +30,8 @@ class TestClassList(TestApp):
                     endTime = "13:00",  maxSlot = 30, minSlot = 10, 
                     regEndDate = datetime.datetime.now(), regStartDate = datetime.datetime.now(), 
                     size = 30, startDate = datetime.datetime.now(), startTime = "12:00", trainerID = 4)
-        cl1 = ClassList(classID = 1, learnerID = 2)
-        cl2 = ClassList(classID = 1, learnerID = 3)
+        cl1 = ClassList(classID = c1.classID, learnerID = l1.empID)
+        cl2 = ClassList(classID = c1.classID, learnerID = l2.empID)
         db.session.add(l1)
         db.session.add(c1)
         db.session.add(l2)
@@ -63,6 +63,30 @@ class TestClassList(TestApp):
                         "username": "lucy123"
                         }]
         })
+
+    def test_classList_by_learner(self):
+        l1 = Learner(badges= "1", department= "R&D", empID= 2, 
+                    empName = "Amy Tan", roleType = "L", username = "amy123")
+        c1 = Classes(classID = 1, courseID = 1, endDate = datetime.datetime.now(), 
+                    endTime = "13:00",  maxSlot = 30, minSlot = 10, 
+                    regEndDate = datetime.datetime.now(), regStartDate = datetime.datetime.now(), 
+                    size = 30, startDate = datetime.datetime.now(), startTime = "12:00", trainerID = 4)
+        cl1 = ClassList(classID = c1.classID, learnerID = l1.empID, finalQuizGrade = None)
+        db.session.add(l1)
+        db.session.add(c1)
+        db.session.add(cl1)
+        db.session.commit()
+        
+        response = self.client.get("/classList/learner/2")
+        self.assertEqual(response.json, {
+                        "data": [
+                            {
+                            "classID": 1, 
+                            "finalQuizGrade": None, 
+                            "learnerID": 2
+                            }
+                        ]
+                        })
 
 class TestAssignLearner(TestApp):
     def test_assign_learner(self):
