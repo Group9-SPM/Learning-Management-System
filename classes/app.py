@@ -12,7 +12,7 @@ db = SQLAlchemy(app)
 CORS(app)
 
 #EMPLOYEE
-class Employee(db.Model): 
+class Employee(db.Model):
 
     __tablename__ = 'employee'
 
@@ -34,13 +34,13 @@ class Employee(db.Model):
         return result
 
 #LEARNER
-class Learner(Employee): 
+class Learner(Employee):
 
     __tablename__ = 'learner'
 
     badges = db.Column(db.String(300))
     empID = db.Column(db.Integer, db.ForeignKey(Employee.empID), primary_key=True)
-    
+
     def to_dict(self):
         """
         'to_dict' converts the object into a dictionary,
@@ -52,8 +52,8 @@ class Learner(Employee):
             result[column] = getattr(self, column)
         return result
 
-#course
-class Course(db.Model): 
+#COURSE
+class Course(db.Model):
 
     __tablename__ = 'course'
 
@@ -74,8 +74,8 @@ class Course(db.Model):
         return result
 
 #CLASSES
-class Classes(db.Model): 
-    
+class Classes(db.Model):
+
     __tablename__ = 'classes'
 
     classID = db.Column(db.Integer, primary_key=True)
@@ -90,7 +90,7 @@ class Classes(db.Model):
     regEndDate = db.Column(db.DateTime, nullable=False)
     courseID = db.Column(db.Integer, db.ForeignKey(Course.courseID))
     trainerID = db.Column(db.Integer, db.ForeignKey(Employee.empID))
-    
+
     def to_dict(self):
         """
         'to_dict' converts the object into a dictionary,
@@ -103,7 +103,7 @@ class Classes(db.Model):
         return result
 
 #classlist
-class ClassList(db.Model): 
+class ClassList(db.Model):
 
     __tablename__ = 'classList'
 
@@ -123,7 +123,7 @@ class ClassList(db.Model):
         return result
 
 #ENROLMENTLIST
-class EnrolmentList(db.Model): 
+class EnrolmentList(db.Model):
 
     __tablename__ = 'enrolmentList'
 
@@ -143,9 +143,9 @@ class EnrolmentList(db.Model):
             result[column] = getattr(self, column)
         return result
 
-
 #PREREQ
 class Prerequisite(db.Model):
+
     __tablename__ = 'prerequisite'
 
     courseID = db.Column(db.Integer, db.ForeignKey(Course.courseID) ,primary_key=True)
@@ -164,6 +164,7 @@ class Prerequisite(db.Model):
 
 #LESSON CLASS
 class Lesson(db.Model):
+
     __tablename__ = 'lesson'
 
     lessonID = db.Column(db.Integer, primary_key=True)
@@ -186,8 +187,8 @@ class Lesson(db.Model):
 
 
 #LESSON MATERIAL CLASS
-class LessonMaterials(db.Model): 
-    
+class LessonMaterials(db.Model):
+
     __tablename__ = 'lessonMaterials'
 
     materialID = db.Column(db.Integer, primary_key=True)
@@ -208,6 +209,7 @@ class LessonMaterials(db.Model):
 
 #LESSON MATERIAL VIEWED CLASS
 class LessonMaterialsViewed(db.Model):
+
     __tablename__ = 'lessonMaterialsViewed'
 
     materialID = db.Column(db.Integer, db.ForeignKey(LessonMaterials.materialID), primary_key=True)
@@ -228,6 +230,7 @@ class LessonMaterialsViewed(db.Model):
 
 #QUIZ CLASS
 class Quiz(db.Model):
+
     __tablename__ = 'quiz'
 
     quizID = db.Column(db.Integer, primary_key=True)
@@ -235,7 +238,6 @@ class Quiz(db.Model):
     passingCriteria = db.Column(db.String(5), nullable=False)
     quizType = db.Column(db.String(2), nullable=False)
     lessonID = db.Column(db.Integer, db.ForeignKey(Lesson.lessonID), nullable=False)
-
 
     def to_dict(self):
         """
@@ -250,6 +252,7 @@ class Quiz(db.Model):
 
 #QUESTION CLASS
 class Questions(db.Model):
+
     __tablename__ = 'quizQuestions'
     questionsID = db.Column(db.Integer, primary_key=True)
     quizID = db.Column(db.Integer, db.ForeignKey(Quiz.quizID))
@@ -290,7 +293,6 @@ class QuizAttempt(db.Model):
             result[column] = getattr(self, column)
         return result
 
-
 #EMPLOYEE
 @app.route("/employee")
 def employee():
@@ -301,7 +303,6 @@ def employee():
                      for employee in employee_list]
         }
     ), 200
-
 
 @app.route("/employee/<int:empID>")
 def employee_by_id(empID):
@@ -325,7 +326,6 @@ def learner():
                      for learner in learner_list]
         }
     ), 200
-    
 
 @app.route("/learner/<int:empID>")
 def learner_by_empID(empID):
@@ -338,8 +338,6 @@ def learner_by_empID(empID):
         return jsonify({
             "message": "No learner with that empID."
         }), 404
-
-
 
 #COURSE
 @app.route("/courses")
@@ -454,7 +452,6 @@ def assign_learner():
         "message" : "All learners assigned successfully"
     }), 201
 
-
 #CLASSES
 @app.route("/classes")
 def classes():
@@ -479,7 +476,6 @@ def class_by_courseID(courseID):
             "message": "No available classes."
         }), 404
 
-
 @app.route("/classes/byClass/<int:classID>")
 def class_by_classID(classID):
     classID = Classes.query.join(Course).filter(Classes.classID==classID)
@@ -492,7 +488,6 @@ def class_by_classID(classID):
         return jsonify({
             "message": "No available classes."
         }), 404
-
 
 #ENROLMENTLIST
 @app.route("/enrolmentList")
@@ -562,7 +557,6 @@ def create_enrolment():
         return jsonify({
             "message": "Unable to commit to database. " + str(e)
         }), 500        
-
 
 #LESSON
 @app.route("/lesson/<int:classID>/<int:lessonNum>/<int:courseID>")
@@ -704,8 +698,6 @@ def lessonMaterialsViewed_update_by_lesson_material(materialID, learnerID, lesso
         return jsonify({
             "message": "Unable to commit to database."
         }), 500
-
-
 
 #PREREQ        
 @app.route("/prerequisite")
