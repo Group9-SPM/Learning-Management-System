@@ -42,7 +42,6 @@ function addQuestion() {
                         <textarea class="form-control" id="inputQn" rows="1"></textarea>
                       </div>
                     </div>
-                    <!-- Options -->
                     <div class="row mb-3">
                       <label class="col-sm-2 col-form-label">Options</label>
                       <div class="col-sm-10">
@@ -54,10 +53,8 @@ function addQuestion() {
                           <input class="form-check-input" type="radio" value="option2">
                           <input type="text" class="form-control" id="option2" placeholder="False/Option 2">
                         </div>
-                        <button type="button" class="btn btn-primary" style="margin-top: 10px; float: right;" onclick="addOption(this)">Add New Option</button>
                       </div>
                     </div>
-                    <!-- Correct Answer -->
                     <div class="row mb-3">
                       <label for="correctAns" class="col-sm-2 col-form-label">Correct Answer</label>
                       <div class="col-sm-10">
