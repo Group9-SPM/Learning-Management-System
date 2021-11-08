@@ -22,17 +22,8 @@ class TestApp(flask_testing.TestCase):
 
 class TestCreateQuiz(TestApp):
     def test_create_quiz(self):
-
         quiz = Quiz(quizDuration='10',
                     passingCriteria='5', quizType='UG', lessonID=1)
-
-#         lesson = Lesson(lessonID=5, lessonNum='10',
-#                     classID=1, courseID=5, lessonName='Fixing Printers', lessonDesc='How to fix printers')
-#         quiz = Quiz(quizID=5, quizDuration='10',
-#                     passingCriteria='5', quizType='UG', lessonID=lesson.lessonID)
-#         db.session.add(lesson)
-#         db.session.commit()
-
 
         request_body = {
             'quizDuration': quiz.quizDuration,
@@ -54,9 +45,12 @@ class TestCreateQuiz(TestApp):
         })
 
     def test_create_quiz_invalid_lesson(self):
-        quiz = Quiz(quizID=5, quizDuration='10',
-                    passingCriteria='5', quizType='UG', lessonID=1)
-        db.session.add(quiz)
+        lesson = Lesson(lessonNum='10',
+                    classID=1, courseID=5, lessonName='Fixing Printers', lessonDesc='How to fix printers')
+        quiz = Quiz(quizDuration='10',
+                    passingCriteria='5', quizType='UG', lessonID=lesson.lessonID)
+        db.session.add(lesson)
+        db.session.commit()
 
         request_body = {
             'quizID': quiz.quizID,
@@ -71,7 +65,7 @@ class TestCreateQuiz(TestApp):
                                     content_type='application/json')
         self.assertEqual(response.status_code, 500)
         self.assertEqual(response.json, {
-            'message': 'LessonID not valid.'
+            'message': 'Unable to commit to database.'
         }) 
 class TestCreateQuestion(TestApp):
     def test_create_quiz_question(self):
