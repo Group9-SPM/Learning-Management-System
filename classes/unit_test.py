@@ -41,7 +41,7 @@ class TestQuestion(unittest.TestCase):
     def test_to_dict(self):
         q1 = Questions(quizID='1', qnNo='1', question='SPM is difficult.', options='True,False', answer ="True")
         self.assertEqual(q1.to_dict(), {
-            'quizID': '4',
+            'quizID': '1',
             'qnNo': '1', 
             'question': 'SPM is difficult.',
             'options': 'True,False',
