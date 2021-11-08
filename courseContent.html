@@ -265,7 +265,7 @@
                 const result = await response.json();
                  if (response.status === 200) {
                     // success case;
-                    var lessonID = result.data.lessonID;
+                    var lessonID = result.data[0].lessonID;
                     return getLessonMaterial(lessonID, lessonName, lessonNum);
                                 } else if (response.status === 201) {
                                   $('#lessonmaterials_div').html(result.message);
@@ -329,6 +329,7 @@
                 
 
         }
+
 </script>
 
   <!-- ======= Footer ======= -->

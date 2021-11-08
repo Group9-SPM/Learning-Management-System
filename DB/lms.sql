@@ -126,25 +126,21 @@ CREATE TABLE quiz (
 );
 
 CREATE TABLE quizQuestions (
-    questionsID INT NOT NULL AUTO_INCREMENT,
     quizID INT NOT NULL,
     qnNo INT NOT NULL,
     question VARCHAR(300) NOT NULL,
     options VARCHAR(100) NOT NULL,
     answer VARCHAR(50) NOT NULL,
 
-    CONSTRAINT quizQuestions_pk PRIMARY KEY (questionsID),
+    CONSTRAINT quizQuestions_pk PRIMARY KEY (quizID, qnNo),
     CONSTRAINT quizQuestions_fk FOREIGN KEY (quizID) REFERENCES quiz(quizID)
 );
 
 CREATE TABLE quizAttempt (
-    quizAttemptID INT NOT NULL AUTO_INCREMENT,
     quizID INT NOT NULL,
     learnerID INT NOT NULL,
-    score INT NOT NULL,
-    max_score INT NOT NULL,
 
-    CONSTRAINT quizAttempt_pk PRIMARY KEY (quizAttemptID),
+    CONSTRAINT quizAttempt_pk PRIMARY KEY (quizID, learnerID),
     CONSTRAINT quizAttempt_fk FOREIGN KEY (quizID) REFERENCES quiz(quizID),
     CONSTRAINT quizAttempt_fk1 FOREIGN KEY (learnerID) REFERENCES learner(empID)
 );
@@ -219,27 +215,27 @@ INSERT INTO quiz(quizDuration, passingCriteria, quizType, lessonID) VALUES("10mi
 INSERT INTO quiz(quizDuration, passingCriteria, quizType, lessonID) VALUES("10min", "3", "G", 7);
 
 
-INSERT INTO quizQuestions(quizID, qnNo, question, options, answer) VALUES(1, 1, "What is the number that is shown when facing printing error?", "21,23,24,25", "21");
-INSERT INTO quizQuestions(quizID, qnNo, question, options, answer) VALUES(1, 2, "Which of the following options states the main purpose of HP Printer?", "Printing,Copying,Scanning,Faxing", "Copying");
-INSERT INTO quizQuestions(quizID, qnNo, question, options, answer) VALUES(1, 3,  "How long does it take for the machine to reboot?", "5 minutes,15 minutes,45 minutes,1 hour", "15 minutes");
-INSERT INTO quizQuestions(quizID, qnNo, question, options, answer) VALUES(1, 4, "True or False: The HP Printer can copy 500 pages at one go.", "True,False", "False");
-INSERT INTO quizQuestions(quizID, qnNo, question, options, answer) VALUES(1, 5, "True or False: The HP Printer have a lifetime warranty.", "True,False", "True");
+INSERT INTO quizQuestions VALUES(1, 1, "What is the number that is shown when facing printing error?", "21,23,24,25", "21");
+INSERT INTO quizQuestions VALUES(1, 2, "Which of the following options states the main purpose of HP Printer?", "Printing,Copying,Scanning,Faxing", "Copying");
+INSERT INTO quizQuestions VALUES(1, 3,  "How long does it take for the machine to reboot?", "5 minutes,15 minutes,45 minutes,1 hour", "15 minutes");
+INSERT INTO quizQuestions VALUES(1, 4, "True or False: The HP Printer can copy 500 pages at one go.", "True,False", "False");
+INSERT INTO quizQuestions VALUES(1, 5, "True or False: The HP Printer have a lifetime warranty.", "True,False", "True");
 
-INSERT INTO quizQuestions(quizID, qnNo, question, options, answer) VALUES(2, 1, "What is the number that is shown when facing printing error?", "21,23,24,25", "21");
-INSERT INTO quizQuestions(quizID, qnNo, question, options, answer) VALUES(2, 2, "Which of the following options states the main purpose of Xerox Printer?", "Printing,Copying,Scanning,Faxing", "Copying");
-INSERT INTO quizQuestions(quizID, qnNo, question, options, answer) VALUES(2, 3,  "How long does it take for the machine to reboot?", "5 minutes,15 minutes,45 minutes,1 hour", "15 minutes");
+INSERT INTO quizQuestions VALUES(2, 1, "What is the number that is shown when facing printing error?", "21,23,24,25", "21");
+INSERT INTO quizQuestions VALUES(2, 2, "Which of the following options states the main purpose of Xerox Printer?", "Printing,Copying,Scanning,Faxing", "Copying");
+INSERT INTO quizQuestions VALUES(2, 3,  "How long does it take for the machine to reboot?", "5 minutes,15 minutes,45 minutes,1 hour", "15 minutes");
 
-INSERT INTO quizQuestions(quizID, qnNo, question, options, answer) VALUES(3, 1, "True or False: The Canon Printer can copy 500 pages at one go.", "True,False", "False");
-INSERT INTO quizQuestions(quizID, qnNo, question, options, answer) VALUES(3, 2, "True or False: The Canon Printer have a lifetime warranty.", "True,False", "True");
+INSERT INTO quizQuestions VALUES(3, 1, "True or False: The Canon Printer can copy 500 pages at one go.", "True,False", "False");
+INSERT INTO quizQuestions VALUES(3, 2, "True or False: The Canon Printer have a lifetime warranty.", "True,False", "True");
 
-INSERT INTO quizQuestions(quizID, qnNo, question, options, answer) VALUES(4, 1, "What is the number that is shown when facing printing error?", "21,23,24,25", "21");
-INSERT INTO quizQuestions(quizID, qnNo, question, options, answer) VALUES(4, 2, "Which of the following options states the main purpose of HP Printer?", "Printing,Copying,Scanning,Faxing", "Copying");
-INSERT INTO quizQuestions(quizID, qnNo, question, options, answer) VALUES(4, 3,  "How long does it take for the machine to reboot?", "5 minutes,15 minutes,45 minutes,1 hour", "15 minutes");
-INSERT INTO quizQuestions(quizID, qnNo, question, options, answer) VALUES(4, 4, "True or False: The HP Printer can copy 500 pages at one go.", "True,False", "False");
-INSERT INTO quizQuestions(quizID, qnNo, question, options, answer) VALUES(4, 5, "True or False: The HP Printer have a lifetime warranty.", "True,False", "True");
+INSERT INTO quizQuestions VALUES(4, 1, "What is the number that is shown when facing printing error?", "21,23,24,25", "21");
+INSERT INTO quizQuestions VALUES(4, 2, "Which of the following options states the main purpose of HP Printer?", "Printing,Copying,Scanning,Faxing", "Copying");
+INSERT INTO quizQuestions VALUES(4, 3,  "How long does it take for the machine to reboot?", "5 minutes,15 minutes,45 minutes,1 hour", "15 minutes");
+INSERT INTO quizQuestions VALUES(4, 4, "True or False: The HP Printer can copy 500 pages at one go.", "True,False", "False");
+INSERT INTO quizQuestions VALUES(4, 5, "True or False: The HP Printer have a lifetime warranty.", "True,False", "True");
 
-INSERT INTO quizQuestions(quizID, qnNo, question, options, answer) VALUES(5, 1, "What is the number that is shown when facing printing error?", "21,23,24,25", "21");
-INSERT INTO quizQuestions(quizID, qnNo, question, options, answer) VALUES(5, 2, "Which of the following options states the main purpose of HP Printer?", "Printing,Copying,Scanning,Faxing", "Copying");
-INSERT INTO quizQuestions(quizID, qnNo, question, options, answer) VALUES(5, 3,  "How long does it take for the machine to reboot?", "5 minutes,15 minutes,45 minutes,1 hour", "15 minutes");
-INSERT INTO quizQuestions(quizID, qnNo, question, options, answer) VALUES(5, 4, "True or False: The HP Printer can copy 500 pages at one go.", "True,False", "False");
-INSERT INTO quizQuestions(quizID, qnNo, question, options, answer) VALUES(5, 5, "True or False: The HP Printer have a lifetime warranty.", "True,False", "True");
+INSERT INTO quizQuestions VALUES(5, 1, "What is the number that is shown when facing printing error?", "21,23,24,25", "21");
+INSERT INTO quizQuestions VALUES(5, 2, "Which of the following options states the main purpose of HP Printer?", "Printing,Copying,Scanning,Faxing", "Copying");
+INSERT INTO quizQuestions VALUES(5, 3,  "How long does it take for the machine to reboot?", "5 minutes,15 minutes,45 minutes,1 hour", "15 minutes");
+INSERT INTO quizQuestions VALUES(5, 4, "True or False: The HP Printer can copy 500 pages at one go.", "True,False", "False");
+INSERT INTO quizQuestions VALUES(5, 5, "True or False: The HP Printer have a lifetime warranty.", "True,False", "True");
