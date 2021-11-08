@@ -251,8 +251,8 @@ class Quiz(db.Model):
 #QUESTION CLASS
 class Questions(db.Model):
     __tablename__ = 'quizQuestions'
-
-    quizID = db.Column(db.Integer, db.ForeignKey(Quiz.quizID), primary_key=True)
+    questionsID = db.Column(db.Integer, primary_key=True)
+    quizID = db.Column(db.Integer, db.ForeignKey(Quiz.quizID))
     qnNo = db.Column(db.Integer, nullable=False)
     question = db.Column(db.String(300), nullable=False)
     options = db.Column(db.String(100), nullable=False)
@@ -273,10 +273,11 @@ class Questions(db.Model):
 class QuizAttempt(db.Model):
     __tablename__ = 'quizAttempt'
 
-    quizID = db.Column(db.Integer, db.ForeignKey(Quiz.quizID), primary_key=True)
-    qnNo = db.Column(db.Integer, nullable=False)
+    quizAttemptID = db.Column(db.Integer, primary_key=True)
+    quizID = db.Column(db.Integer, db.ForeignKey(Quiz.quizID), nullable=False)
     learnerID = db.Column(db.Integer, db.ForeignKey(Learner.empID), nullable=False)
-    answer = db.Column(db.String(50), nullable=False)
+    score = db.Column(db.Integer, nullable=False)
+    max_score = db.Column(db.Integer, nullable=False)
 
     def to_dict(self):
         """
@@ -590,12 +591,18 @@ def retrieve_all_lessons_by_class(classID, courseID):
             "message": "No lessons available yet."
         }), 201
 
-@app.route("/lesson/lessonByID/<int:lessonID>")
-def retrieve_lesson_by_lessonID(lessonID):
+@app.route("/lesson/lessonByID/<int:lessonID>/<int:learnerID>")
+def retrieve_lesson_by_lessonID(lessonID, learnerID):
     lessons = Lesson.query.filter_by(lessonID=lessonID).first()
+    lessonMaterialsCheck = LessonMaterialsViewed.query.filter_by(lessonID=lessonID, learnerID=learnerID, completed=1).all()
+    lessonMaterials = LessonMaterials.query.filter_by(lessonID=lessonID).all()
+    quizCheck = Quiz.query.filter_by(lessonID=lessonID).first()
+    attemptCheck = QuizAttempt.query.filter_by(quizID=quizCheck.quizID,learnerID=learnerID).all()
     if lessons:
         return jsonify({
-            "data": lessons.to_dict()
+            "data": lessons.to_dict(),
+            "quiz_available": len(lessonMaterialsCheck) == len(lessonMaterials),
+            "quiz_attempts" : len(attemptCheck) > 0
         }), 200
     else:
         return jsonify({
@@ -638,16 +645,24 @@ def lessonMaterials_by_lesson(lessonID, learnerID):
 @app.route("/lessonMaterialsViewed/check/<int:materialID>/<int:learnerID>/<int:lessonID>")
 def lessonMaterialsViewed_by_lesson_material(materialID, learnerID, lessonID):
     lessonMaterialsViewed = LessonMaterialsViewed.query.filter_by(materialID=materialID, learnerID=learnerID, lessonID=lessonID).first()
-    if lessonMaterialsViewed:
-        return jsonify({
-            "data": lessonMaterialsViewed.to_dict(),
-            "status": "success"
-        }), 200
+    quizCheck = Quiz.query.filter_by(lessonID=lessonID).first()
+    attemptCheck = QuizAttempt.query.filter_by(quizID=quizCheck.quizID,learnerID=learnerID).all()
+    if lessonMaterialsViewed :
+        if(len(attemptCheck) > 0):
+            return jsonify({
+                "data": lessonMaterialsViewed.to_dict(),
+                "status": "success"
+            }), 200
+        else:
+            return jsonify({
+                "data": lessonMaterialsViewed.to_dict(),
+                "status": "success"
+            }), 201
     else:
         return jsonify({
             "message": "No lesson materials found.",
             "status": "not found"
-        }), 201
+        }), 202
 
 #ADD TO DB THAT ITS VIEWED
 @app.route("/lessonMaterialsViewed/add/<int:materialID>/<int:learnerID>/<int:lessonID>")
@@ -758,7 +773,7 @@ def retrieve_quiz_by_lessonID(lessonID):
 #QUESTIONCLASS
 @app.route("/question/<int:quizID>")
 def quizQuestions(quizID):
-    r_quizQuestions = Questions.query.filter(quizID==quizID).all()
+    r_quizQuestions = Questions.query.filter_by(quizID=quizID).all()
     if r_quizQuestions:
         return jsonify({
             "data": [quizQuestion.to_dict()
@@ -786,7 +801,46 @@ def create_question():
                 "message": "Unable to commit to database."
             }), 500
 
+@app.route('/quizAttempts/check/<int:lessonID>/<int:learnerID>')
+def retrieveQuizAttempts(lessonID, learnerID):
+    quiz_info = Quiz.query.filter_by(lessonID=lessonID).first()
+    attempts = QuizAttempt.query.filter_by(quizID=quiz_info.quizID, learnerID=learnerID).all()
+    if attempts:
+        return jsonify({
+            "data": [att.to_dict()
+                     for att in attempts],           
+        }), 200
+    else:
+        return jsonify({
+            "message": "No attempts found."
+        }), 404
 
+@app.route('/submitQuiz', methods=['POST'])
+def submit_quiz():
+    data = request.form.to_dict()
+    score = 0
+    max_score = 0
+
+    for key in data:
+        if(key != "learner_id" and key != "quiz_id" and key != "lesson_id"):
+            qn_id = key.split("qn_")[1]
+            question_info = Questions.query.filter_by(quizID=data["quiz_id"], qnNo=qn_id).first()
+            if(question_info.answer == data[key]):
+                score += 1
+            max_score += 1
+
+    attempt = QuizAttempt(
+        quizID=data["quiz_id"], learnerID=data["learner_id"], score=score, max_score=max_score
+    )
+    if ( data is not None ): 
+        try:
+            db.session.add(attempt)
+            db.session.commit()
+            return jsonify(attempt.to_dict()), 200
+        except Exception as e:
+            return jsonify({
+                "message": e
+            }), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
