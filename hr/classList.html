@@ -9,6 +9,9 @@
   <meta content="" name="description">
   <meta content="" name="keywords">
 
+  <!-- jQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
@@ -129,7 +132,7 @@
         </tr>
         
     <tr> 
-        <td>Alice Teo</td>
+        <td>Jeremy Lim</td>
         <td align='right'><button type="button" class="btn btn-danger">Withdraw</button></td>
     </tr>
 
@@ -139,16 +142,7 @@
         
         <tr> 
             <th scope="col">Student Name</th> 
-            <th scope="col">Course Progress</th>
-            <th scope="col">Final Quiz Grade</th> 
-         
-        </tr>
-        
-        <tr> 
-            <td>Amy Tan</td>
-            <td><a href='#'>80%</a></td>
-            <td> - </td>
-            <td align='right'><button type="button" class="btn btn-danger">Withdraw</button></td>
+            <th scope="col">Final Quiz Grade</th>
         </tr>
 
 
@@ -187,8 +181,7 @@
                     var rows = "";
                     for (const student of allStudents) {
                         eachRow =`<td>${student.empName}</td>
-                                <td>${student.progressPercentage}</td>
-                                <td>${student.progressPercentage ?? "-"}</td>
+                                <td>${student.finalQuizGrade ?? "-"}</td>
                                 <td align='right'><button type='button' class='btn btn-danger'>Withdraw</button></td>`;
                        
                         rows += "<tr>" + eachRow + "</tr>";

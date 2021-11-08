@@ -22,15 +22,19 @@ class TestApp(flask_testing.TestCase):
 
 class TestCreateQuiz(TestApp):
     def test_create_quiz(self):
-        lesson = Lesson(lessonID=5, lessonNum='10',
-                    classID=1, courseID=5, lessonName='Fixing Printers', lessonDesc='How to fix printers')
-        quiz = Quiz(quizID=5, quizDuration='10',
-                    passingCriteria='5', quizType='UG', lessonID=lesson.lessonID)
-        db.session.add(lesson)
-        db.session.commit()
+
+        quiz = Quiz(quizDuration='10',
+                    passingCriteria='5', quizType='UG', lessonID=1)
+
+#         lesson = Lesson(lessonID=5, lessonNum='10',
+#                     classID=1, courseID=5, lessonName='Fixing Printers', lessonDesc='How to fix printers')
+#         quiz = Quiz(quizID=5, quizDuration='10',
+#                     passingCriteria='5', quizType='UG', lessonID=lesson.lessonID)
+#         db.session.add(lesson)
+#         db.session.commit()
+
 
         request_body = {
-            'quizID': quiz.quizID,
             'quizDuration': quiz.quizDuration,
             'passingCriteria': quiz.passingCriteria,
             'quizType': quiz.quizType,
@@ -41,7 +45,8 @@ class TestCreateQuiz(TestApp):
                                     data=json.dumps(request_body),
                                     content_type='application/json')
         self.assertEqual(response.json, {
-            'quizID': 5,
+
+            'quizID': 1,
             'quizDuration': '10',
             'passingCriteria': '5',
             'quizType': 'UG',

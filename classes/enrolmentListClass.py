@@ -22,7 +22,7 @@ class EnrolmentList(db.Model):
     __tablename__ = 'enrolmentList'
 
     classID = db.Column(db.Integer, db.ForeignKey(Classes.classID), primary_key=True)
-    learnerID = db.Column(db.Integer, db.ForeignKey(Learner.empID), nullable=False)
+    learnerID = db.Column(db.Integer, db.ForeignKey(Learner.empID), primary_key=True)
     courseID = db.Column(db.Integer, db.ForeignKey(Course.courseID), nullable=False)
     enrolmentStatus = db.Column(db.String(100), nullable=False)
 

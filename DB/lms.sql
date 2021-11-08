@@ -60,7 +60,6 @@ CREATE TABLE learner (
 CREATE TABLE classList (
     learnerID INT NOT NULL,
     classID INT NOT NULL,
-    progressPercentage INT NOT NULL,
     finalQuizGrade VARCHAR(5),
 
     CONSTRAINT classList_pk PRIMARY KEY (learnerID,classID),
@@ -109,7 +108,7 @@ CREATE TABLE lessonMaterialsViewed (
     lessonID INT NOT NULL,
     completed TINYINT NOT NULL,
 
-    CONSTRAINT lessonMaterialsViewed_pk PRIMARY KEY (materialID,learnerID),
+    CONSTRAINT lessonMaterialsViewed_pk PRIMARY KEY (materialID, learnerID),
     CONSTRAINT lessonMaterialsViewed_fk1 FOREIGN KEY (learnerID) REFERENCES learner(empID),
     CONSTRAINT lessonMaterialsViewed_fk2 FOREIGN KEY (materialID) REFERENCES lessonMaterials(materialID),
     CONSTRAINT lessonMaterialsViewed_fk3 FOREIGN KEY (lessonID) REFERENCES lesson(lessonID)
@@ -139,11 +138,9 @@ CREATE TABLE quizQuestions (
 
 CREATE TABLE quizAttempt (
     quizID INT NOT NULL,
-    qnNo INT NOT NULL,
-    answer VARCHAR(300) NOT NULL,
-    learnerID VARCHAR(100) NOT NULL,
+    learnerID INT NOT NULL,
 
-    CONSTRAINT quizAttempt_pk PRIMARY KEY (quizID, qnNo),
+    CONSTRAINT quizAttempt_pk PRIMARY KEY (quizID, learnerID),
     CONSTRAINT quizAttempt_fk FOREIGN KEY (quizID) REFERENCES quiz(quizID),
     CONSTRAINT quizAttempt_fk1 FOREIGN KEY (learnerID) REFERENCES learner(empID)
 );
@@ -162,7 +159,6 @@ INSERT INTO course(courseName, courseDesc, courseDuration) VALUES("Repair Words 
 INSERT INTO course(courseName, courseDesc, courseDuration) VALUES("Repair 101", "Learn how to repair things", "3h");
 INSERT INTO course(courseName, courseDesc, courseDuration) VALUES("Repair testing ", "Learn how to repair things testing ", "3h");
 
-INSERT INTO prerequisite VALUES(1, 0);
 INSERT INTO prerequisite VALUES(2, 1);
 INSERT INTO prerequisite VALUES(3, 2);
 
@@ -184,10 +180,10 @@ INSERT INTO learner VALUES(1, NULL);
 INSERT INTO learner VALUES(2, "1");
 INSERT INTO learner VALUES(3, NULL);
 
-INSERT INTO classList VALUES(3, 1, 0, NULL);
-INSERT INTO classList VALUES(1, 4, 0, NULL);
-INSERT INTO classList VALUES(1, 2, 0, NULL);
-INSERT INTO classList VALUES(2, 1, 0, NULL);
+INSERT INTO classList VALUES(3, 1, NULL);
+INSERT INTO classList VALUES(1, 4, NULL);
+INSERT INTO classList VALUES(1, 2, NULL);
+INSERT INTO classList VALUES(2, 1, NULL);
 
 INSERT INTO enrolmentList VALUES(1, 1, 2,"Pending");
 INSERT INTO enrolmentList VALUES(2, 2 , 1 ,"Successful");
