@@ -60,7 +60,6 @@ CREATE TABLE learner (
 CREATE TABLE classList (
     learnerID INT NOT NULL,
     classID INT NOT NULL,
-    progressPercentage INT NOT NULL,
     finalQuizGrade VARCHAR(5),
 
     CONSTRAINT classList_pk PRIMARY KEY (learnerID,classID),
@@ -109,7 +108,7 @@ CREATE TABLE lessonMaterialsViewed (
     lessonID INT NOT NULL,
     completed TINYINT NOT NULL,
 
-    CONSTRAINT lessonMaterialsViewed_pk PRIMARY KEY (materialID,learnerID),
+    CONSTRAINT lessonMaterialsViewed_pk PRIMARY KEY (materialID, learnerID),
     CONSTRAINT lessonMaterialsViewed_fk1 FOREIGN KEY (learnerID) REFERENCES learner(empID),
     CONSTRAINT lessonMaterialsViewed_fk2 FOREIGN KEY (materialID) REFERENCES lessonMaterials(materialID),
     CONSTRAINT lessonMaterialsViewed_fk3 FOREIGN KEY (lessonID) REFERENCES lesson(lessonID)
@@ -137,6 +136,15 @@ CREATE TABLE quizQuestions (
     CONSTRAINT quizQuestions_fk FOREIGN KEY (quizID) REFERENCES quiz(quizID)
 );
 
+CREATE TABLE quizAttempt (
+    quizID INT NOT NULL,
+    learnerID INT NOT NULL,
+
+    CONSTRAINT quizAttempt_pk PRIMARY KEY (quizID, learnerID),
+    CONSTRAINT quizAttempt_fk FOREIGN KEY (quizID) REFERENCES quiz(quizID),
+    CONSTRAINT quizAttempt_fk1 FOREIGN KEY (learnerID) REFERENCES learner(empID)
+);
+
 -- INSERT DATA --
 INSERT INTO  employee(empName, department, username, roleType) VALUES("Alice Teo", "Production", "alice123", "L");
 INSERT INTO  employee(empName, department, username, roleType) VALUES("Amy Tan", "R&D", "amy123", "L");
@@ -151,7 +159,6 @@ INSERT INTO course(courseName, courseDesc, courseDuration) VALUES("Repair Words 
 INSERT INTO course(courseName, courseDesc, courseDuration) VALUES("Repair 101", "Learn how to repair things", "3h");
 INSERT INTO course(courseName, courseDesc, courseDuration) VALUES("Repair testing ", "Learn how to repair things testing ", "3h");
 
-INSERT INTO prerequisite VALUES(1, 0);
 INSERT INTO prerequisite VALUES(2, 1);
 INSERT INTO prerequisite VALUES(3, 2);
 
@@ -173,10 +180,10 @@ INSERT INTO learner VALUES(1, NULL);
 INSERT INTO learner VALUES(2, "1");
 INSERT INTO learner VALUES(3, NULL);
 
-INSERT INTO classList VALUES(3, 1, 0, NULL);
-INSERT INTO classList VALUES(1, 4, 0, NULL);
-INSERT INTO classList VALUES(1, 2, 0, NULL);
-INSERT INTO classList VALUES(2, 1, 0, NULL);
+INSERT INTO classList VALUES(3, 1, NULL);
+INSERT INTO classList VALUES(1, 4, NULL);
+INSERT INTO classList VALUES(1, 2, NULL);
+INSERT INTO classList VALUES(2, 1, NULL);
 
 INSERT INTO enrolmentList VALUES(1, 1, 2,"Pending");
 INSERT INTO enrolmentList VALUES(2, 2 , 1 ,"Successful");
@@ -204,6 +211,9 @@ INSERT INTO lessonMaterials(content, materialURL, lessonID) VALUES("Extra_Materi
 INSERT INTO quiz(quizDuration, passingCriteria, quizType, lessonID) VALUES("10min", "3", "UG", 1);
 INSERT INTO quiz(quizDuration, passingCriteria, quizType, lessonID) VALUES("10min", "3", "UG", 2);
 INSERT INTO quiz(quizDuration, passingCriteria, quizType, lessonID) VALUES("10min", "3", "UG", 4);
+INSERT INTO quiz(quizDuration, passingCriteria, quizType, lessonID) VALUES("10min", "3", "UG", 6);
+INSERT INTO quiz(quizDuration, passingCriteria, quizType, lessonID) VALUES("10min", "3", "G", 7);
+
 
 INSERT INTO quizQuestions VALUES(1, 1, "What is the number that is shown when facing printing error?", "21,23,24,25", "21");
 INSERT INTO quizQuestions VALUES(1, 2, "Which of the following options states the main purpose of HP Printer?", "Printing,Copying,Scanning,Faxing", "Copying");
@@ -217,3 +227,15 @@ INSERT INTO quizQuestions VALUES(2, 3,  "How long does it take for the machine t
 
 INSERT INTO quizQuestions VALUES(3, 1, "True or False: The Canon Printer can copy 500 pages at one go.", "True,False", "False");
 INSERT INTO quizQuestions VALUES(3, 2, "True or False: The Canon Printer have a lifetime warranty.", "True,False", "True");
+
+INSERT INTO quizQuestions VALUES(4, 1, "What is the number that is shown when facing printing error?", "21,23,24,25", "21");
+INSERT INTO quizQuestions VALUES(4, 2, "Which of the following options states the main purpose of HP Printer?", "Printing,Copying,Scanning,Faxing", "Copying");
+INSERT INTO quizQuestions VALUES(4, 3,  "How long does it take for the machine to reboot?", "5 minutes,15 minutes,45 minutes,1 hour", "15 minutes");
+INSERT INTO quizQuestions VALUES(4, 4, "True or False: The HP Printer can copy 500 pages at one go.", "True,False", "False");
+INSERT INTO quizQuestions VALUES(4, 5, "True or False: The HP Printer have a lifetime warranty.", "True,False", "True");
+
+INSERT INTO quizQuestions VALUES(5, 1, "What is the number that is shown when facing printing error?", "21,23,24,25", "21");
+INSERT INTO quizQuestions VALUES(5, 2, "Which of the following options states the main purpose of HP Printer?", "Printing,Copying,Scanning,Faxing", "Copying");
+INSERT INTO quizQuestions VALUES(5, 3,  "How long does it take for the machine to reboot?", "5 minutes,15 minutes,45 minutes,1 hour", "15 minutes");
+INSERT INTO quizQuestions VALUES(5, 4, "True or False: The HP Printer can copy 500 pages at one go.", "True,False", "False");
+INSERT INTO quizQuestions VALUES(5, 5, "True or False: The HP Printer have a lifetime warranty.", "True,False", "True");

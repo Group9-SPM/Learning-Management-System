@@ -186,15 +186,11 @@
 
         function submitForm() {
             var selectedEngineers = document.querySelectorAll('input[name=engineer]:checked');
+            assignmentList = []
             selectedEngineers.forEach(function(engineer){
-                assignLearner(engineer.id, sessionStorage.classid).then(function(result){
-                    if (result.code != 201){
-                        failed = result.data.learnerID
-                        learner = document.getElementById(failed).value;
-                        alert("Failed to assign " + learner + ". " + result.message)
-                    }
-                });
+                assignmentList.push({learnerID : engineer.id, classID : sessionStorage.classid})
             });
+            assignLearner(assignmentList)
         }
   </script>
 
