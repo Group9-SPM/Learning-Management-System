@@ -1,5 +1,6 @@
 import unittest
 from app import Classes,ClassList, Employee, Learner, Course, Quiz, Questions
+from classes.app import EnrolmentList, learner
 
 
 #amanda - Employee & Learner
@@ -26,7 +27,7 @@ class TestLearner(unittest.TestCase):
             "roleType":"L"}
         )
         
-# Nicole - Course
+# Nicole - Course and EnrolmentList
 class TestCourse(unittest.TestCase):
     def test_to_dict(self):
         c1 = Course(courseID=1, courseName='Repair 101', courseDesc="Learn how to repair things", courseDuration="3h")
@@ -35,6 +36,16 @@ class TestCourse(unittest.TestCase):
             'courseName': 'Repair 101',
             'courseDesc': 'Learn how to repair things', 
             'courseDuration': '3h'}
+        )
+
+class TestEnrolmentList(unittest.TestCase):
+    def test_to_dict(self):
+        el1 = EnrolmentList(courseID=1, learnerID=1, classID=1, enrolmentStatus="Pending")
+        self.assertEqual(el1.to_dict(), {
+            'courseID': 1,
+            'learnerID': 1,
+            'classID': 1, 
+            'enrolmentStatus': 'Pending'}
         )
 
 class TestQuiz(unittest.TestCase):
