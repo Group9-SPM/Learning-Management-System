@@ -52,10 +52,11 @@ class TestCreateQuiz(TestApp):
             'quizType': 'UG',
             'lessonID': 1
         })
+
     def test_create_quiz_invalid_lesson(self):
         quiz = Quiz(quizID=5, quizDuration='10',
-                    passingCriteria='5', quizType='UG', lessonID=lesson.lessonID)
-        db.session.add(lesson)
+                    passingCriteria='5', quizType='UG', lessonID=1)
+        db.session.add(quiz)
 
         request_body = {
             'quizID': quiz.quizID,
