@@ -1,5 +1,5 @@
 import unittest
-from app import Classes,ClassList, Employee, Learner, Quiz, Questions
+from app import Classes,ClassList, Employee, Learner, Course, Quiz, Questions
 
 
 #amanda - Employee & Learner
@@ -24,6 +24,17 @@ class TestLearner(unittest.TestCase):
             'department': 'HR',
             "username": "emma65",
             "roleType":"L"}
+        )
+        
+# Nicole - Course
+class TestCourse(unittest.TestCase):
+    def test_to_dict(self):
+        c1 = Course(courseID=1, courseName='Repair 101', courseDesc="Learn how to repair things", courseDuration="3h")
+        self.assertEqual(c1.to_dict(), {
+            'courseID': 1,
+            'courseName': 'Repair 101',
+            'courseDesc': 'Learn how to repair things', 
+            'courseDuration': '3h'}
         )
 
 class TestQuiz(unittest.TestCase):
