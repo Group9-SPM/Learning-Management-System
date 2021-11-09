@@ -1,6 +1,5 @@
 import unittest
-from app import Employee, Learner, Course, Quiz, Questions
-from classes.app import EnrolmentList, learner
+from app import Employee, Learner, Course, Quiz, Questions, EnrolmentList
 
 
 #amanda - Employee & Learner

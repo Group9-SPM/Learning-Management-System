@@ -2,7 +2,6 @@ import unittest
 import flask_testing
 import json
 from app import app, db, ClassList, EnrolmentList, Quiz, Questions, Lesson
-from classes.LessonClass import lesson_by_num
 
 class TestApp(flask_testing.TestCase):
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://"
