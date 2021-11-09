@@ -2,7 +2,7 @@ import unittest
 import flask_testing
 import json
 import datetime
-from app import app, db, ClassList, Learner, Classes, EnrolmentList, Course
+from app import app, db, ClassList, Learner, Classes, EnrolmentList, Course, ClassList, Quiz, Questions, Lesson
 
 class TestApp(flask_testing.TestCase):
     
@@ -138,7 +138,7 @@ class TestCreateEnrolment(TestApp):
         c1 = Classes(classID=8,courseID=4, endDate=datetime.datetime.now(),
                     endTime="13:00",  maxSlot=30, minSlot=10,
                     regEndDate=datetime.datetime.now(), regStartDate=datetime.datetime.now(),
-                    size=30, startDate=datetime.datetime.now(), startTime="12:00", trainerID=4,courseID='4',courseName='Repair Words 101',
+                    size=30, startDate=datetime.datetime.now(), startTime="12:00", trainerID=4,courseName='Repair Words 101',
                     courseDesc ='Learn how to speak repair words', courseDuration='1h',empName='Emma', department='HR', username ="emma65", roleType="L")
 
         l1 = Learner (empID='4', badges='3', empName='Emma', department='HR', username ="emma65", roleType="L")
@@ -177,7 +177,7 @@ class TestCreateEnrolment(TestApp):
         c1 = Classes(classID=8,courseID=4, endDate=datetime.datetime.now(),
                     endTime="13:00",  maxSlot=30, minSlot=30,
                     regEndDate=datetime.datetime.now(), regStartDate=datetime.datetime.now(),
-                    size=30, startDate=datetime.datetime.now(), startTime="12:00", trainerID=4,courseID='4',courseName='Repair Words 101',
+                    size=30, startDate=datetime.datetime.now(), startTime="12:00", trainerID=4,courseName='Repair Words 101',
                     courseDesc ='Learn how to speak repair words', courseDuration='1h',empName='Lily', department='Production', username ="Lily65", roleType="T")
 
         l1 = Learner (empID='4', badges='3', empName='Emma', department='HR', username ="emma65", roleType="L")
@@ -201,6 +201,80 @@ class TestCreateEnrolment(TestApp):
         self.assertEqual(response.status_code, 500)
         self.assertEqual(response.json, {
             'message': 'Class is full.'
+        })
+
+# Diyanah - TestCreateQuiz and TestCreateQuestion
+class TestCreateQuiz(TestApp):
+    def test_create_quiz(self):
+        lesson = Lesson(lessonNum='10',
+                    classID=1, courseID=5, lessonName='Fixing Printers', lessonDesc='How to fix printers')
+        quiz = Quiz(quizDuration='10',
+                    passingCriteria='5', quizType='UG', lessonID=1)
+        db.session.add(lesson)
+        db.session.commit()
+
+        request_body = {
+            'quizDuration': quiz.quizDuration,
+            'passingCriteria': quiz.passingCriteria,
+            'quizType': quiz.quizType,
+            'lessonID': quiz.lessonID
+        }
+
+        response = self.client.post("/quiz-create",
+                                    data=json.dumps(request_body),
+                                    content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json, {
+
+            'quizID': 1,
+            'quizDuration': '10',
+            'passingCriteria': '5',
+            'quizType': 'UG',
+            'lessonID': 1
+        })
+
+    def test_create_quiz_invalid_lesson(self):
+        quiz = Quiz(quizDuration='10',
+                    passingCriteria='5', quizType='UG')
+
+        request_body = {
+            'quizID': quiz.quizID,
+            'quizDuration': quiz.quizDuration,
+            'passingCriteria': quiz.passingCriteria,
+            'quizType': quiz.quizType,
+            'lessonID': quiz.lessonID
+        }
+
+        response = self.client.post("/quiz-create",
+                                    data=json.dumps(request_body),
+                                    content_type='application/json')
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(response.json, {
+            'message': 'Unable to commit to database.'
+        }) 
+class TestCreateQuestion(TestApp):
+    def test_create_quiz_question(self):
+        qns = Questions(quizID=10, qnNo=1,
+                     question='You are great today.', options='True,False', answer='True')
+
+        request_body = {
+            'quizID': qns.quizID,
+            'qnNo': qns.qnNo,
+            'question': qns.question,
+            'options': qns.options,
+            'answer': qns.answer
+        }
+
+        response = self.client.post("/question-create",
+                                    data=json.dumps(request_body),
+                                    content_type='application/json')
+        self.assertEqual(response.json, {
+            'questionsID': 1,
+            'quizID': 10,
+            'qnNo': 1,
+            'question': 'You are great today.',
+            'options': 'True,False',
+            'answer': 'True'
         })
 
 if __name__ == '__main__':
