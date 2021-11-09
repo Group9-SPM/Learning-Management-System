@@ -2,7 +2,7 @@ import unittest
 import flask_testing
 import json
 import datetime
-from app import app, db, ClassList, Learner, Classes, EnrolmentList, Course, ClassList, Quiz, Questions, Lesson
+from app import app, db, Learner, Classes, EnrolmentList, Course, ClassList, Quiz, Questions, Lesson
 
 class TestApp(flask_testing.TestCase):
     
