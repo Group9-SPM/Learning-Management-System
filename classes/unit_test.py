@@ -1,6 +1,5 @@
 import unittest
-from app import Employee, Learner, Course, Quiz, Questions, EnrolmentList, Classes, ClassList, LessonMaterialsViewed, QuizAttempt
-
+from app import Lesson, Employee, Learner, Course, Quiz, Questions, EnrolmentList, Classes, ClassList, LessonMaterialsViewed, QuizAttempt
 
 #amanda - Employee & Learner
 class TestEmployee(unittest.TestCase):
