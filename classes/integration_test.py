@@ -232,7 +232,7 @@ class TestCreateQuiz(TestApp):
         lesson = Lesson(lessonNum='10',
                     classID=1, courseID=5, lessonName='Fixing Printers', lessonDesc='How to fix printers')
         quiz = Quiz(quizDuration='10',
-                    passingCriteria='5', quizType='UG', lessonID=lesson.lessonID)
+                    passingCriteria='5', quizType='UG', lessonID=2)
         db.session.add(lesson)
         db.session.commit()
 
