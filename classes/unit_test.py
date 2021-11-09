@@ -1,13 +1,13 @@
 import unittest
-from app import Lesson, Employee, Learner, Course, Quiz, Questions, EnrolmentList, Classes, ClassList, LessonMaterialsViewed, QuizAttempt
+from app import Lesson, Employee, Learner, Course, Quiz, Questions, EnrolmentList, Classes, ClassList, LessonMaterialsViewed, QuizAttempt, LessonMaterials, Prerequisite
 
-#amanda - Employee & Learner
+#amanda - Employee, Learner, Lessonmaterial
 class TestEmployee(unittest.TestCase):
 
     def test_to_dict(self):
-        e1 = Employee(empID='1',empName='Emma', department='HR', username="emma65", roleType="L")
+        e1 = Employee(empID=1,empName='Emma', department='HR', username="emma65", roleType="L")
         self.assertEqual(e1.to_dict(), {
-            'empID': '1',
+            'empID': 1,
             'empName': 'Emma',
             'department': 'HR',
             "username": "emma65",
@@ -17,17 +17,27 @@ class TestEmployee(unittest.TestCase):
 class TestLearner(unittest.TestCase):
 
     def test_to_dict(self):
-        l1 = Learner(empID='1', badges='3', empName='Emma', department='HR', username="emma65", roleType="L")
+        l1 = Learner(empID=1, badges='3', empName='Emma', department='HR', username="emma65", roleType="L")
         self.assertEqual(l1.to_dict(), {
-            'empID': '1',
+            'empID': 1,
             'badges': '3',
             'empName': 'Emma',
             'department': 'HR',
             "username": "emma65",
             "roleType":"L"}
         )
+
+class TestLessonMaterials(unittest.TestCase):
+    def test_to_dict(self):
+        lm1 = LessonMaterials(materialID=1, materialURL ="https://drive.google.com/file/d/1tbOmz0GipcX-_c2oXj4MnzZNodiN85x-/view?usp=sharing", lessonID=1,content="Basic_1.pdf")
+        self.assertEqual(lm1.to_dict(), {
+            'materialID': 1,
+            'materialURL': "https://drive.google.com/file/d/1tbOmz0GipcX-_c2oXj4MnzZNodiN85x-/view?usp=sharing",
+            'lessonID': 1,
+            'content':'Basic_1.pdf'}
+        )
         
-# Nicole - Course and EnrolmentList
+# Nicole - Course, EnrolmentList, Prerequisite
 class TestCourse(unittest.TestCase):
 
     def test_to_dict(self):
@@ -42,49 +52,58 @@ class TestCourse(unittest.TestCase):
 class TestEnrolmentList(unittest.TestCase):
 
     def test_to_dict(self):
-        el1 = EnrolmentList(courseID=1, learnerID=1, classID=1, enrolmentStatus="Pending")
+        el1 = EnrolmentList(courseID=2, learnerID=1, classID=1, enrolmentStatus="Pending")
         self.assertEqual(el1.to_dict(), {
-            'courseID': 1,
+            'courseID': 2,
             'learnerID': 1,
             'classID': 1, 
             'enrolmentStatus': 'Pending'}
         )
 
-class TestLesson(unittest.TestCase):
+class TestPrerequisite(unittest.TestCase):
+
     def test_to_dict(self):
-        l1 = Lesson(lessonID='1', lessonNum='1', classID='1', courseID='1', lessonName ="Fixing Scanner", lessonDesc="How to fix scanner.")
-        self.assertEqual(l1.to_dict(), {
-            'lessonID': '1',
-            'lessonNum': '1', 
-            'classID': '1',
-            'courseID': '1',
-            "lessonName": "Fixing Scanner",
-            "lessonDesc": "How to fix scanner."}
+        p1 = Prerequisite(courseID=1, prerequisiteID=1)
+        self.assertEqual(p1.to_dict(), {
+            'courseID': 1,
+            'prerequisiteID': 1}
         )
 
-# Diyanah - Quiz and Questions
+# Diyanah - Quiz , Questions , Lessons
 class TestQuiz(unittest.TestCase):
 
     def test_to_dict(self):
-        q1 = Quiz(quizID='4', quizDuration='20', passingCriteria='6', quizType='UG', lessonID="2")
+        q1 = Quiz(quizID=4, quizDuration=20, passingCriteria=6, quizType='UG', lessonID=2)
         self.assertEqual(q1.to_dict(), {
-            'quizID': '4',
-            'quizDuration': '20',
-            'passingCriteria': '6',
+            'quizID': 4,
+            'quizDuration': 20,
+            'passingCriteria': 6,
             'quizType': 'UG',
-            "lessonID": "2"}
+            "lessonID": 2}
         )
 
 class TestQuestion(unittest.TestCase):
     def test_to_dict(self):
-        q1 = Questions(questionsID='1', quizID='1', qnNo='1', question='SPM is difficult.', options='True,False', answer="True")
+        q1 = Questions(questionsID=1, quizID=1, qnNo=1, question='SPM is difficult.', options='True,False', answer="True")
         self.assertEqual(q1.to_dict(), {
-            'questionsID': '1',
-            'quizID': '1',
-            'qnNo': '1',
+            'questionsID': 1,
+            'quizID': 1,
+            'qnNo': 1,
             'question': 'SPM is difficult.',
             'options': 'True,False',
             "answer": "True"}
+        )
+
+class TestLesson(unittest.TestCase):
+    def test_to_dict(self):
+        l1 = Lesson(lessonID=1, lessonNum=1, classID=1, courseID=1, lessonName ="Fixing Scanner", lessonDesc="How to fix scanner.")
+        self.assertEqual(l1.to_dict(), {
+            'lessonID': 1,
+            'lessonNum': 1, 
+            'classID': 1,
+            'courseID': 1,
+            "lessonName": "Fixing Scanner",
+            "lessonDesc": "How to fix scanner."}
         )
 
 # Mei Fang - Classes, ClassList, LessonMaterialsViewed and QuizAttempt
