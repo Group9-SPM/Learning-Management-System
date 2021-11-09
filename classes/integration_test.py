@@ -2,7 +2,7 @@ import unittest
 import flask_testing
 import json
 import datetime
-from app import app, db, ClassList, Learner, Classes, EnrolmentList, Course, ClassList, Quiz, Questions, Lesson
+from app import app, db, ClassList, Learner, Classes, EnrolmentList, Course, ClassList, Quiz, Questions, Lesson, LessonMaterials, LessonMaterialsViewed, QuizAttempt
 
 class TestApp(flask_testing.TestCase):
     
@@ -98,14 +98,14 @@ class TestClassList(TestApp):
 
 class TestAssignLearner(TestApp):
 
-    def test_assign_learner(self):
+    def test_assign_learner_within_class_size(self):
         l1 = Learner(badges="1", department="R&D", empID=2,
                     empName="Amy Tan", roleType="L", username="amy123")
 
         c1 = Classes(classID=1,courseID=1, endDate=datetime.datetime.now(),
-                    endTime="13:00",  maxSlot=30, minSlot=10,
+                    endTime="13:00", maxSlot=30, minSlot=10,
                     regEndDate=datetime.datetime.now(), regStartDate=datetime.datetime.now(),
-                    size=30, startDate=datetime.datetime.now(), startTime="12:00", trainerID=4)
+                    size=29, startDate=datetime.datetime.now(), startTime="12:00", trainerID=4)
 
         db.session.add(l1)
         db.session.add(c1)
@@ -125,82 +125,130 @@ class TestAssignLearner(TestApp):
                                 "message" : "All learners assigned successfully"
                         })
 
+    def test_assign_learner_exceeding_class_size(self):
+        l1 = Learner(badges="1", department="R&D", empID=2,
+                    empName="Amy Tan", roleType="L", username="amy123")
 
-# Amanda - TestCreateEnrolment 
+        c1 = Classes(classID=1,courseID=1, endDate=datetime.datetime.now(),
+                    endTime="13:00", maxSlot=30, minSlot=10,
+                    regEndDate=datetime.datetime.now(), regStartDate=datetime.datetime.now(),
+                    size=30, startDate=datetime.datetime.now(), startTime="12:00", trainerID=4)
+
+        db.session.add(l1)
+        db.session.add(c1)
+        db.session.commit()
+
+        request_body = [{
+                            'learnerID': l1.empID,
+                            'classID': c1.classID
+                        }]
+
+        response = self.client.post("/classList",
+                                    data=json.dumps(request_body),
+                                    content_type='application/json')
+        self.assertEqual(response.json,
+                        {
+                                "data" : [{
+                                    'learnerID': 2,
+                                    'classID': 1
+                                }],
+                                "message" : "Class size is exceeded. Failed to assign learners."
+                        })
+
+
+# Amanda - TestCreateEnrolment & TestEnrolmentList
 class TestCreateEnrolment(TestApp):
     def test_create_enrolment(self):
-        e1 = EnrolmentList(classID=8, learnerID=4,
-                    courseID=4, enrolmentStatus='pending')
         
-        co1 = Course(courseID='4',courseName='Repair Words 101',
+        co1 = Course(courseName='Repair Words 101',
                     courseDesc ='Learn how to speak repair words', courseDuration='1h')
 
-        c1 = Classes(classID=8,courseID=4, endDate=datetime.datetime.now(),
+        c1 = Classes(courseID=1, endDate=datetime.datetime.now(),
                     endTime="13:00",  maxSlot=30, minSlot=10,
                     regEndDate=datetime.datetime.now(), regStartDate=datetime.datetime.now(),
-                    size=30, startDate=datetime.datetime.now(), startTime="12:00", trainerID=4,courseName='Repair Words 101',
-                    courseDesc ='Learn how to speak repair words', courseDuration='1h',empName='Emma', department='HR', username ="emma65", roleType="L")
+                    size=30, startDate=datetime.datetime.now(), startTime="12:00", trainerID=4)
 
-        l1 = Learner (empID='4', badges='3', empName='Emma', department='HR', username ="emma65", roleType="L")
+        l1 = Learner (empID=4, badges='3', empName='Emma', department='HR', username ="emma65", roleType="L")
 
-        db.session.add(e1)
+        e1 = EnrolmentList(classID=8, learnerID=4,
+                    courseID=4, enrolmentStatus='Pending')
+
         db.session.add(c1)
         db.session.add(co1)
         db.session.add(l1)
+        db.session.add(e1)
         db.session.commit()
 
         request_body = {
             'classID': c1.classID,
             'learnerID': l1.empID,
             'courseID': co1.courseID,
-            'enrolmentStatus': 'pending'
+            'enrolmentStatus': 'Pending'
         }
 
         response = self.client.post("/enrolmentList",
                                     data=json.dumps(request_body),
                                     content_type='application/json')
         self.assertEqual(response.json, {
-            'classID': 8,
+            'classID': 1,
             'learnerID': 4,
-            'courseID': 4,
-            'enrolmentStatus': 'pending'
+            'courseID': 1,
+            'enrolmentStatus': 'Pending'
         })
 
- 
-    def test_create_enrolment_invalidClassSize(self):
-        e1 = EnrolmentList(classID=8, learnerID=4,
-                    courseID=4, enrolmentStatus='pending')
-        
-        co1 = Course(courseID='4',courseName='Repair Words 101',
+class TestEnrolmentList(TestApp):
+    def test_enrolmentList_by_learnerID(self):
+
+        co1 = Course(courseID = 1, courseName='Repair Words 101',
                     courseDesc ='Learn how to speak repair words', courseDuration='1h')
 
-        c1 = Classes(classID=8,courseID=4, endDate=datetime.datetime.now(),
-                    endTime="13:00",  maxSlot=30, minSlot=30,
-                    regEndDate=datetime.datetime.now(), regStartDate=datetime.datetime.now(),
-                    size=30, startDate=datetime.datetime.now(), startTime="12:00", trainerID=4,courseName='Repair Words 101',
-                    courseDesc ='Learn how to speak repair words', courseDuration='1h',empName='Lily', department='Production', username ="Lily65", roleType="T")
+        co2 = Course(courseID = 2,courseName='Repair 101',
+                     courseDesc ='Learn how to repair words', courseDuration='3h')        
 
-        l1 = Learner (empID='4', badges='3', empName='Emma', department='HR', username ="emma65", roleType="L")
+        c1 = Classes(classID=1 , courseID=1, endDate=datetime.datetime.now(),
+                    endTime="13:00",  maxSlot=30, minSlot=10,
+                    regEndDate=datetime.datetime.now(), regStartDate=datetime.datetime.now(),
+                    size=30, startDate=datetime.datetime.now(), startTime="12:00", trainerID=4)
         
-        db.session.add(e1)
-        db.session.add(c1)
+        c2 = Classes(classID=3 , courseID=2, endDate=datetime.datetime.now(),
+                    endTime="13:00",  maxSlot=30, minSlot=10,
+                    regEndDate=datetime.datetime.now(), regStartDate=datetime.datetime.now(),
+                    size=30, startDate=datetime.datetime.now(), startTime="12:00", trainerID=4)
+
+        l1 = Learner (empID=1, badges='3', empName='Emma', department='HR', username ="emma65", roleType="L")
+
+        e1 = EnrolmentList(classID=c1.classID, learnerID=l1.empID,
+                    courseID=co1.courseID, enrolmentStatus='Successful')
+
+        e2 = EnrolmentList(classID=c2.classID, learnerID=l1.empID,
+                    courseID=co2.courseID, enrolmentStatus='Pending')
+
         db.session.add(co1)
+        db.session.add(co2)
+        db.session.add(c1)
+        db.session.add(c2)
         db.session.add(l1)
+        db.session.add(e1)
+        db.session.add(e2)
         db.session.commit()
 
-        request_body = {
-            'classID': c1.classID,
-            'learnerID': l1.empID,
-            'courseID': co1.courseID,
-            'enrolmentStatus': 'pending'
-        }
-
-        response = self.client.post("/enrolmentList",
-                                    data=json.dumps(request_body),
-                                    content_type='application/json')
-        self.assertEqual(response.status_code, 500)
-        self.assertEqual(response.json, {
-            'message': 'Class is full.'
+        response=self.client.get("/enrolmentList/1")
+        self.assertEqual(response.json,
+        {
+                "data": [
+                            {
+                                "classID":1,
+                                "learnerID":1,
+                                "courseID":1,
+                                "enrolmentStatus":"Successful"
+                            },
+                            {
+                                "classID":3,
+                                "learnerID":1,
+                                "courseID":2,
+                                "enrolmentStatus":"Pending"
+                            }
+                        ]
         })
 
 # Diyanah - TestCreateQuiz and TestCreateQuestion
@@ -276,6 +324,216 @@ class TestCreateQuestion(TestApp):
             'options': 'True,False',
             'answer': 'True'
         })
+
+# Mei Fang - TestLesson, TestLessonMaterials, TestLessonMaterialsViewed, TestQuizAttempt
+class TestLesson(TestApp):
+    def test__lesson_by_num(self):
+        co1 = Course(courseID=4,courseName='Repair Words 101',
+            courseDesc ='Learn how to speak repair words', courseDuration='10mins')
+        c1=Classes(classID=1, courseID=co1.courseID, endDate=datetime.datetime.now(),
+                        endTime="13:00",  maxSlot=30, minSlot=10,
+                        regEndDate=datetime.datetime.now(), regStartDate=datetime.datetime.now(),
+                        size=30, startDate=datetime.datetime.now(), startTime="12:00", trainerID=4)
+        l1=Lesson(lessonID=1, lessonNum=1, classID=c1.classID, courseID=co1.courseID, lessonName='Basic English', lessonDesc='Basic English words.')
+
+        db.session.add(co1)
+        db.session.add(c1)
+        db.session.add(l1)
+        db.session.commit()
+
+        response = self.client.get("/lesson/1/1/4")
+        self.assertEqual(response.json,
+                        {
+                            "data":
+                                {
+                                "lessonID": 1,
+                                "lessonNum": 1,
+                                "classID": 1,
+                                "courseID": 4,
+                                "lessonName":'Basic English',
+                                "lessonDesc":'Basic English words.'
+                                }
+                        })
+
+    def test__lesson_by_class(self):
+        co1 = Course(courseID=4,courseName='Repair Words 101',
+            courseDesc ='Learn how to speak repair words', courseDuration='10mins')
+        c1=Classes(classID=1, courseID=co1.courseID, endDate=datetime.datetime.now(),
+                        endTime="13:00",  maxSlot=30, minSlot=10,
+                        regEndDate=datetime.datetime.now(), regStartDate=datetime.datetime.now(),
+                        size=30, startDate=datetime.datetime.now(), startTime="12:00", trainerID=4)
+        l1=Lesson(lessonID=1, lessonNum=1, classID=c1.classID, courseID=co1.courseID, lessonName='Basic English', lessonDesc='Basic English words.')
+
+        db.session.add(co1)
+        db.session.add(c1)
+        db.session.add(l1)
+        db.session.commit()
+
+        response = self.client.get("/lesson/1/4")
+        self.assertEqual(response.json,
+                        {
+                            "data":[
+                                {
+                                "lessonID": 1,
+                                "lessonNum": 1,
+                                "classID": 1,
+                                "courseID": 4,
+                                "lessonName":'Basic English',
+                                "lessonDesc":'Basic English words.'
+                                }
+                            ]
+                        })
+
+    def test__lesson_by_lessonID(self):
+        ln1=Lesson(lessonID=1, lessonNum=1, classID=1, courseID=4, lessonName='Basic English', lessonDesc='Basic English words.')
+        l1 = Learner(empID=1, badges=3, empName='Emma', department='HR', username ="emma65", roleType="L")
+        lmv1 = LessonMaterialsViewed(materialID=1, learnerID=l1.empID, lessonID=ln1.lessonID, completed=False)
+        q1 = Quiz(quizID=1, quizDuration='10', passingCriteria='5', quizType='UG', lessonID=1)
+        qa1 = QuizAttempt(quizAttemptID=1, quizID=q1.quizID, learnerID=l1.empID, score=3, max_score=5)
+
+        db.session.add(ln1)
+        db.session.add(l1)
+        db.session.add(lmv1)
+        db.session.add(q1)
+        db.session.add(qa1)
+        db.session.commit()
+
+        response = self.client.get("/lesson/lessonByID/1/1")
+        self.assertEqual(response.json,
+                        {
+                            "data": {
+                                "lessonID": 1,
+                                "lessonNum": 1,
+                                "classID": 1,
+                                "courseID": 4,
+                                "lessonName":'Basic English',
+                                "lessonDesc":'Basic English words.'
+                                },
+                            "quiz_attempts": True,
+                            "quiz_available": True
+                        })
+
+class TestLessonMaterials(TestApp):
+    def test__lessonMaterials_by_lesson(self):
+        ln1=Lesson(lessonID=1, lessonNum=1, classID=1, courseID=4, lessonName='Basic English', lessonDesc='Basic English words.')
+        lm1 = LessonMaterials(materialID=1, materialURL="https://drive.google.com/file/d/1tbOmz0GipcX-_c2oXj4MnzZNodiN85x-/view?usp=sharing", content='Basic_1.pdf', lessonID=ln1.lessonID)
+        qa1 = QuizAttempt(quizAttemptID=1, quizID=1, learnerID=1, score=3, max_score=5)
+
+        db.session.add(ln1)
+        db.session.add(lm1)
+        db.session.add(qa1)
+        db.session.commit()
+
+        response = self.client.get("/lessonMaterials/1/1")
+        self.assertEqual(response.json,
+                        {
+                            "data": [
+                                {
+                                "materialID": 1,
+                                "materialURL": "https://drive.google.com/file/d/1tbOmz0GipcX-_c2oXj4MnzZNodiN85x-/view?usp=sharing",
+                                "content":'Basic_1.pdf',
+                                "lessonID": 1
+                                }
+                            ]
+                        })
+
+class TestLessonMaterialsViewed(TestApp):
+    def test__lessonMaterialsViewed_by_lesson_material(self):
+        lmv1 = LessonMaterialsViewed(materialID=1, learnerID=1, lessonID=1, completed=False)
+        q1 = Quiz(quizID=1, quizDuration='10', passingCriteria='5', quizType='UG', lessonID=lmv1.lessonID)
+        qa1 = QuizAttempt(quizAttemptID=1, quizID=q1.quizID, learnerID=lmv1.learnerID, score=3, max_score=5)
+
+        db.session.add(lmv1)
+        db.session.add(q1)
+        db.session.add(qa1)
+        db.session.commit()
+
+        response = self.client.get("/lessonMaterialsViewed/check/1/1/1")
+        self.assertEqual(response.json,
+                        {
+                            "data":
+                                {
+                                "materialID": 1,
+                                "learnerID": 1,
+                                "lessonID": 1, 
+                                "completed": False
+                                },
+                            "status": "success"
+                        })
+
+    def test_lessonMaterialsViewed_add_by_lesson_material(self):
+        lmv1 = LessonMaterialsViewed(materialID=1, learnerID=1, lessonID=1, completed=False)
+
+        db.session.add(lmv1)
+        db.session.commit()
+
+        response = self.client.get("/lessonMaterialsViewed/update/1/1/1")
+
+        self.assertEqual(response.json, {
+            'message': "Lesson Material already viewed."
+        })
+
+    def test_lessonMaterialsViewed_update_by_lesson_material(self):
+        lmv1 = LessonMaterialsViewed(materialID=1, learnerID=1, lessonID=1, completed=False)
+
+        db.session.add(lmv1)
+        db.session.commit()
+
+        response = self.client.get("/lessonMaterialsViewed/update/1/1/1")
+
+        self.assertEqual(response.json, {
+            'message': "Updated Completed."
+        })
+
+class TestQuizAttempt(TestApp):
+    def test_retrieveQuizAttempts(self):
+        q1 = Quiz(quizID=1, quizDuration='10', passingCriteria='5', quizType='UG', lessonID=1)
+        qa1 = QuizAttempt(quizAttemptID=1, quizID=q1.quizID, learnerID=1, score=3, max_score=5)
+
+        db.session.add(q1)
+        db.session.add(qa1)
+        db.session.commit()
+
+        response = self.client.get("/quizAttempts/check/1/1")
+        self.assertEqual(response.json,
+                        {
+                            "data": [
+                                {
+                                "quizAttemptID": 1,
+                                "quizID": 1, 
+                                "learnerID": 1,
+                                "score": 3, 
+                                "max_score": 5
+                                }
+                            ]
+                        })
+
+    def test_submit_quiz(self):
+        qn1 = Questions(questionsID=1, quizID=1, qnNo=1, question='You had a great day', options='True,False', answer='True')
+        qa1 = QuizAttempt(quizAttemptID=1, quizID=qn1.quizID, learnerID=1, score=1, max_score=1)
+
+        db.session.add(qn1)
+        db.session.add(qa1)
+        db.session.commit()
+
+        request_body = {
+                            quiz_id: qn1.quizID,
+                            learner_id: qa1.learnerID,
+                            lesson_id: 1,
+                            qn_1: 'True'
+                        }
+
+        response = self.client.post("/submitQuiz",
+                                    data=request_body,
+                                    content_type='application/json')
+        self.assertEqual(response.json,
+                        {
+                                "quiz_id" : 1,
+                                "learner_id" : 1,
+                                "score": 1,
+                                "max_score": 1
+                        })
+
 
 if __name__ == '__main__':
     unittest.main()
