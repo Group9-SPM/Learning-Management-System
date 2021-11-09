@@ -51,6 +51,18 @@ class TestEnrolmentList(unittest.TestCase):
             'enrolmentStatus': 'Pending'}
         )
 
+class TestLesson(unittest.TestCase):
+    def test_to_dict(self):
+        l1 = Lesson(lessonID='1', lessonNum='1', classID='1', courseID='1', lessonName ="Fixing Scanner", lessonDesc="How to fix scanner.")
+        self.assertEqual(l1.to_dict(), {
+            'lessonID': '1',
+            'lessonNum': '1', 
+            'classID': '1',
+            'courseID': '1',
+            "lessonName": "Fixing Scanner",
+            "lessonDesc": "How to fix scanner."}
+        )
+
 # Diyanah - Quiz and Questions
 class TestQuiz(unittest.TestCase):
 
