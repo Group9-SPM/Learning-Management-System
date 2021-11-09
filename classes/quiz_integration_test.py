@@ -21,8 +21,12 @@ class TestApp(flask_testing.TestCase):
 
 class TestCreateQuiz(TestApp):
     def test_create_quiz(self):
+        lesson = Lesson(lessonNum='10',
+                    classID=1, courseID=5, lessonName='Fixing Printers', lessonDesc='How to fix printers')
         quiz = Quiz(quizDuration='10',
                     passingCriteria='5', quizType='UG', lessonID=1)
+        db.session.add(lesson)
+        db.session.commit()
 
         request_body = {
             'quizDuration': quiz.quizDuration,
@@ -34,6 +38,7 @@ class TestCreateQuiz(TestApp):
         response = self.client.post("/quiz-create",
                                     data=json.dumps(request_body),
                                     content_type='application/json')
+        self.assertEqual(response.status_code, 201)
         self.assertEqual(response.json, {
 
             'quizID': 1,
@@ -44,12 +49,8 @@ class TestCreateQuiz(TestApp):
         })
 
     def test_create_quiz_invalid_lesson(self):
-        lesson = Lesson(lessonNum='10',
-                    classID=1, courseID=5, lessonName='Fixing Printers', lessonDesc='How to fix printers')
         quiz = Quiz(quizDuration='10',
-                    passingCriteria='5', quizType='UG', lessonID=lesson.lessonID)
-        db.session.add(lesson)
-        db.session.commit()
+                    passingCriteria='5', quizType='UG')
 
         request_body = {
             'quizID': quiz.quizID,
@@ -83,6 +84,7 @@ class TestCreateQuestion(TestApp):
                                     data=json.dumps(request_body),
                                     content_type='application/json')
         self.assertEqual(response.json, {
+            'questionsID': 1,
             'quizID': 10,
             'qnNo': 1,
             'question': 'You are great today.',
