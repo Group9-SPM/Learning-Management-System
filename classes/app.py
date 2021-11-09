@@ -12,7 +12,7 @@ db = SQLAlchemy(app)
 CORS(app)
 
 #EMPLOYEE
-class Employee(db.Model): 
+class Employee(db.Model):
 
     __tablename__ = 'employee'
 
@@ -34,13 +34,13 @@ class Employee(db.Model):
         return result
 
 #LEARNER
-class Learner(Employee): 
+class Learner(Employee):
 
     __tablename__ = 'learner'
 
     badges = db.Column(db.String(300))
     empID = db.Column(db.Integer, db.ForeignKey(Employee.empID), primary_key=True)
-    
+
     def to_dict(self):
         """
         'to_dict' converts the object into a dictionary,
@@ -52,8 +52,8 @@ class Learner(Employee):
             result[column] = getattr(self, column)
         return result
 
-#course
-class Course(db.Model): 
+#COURSE
+class Course(db.Model):
 
     __tablename__ = 'course'
 
@@ -74,8 +74,8 @@ class Course(db.Model):
         return result
 
 #CLASSES
-class Classes(db.Model): 
-    
+class Classes(db.Model):
+
     __tablename__ = 'classes'
 
     classID = db.Column(db.Integer, primary_key=True)
@@ -90,7 +90,7 @@ class Classes(db.Model):
     regEndDate = db.Column(db.DateTime, nullable=False)
     courseID = db.Column(db.Integer, db.ForeignKey(Course.courseID))
     trainerID = db.Column(db.Integer, db.ForeignKey(Employee.empID))
-    
+
     def to_dict(self):
         """
         'to_dict' converts the object into a dictionary,
@@ -103,7 +103,7 @@ class Classes(db.Model):
         return result
 
 #classlist
-class ClassList(db.Model): 
+class ClassList(db.Model):
 
     __tablename__ = 'classList'
 
@@ -123,7 +123,7 @@ class ClassList(db.Model):
         return result
 
 #ENROLMENTLIST
-class EnrolmentList(db.Model): 
+class EnrolmentList(db.Model):
 
     __tablename__ = 'enrolmentList'
 
@@ -143,9 +143,9 @@ class EnrolmentList(db.Model):
             result[column] = getattr(self, column)
         return result
 
-
 #PREREQ
 class Prerequisite(db.Model):
+
     __tablename__ = 'prerequisite'
 
     courseID = db.Column(db.Integer, db.ForeignKey(Course.courseID) ,primary_key=True)
@@ -164,6 +164,7 @@ class Prerequisite(db.Model):
 
 #LESSON CLASS
 class Lesson(db.Model):
+
     __tablename__ = 'lesson'
 
     lessonID = db.Column(db.Integer, primary_key=True)
@@ -186,8 +187,8 @@ class Lesson(db.Model):
 
 
 #LESSON MATERIAL CLASS
-class LessonMaterials(db.Model): 
-    
+class LessonMaterials(db.Model):
+
     __tablename__ = 'lessonMaterials'
 
     materialID = db.Column(db.Integer, primary_key=True)
@@ -208,6 +209,7 @@ class LessonMaterials(db.Model):
 
 #LESSON MATERIAL VIEWED CLASS
 class LessonMaterialsViewed(db.Model):
+
     __tablename__ = 'lessonMaterialsViewed'
 
     materialID = db.Column(db.Integer, db.ForeignKey(LessonMaterials.materialID), primary_key=True)
@@ -228,6 +230,7 @@ class LessonMaterialsViewed(db.Model):
 
 #QUIZ CLASS
 class Quiz(db.Model):
+
     __tablename__ = 'quiz'
 
     quizID = db.Column(db.Integer, primary_key=True)
@@ -235,7 +238,6 @@ class Quiz(db.Model):
     passingCriteria = db.Column(db.String(5), nullable=False)
     quizType = db.Column(db.String(2), nullable=False)
     lessonID = db.Column(db.Integer, db.ForeignKey(Lesson.lessonID), nullable=False)
-
 
     def to_dict(self):
         """
@@ -250,9 +252,10 @@ class Quiz(db.Model):
 
 #QUESTION CLASS
 class Questions(db.Model):
-    __tablename__ = 'quizQuestions'
 
-    quizID = db.Column(db.Integer, db.ForeignKey(Quiz.quizID), primary_key=True)
+    __tablename__ = 'quizQuestions'
+    questionsID = db.Column(db.Integer, primary_key=True)
+    quizID = db.Column(db.Integer, db.ForeignKey(Quiz.quizID))
     qnNo = db.Column(db.Integer, nullable=False)
     question = db.Column(db.String(300), nullable=False)
     options = db.Column(db.String(100), nullable=False)
@@ -273,10 +276,11 @@ class Questions(db.Model):
 class QuizAttempt(db.Model):
     __tablename__ = 'quizAttempt'
 
-    quizID = db.Column(db.Integer, db.ForeignKey(Quiz.quizID), primary_key=True)
-    qnNo = db.Column(db.Integer, nullable=False)
+    quizAttemptID = db.Column(db.Integer, primary_key=True)
+    quizID = db.Column(db.Integer, db.ForeignKey(Quiz.quizID), nullable=False)
     learnerID = db.Column(db.Integer, db.ForeignKey(Learner.empID), nullable=False)
-    answer = db.Column(db.String(50), nullable=False)
+    score = db.Column(db.Integer, nullable=False)
+    max_score = db.Column(db.Integer, nullable=False)
 
     def to_dict(self):
         """
@@ -289,7 +293,6 @@ class QuizAttempt(db.Model):
             result[column] = getattr(self, column)
         return result
 
-
 #EMPLOYEE
 @app.route("/employee")
 def employee():
@@ -300,7 +303,6 @@ def employee():
                      for employee in employee_list]
         }
     ), 200
-
 
 @app.route("/employee/<int:empID>")
 def employee_by_id(empID):
@@ -324,7 +326,6 @@ def learner():
                      for learner in learner_list]
         }
     ), 200
-    
 
 @app.route("/learner/<int:empID>")
 def learner_by_empID(empID):
@@ -337,8 +338,6 @@ def learner_by_empID(empID):
         return jsonify({
             "message": "No learner with that empID."
         }), 404
-
-
 
 #COURSE
 @app.route("/courses")
@@ -453,7 +452,6 @@ def assign_learner():
         "message" : "All learners assigned successfully"
     }), 201
 
-
 #CLASSES
 @app.route("/classes")
 def classes():
@@ -478,7 +476,6 @@ def class_by_courseID(courseID):
             "message": "No available classes."
         }), 404
 
-
 @app.route("/classes/byClass/<int:classID>")
 def class_by_classID(classID):
     classID = Classes.query.join(Course).filter(Classes.classID==classID)
@@ -491,7 +488,6 @@ def class_by_classID(classID):
         return jsonify({
             "message": "No available classes."
         }), 404
-
 
 #ENROLMENTLIST
 @app.route("/enrolmentList")
@@ -562,7 +558,6 @@ def create_enrolment():
             "message": "Unable to commit to database. " + str(e)
         }), 500        
 
-
 #LESSON
 @app.route("/lesson/<int:classID>/<int:lessonNum>/<int:courseID>")
 def lesson_by_num(classID, lessonNum, courseID):
@@ -590,12 +585,18 @@ def retrieve_all_lessons_by_class(classID, courseID):
             "message": "No lessons available yet."
         }), 201
 
-@app.route("/lesson/lessonByID/<int:lessonID>")
-def retrieve_lesson_by_lessonID(lessonID):
+@app.route("/lesson/lessonByID/<int:lessonID>/<int:learnerID>")
+def retrieve_lesson_by_lessonID(lessonID, learnerID):
     lessons = Lesson.query.filter_by(lessonID=lessonID).first()
+    lessonMaterialsCheck = LessonMaterialsViewed.query.filter_by(lessonID=lessonID, learnerID=learnerID, completed=1).all()
+    lessonMaterials = LessonMaterials.query.filter_by(lessonID=lessonID).all()
+    quizCheck = Quiz.query.filter_by(lessonID=lessonID).first()
+    attemptCheck = QuizAttempt.query.filter_by(quizID=quizCheck.quizID,learnerID=learnerID).all()
     if lessons:
         return jsonify({
-            "data": lessons.to_dict()
+            "data": lessons.to_dict(),
+            "quiz_available": len(lessonMaterialsCheck) == len(lessonMaterials),
+            "quiz_attempts" : len(attemptCheck) > 0
         }), 200
     else:
         return jsonify({
@@ -638,16 +639,24 @@ def lessonMaterials_by_lesson(lessonID, learnerID):
 @app.route("/lessonMaterialsViewed/check/<int:materialID>/<int:learnerID>/<int:lessonID>")
 def lessonMaterialsViewed_by_lesson_material(materialID, learnerID, lessonID):
     lessonMaterialsViewed = LessonMaterialsViewed.query.filter_by(materialID=materialID, learnerID=learnerID, lessonID=lessonID).first()
-    if lessonMaterialsViewed:
-        return jsonify({
-            "data": lessonMaterialsViewed.to_dict(),
-            "status": "success"
-        }), 200
+    quizCheck = Quiz.query.filter_by(lessonID=lessonID).first()
+    attemptCheck = QuizAttempt.query.filter_by(quizID=quizCheck.quizID,learnerID=learnerID).all()
+    if lessonMaterialsViewed :
+        if(len(attemptCheck) > 0):
+            return jsonify({
+                "data": lessonMaterialsViewed.to_dict(),
+                "status": "success"
+            }), 200
+        else:
+            return jsonify({
+                "data": lessonMaterialsViewed.to_dict(),
+                "status": "success"
+            }), 201
     else:
         return jsonify({
             "message": "No lesson materials found.",
             "status": "not found"
-        }), 201
+        }), 202
 
 #ADD TO DB THAT ITS VIEWED
 @app.route("/lessonMaterialsViewed/add/<int:materialID>/<int:learnerID>/<int:lessonID>")
@@ -689,8 +698,6 @@ def lessonMaterialsViewed_update_by_lesson_material(materialID, learnerID, lesso
         return jsonify({
             "message": "Unable to commit to database."
         }), 500
-
-
 
 #PREREQ        
 @app.route("/prerequisite")
@@ -758,7 +765,7 @@ def retrieve_quiz_by_lessonID(lessonID):
 #QUESTIONCLASS
 @app.route("/question/<int:quizID>")
 def quizQuestions(quizID):
-    r_quizQuestions = Questions.query.filter(quizID==quizID).all()
+    r_quizQuestions = Questions.query.filter_by(quizID=quizID).all()
     if r_quizQuestions:
         return jsonify({
             "data": [quizQuestion.to_dict()
@@ -786,7 +793,46 @@ def create_question():
                 "message": "Unable to commit to database."
             }), 500
 
+@app.route('/quizAttempts/check/<int:lessonID>/<int:learnerID>')
+def retrieveQuizAttempts(lessonID, learnerID):
+    quiz_info = Quiz.query.filter_by(lessonID=lessonID).first()
+    attempts = QuizAttempt.query.filter_by(quizID=quiz_info.quizID, learnerID=learnerID).all()
+    if attempts:
+        return jsonify({
+            "data": [att.to_dict()
+                     for att in attempts],           
+        }), 200
+    else:
+        return jsonify({
+            "message": "No attempts found."
+        }), 404
 
+@app.route('/submitQuiz', methods=['POST'])
+def submit_quiz():
+    data = request.form.to_dict()
+    score = 0
+    max_score = 0
+
+    for key in data:
+        if(key != "learner_id" and key != "quiz_id" and key != "lesson_id"):
+            qn_id = key.split("qn_")[1]
+            question_info = Questions.query.filter_by(quizID=data["quiz_id"], qnNo=qn_id).first()
+            if(question_info.answer == data[key]):
+                score += 1
+            max_score += 1
+
+    attempt = QuizAttempt(
+        quizID=data["quiz_id"], learnerID=data["learner_id"], score=score, max_score=max_score
+    )
+    if ( data is not None ): 
+        try:
+            db.session.add(attempt)
+            db.session.commit()
+            return jsonify(attempt.to_dict()), 200
+        except Exception as e:
+            return jsonify({
+                "message": e
+            }), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
