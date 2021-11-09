@@ -41,7 +41,7 @@
 <script>
   async function findQuiz() {
     var quizID = sessionStorage.quizID;
-    var serviceURL = "http://localhost:5000/course/" + quizID; //5007
+    var serviceURL = "http://localhost:5000/course/" + quizID; 
     try {
       const response =
       await fetch(
@@ -53,7 +53,6 @@
         if (courseName == name) {
           sessionStorage.courseName = data.data.courseName;
           sessionStorage.courseID = data.data.courseID;
-
           window.location.assign("./classes.html");
         } else {
           alert("Cant find course.");

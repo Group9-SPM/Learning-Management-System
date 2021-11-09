@@ -39,7 +39,7 @@
 
 <script>
   $(async() => {           
-    var serviceURL = "http://localhost:5000/courses"; //5007
+    var serviceURL = "http://localhost:5000/courses"; 
     try {
       const response =
       await fetch(
@@ -50,8 +50,6 @@
         var allCourses = result.data;
         var eachRow = "";
         for (const course of allCourses) {
-          preReq = findPreReq(course.courseID);
-          console.log(preReq);
           eachRow = `<div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
                       <div class="col-lg-3">
                         <p>${course.courseID}</p>
@@ -61,9 +59,6 @@
                       </div>
                       <div class="col-lg-3">
                         <p>${course.courseDesc}</p>
-                      </div>
-                      <div class="col-lg-3">
-                        <p>${preReq}</p>
                       </div>
                     </div>`;
           $('#coursesTable').append(eachRow);
@@ -75,7 +70,7 @@
   });
   async function findCourse() {
     var courseName = document.getElementById('courseName').innerHTML;
-    var serviceURL = "http://localhost:5000/course/" + courseName; //5007
+    var serviceURL = "http://localhost:5000/course/" + courseName; 
     try {
       const response =
       await fetch(
@@ -84,7 +79,6 @@
       const data = await response.json();
       if (response.ok) { 
         var name = data.data.courseName;
-        console.log(data.data);
         if (courseName == name) {
           sessionStorage.courseName = data.data.courseName;
           sessionStorage.courseID = data.data.courseID;
@@ -100,33 +94,6 @@
     catch (error) {
       alert('There is a problem, please try again later.');
     }
-  };
-  function findPreReq(courseID) {
-    $(async() => { 
-      var serviceURL = 'http://localhost:5000/prerequisite/' + courseID; //5006
-      try {
-        const response =
-        await fetch(
-          serviceURL, { method: 'GET' }
-        );
-        const result = await response.json();
-
-        if (response.ok) {
-          var preReqCourses = result.data;
-          var preReq = result.data.prerequisiteID;
-
-          if(preReq == 0) {
-            return "No prerequisite course";
-          }
-          else {
-            console.log(preReq);
-            return preReq;
-          }
-        }
-      } catch (error) {
-        showError('There is a problem retrieving prerequisite course please try again later.' + error);
-      } 
-    })
   };
 </script>
 <body>
@@ -170,9 +137,6 @@
           </div>
           <div class="col-lg-3">
             <h4>Description</h4>
-          </div>
-          <div class="col-lg-3">
-            <h4>Pre-requisite Course</h4>
           </div>
         </div>
         <div id="coursesTable"></div>
