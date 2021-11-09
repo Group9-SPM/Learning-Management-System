@@ -1,7 +1,8 @@
+import unittest
 import flask_testing
 import json
 import datetime
-from app import app, db, ClassList, Learner, Classes
+from app import app, db, ClassList, Learner, Classes, EnrolmentList, Course
 
 class TestApp(flask_testing.TestCase):
     
@@ -19,6 +20,7 @@ class TestApp(flask_testing.TestCase):
         db.session.remove()
         db.drop_all()
 
+#Nicole - TestClassList & TestAssignLearner
 class TestClassList(TestApp):
 
     def test_classList_by_class(self):
@@ -97,13 +99,14 @@ class TestClassList(TestApp):
 class TestAssignLearner(TestApp):
 
     def test_assign_learner(self):
-
         l1 = Learner(badges="1", department="R&D", empID=2,
                     empName="Amy Tan", roleType="L", username="amy123")
+
         c1 = Classes(classID=1,courseID=1, endDate=datetime.datetime.now(),
                     endTime="13:00",  maxSlot=30, minSlot=10,
                     regEndDate=datetime.datetime.now(), regStartDate=datetime.datetime.now(),
                     size=30, startDate=datetime.datetime.now(), startTime="12:00", trainerID=4)
+
         db.session.add(l1)
         db.session.add(c1)
         db.session.commit()
@@ -121,3 +124,50 @@ class TestAssignLearner(TestApp):
                                 "data" : [2],
                                 "message" : "All learners assigned successfully"
                         })
+
+
+# Amanda - TestCreateEnrolment 
+class TestCreateEnrolment(TestApp):
+    def test_create_enrolment(self):
+        e1 = EnrolmentList(classID=8, learnerID=4,
+                    courseID=4, enrolmentStatus='pending')
+        
+        co1 = Course(courseID='4',courseName='Repair Words 101',
+                    courseDesc ='Learn how to speak repair words', courseDuration='1h')
+
+        c1 = Classes(classID=8,courseID=4, endDate=datetime.datetime.now(),
+                    endTime="13:00",  maxSlot=30, minSlot=10,
+                    regEndDate=datetime.datetime.now(), regStartDate=datetime.datetime.now(),
+                    size=30, startDate=datetime.datetime.now(), startTime="12:00", trainerID=4,courseID='4',courseName='Repair Words 101',
+                    courseDesc ='Learn how to speak repair words', courseDuration='1h',empName='Emma', department='HR', username ="emma65", roleType="L")
+
+        l1 = Learner (empID='4', badges='3', empName='Emma', department='HR', username ="emma65", roleType="L")
+
+        db.session.add(e1)
+        db.session.add(c1)
+        db.session.add(co1)
+        db.session.add(l1)
+        db.session.commit()
+
+        request_body = {
+            'classID': c1.classID,
+            'learnerID': l1.empID,
+            'courseID': co1.courseID,
+            'enrolmentStatus': 'pending'
+        }
+
+        response = self.client.post("/enrolmentList",
+                                    data=json.dumps(request_body),
+                                    content_type='application/json')
+        self.assertEqual(response.json, {
+            'classID': 8,
+            'learnerID': 4,
+            'courseID': 4,
+            'enrolmentStatus': 'pending'
+        })
+
+ 
+
+
+if __name__ == '__main__':
+    unittest.main()
