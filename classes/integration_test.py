@@ -4,6 +4,7 @@ import json
 import datetime
 from app import app, db, ClassList, Learner, Classes, EnrolmentList, Course, ClassList, Quiz, Questions, Lesson, LessonMaterials, LessonMaterialsViewed, QuizAttempt
 
+
 class TestApp(flask_testing.TestCase):
     
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://"
@@ -202,8 +203,10 @@ class TestEnrolmentList(TestApp):
         co1 = Course(courseID = 1, courseName='Repair Words 101',
                     courseDesc ='Learn how to speak repair words', courseDuration='1h')
 
+
         co2 = Course(courseID = 2,courseName='Repair 101',
                      courseDesc ='Learn how to repair words', courseDuration='3h')        
+
 
         c1 = Classes(classID=1 , courseID=1, endDate=datetime.datetime.now(),
                     endTime="13:00",  maxSlot=30, minSlot=10,
