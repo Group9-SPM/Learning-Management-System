@@ -117,11 +117,6 @@ function create() {
     window.location.assign("./quizConfirm.html");
 }
 
-function allOption(formArr) {
-  formArr = form.elements;
-  
-}
-
 function createQuiz(quizData, questionData) {
   console.log(quizData);
   quizData = JSON.parse(quizData);
@@ -131,8 +126,7 @@ function createQuiz(quizData, questionData) {
   quizDuration = quizData.quizDuration
 
   const quiz_data = { lessonID, quizType, quizDuration, passingCriteria };
-  console.log(quiz_data);
-  fetch('http://localhost:5000/quiz-create', { //5014
+  fetch('http://localhost:5000/quiz-create', { 
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -147,7 +141,6 @@ function createQuiz(quizData, questionData) {
 
     if (sessionStorage.multiple == "true") {
       for (let i = 0; i < questionData.length; i++) {
-        console.log(questionData[i]);
         qnNo = questionData[i].qnNo;
         question = questionData[i].question;
         options = questionData[i].options;
@@ -171,7 +164,7 @@ function createQuiz(quizData, questionData) {
 }
 
 function createQns(question_data) {
-  fetch('http://localhost:5000/question-create', { //5013
+  fetch('http://localhost:5000/question-create', { 
     method: 'POST', 
     headers: {
       'Content-Type': 'application/json',
