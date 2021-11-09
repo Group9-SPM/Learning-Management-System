@@ -102,6 +102,12 @@ class Classes(db.Model):
             result[column] = getattr(self, column)
         return result
 
+    def addToSize(self, num):
+        if (self.size + num) <= self.maxSlot:
+            self.size += num
+        else:
+            raise Exception("Unable to add to class size, size exceeds max slots.")
+
 #classlist
 class ClassList(db.Model):
 
@@ -192,9 +198,9 @@ class LessonMaterials(db.Model):
     __tablename__ = 'lessonMaterials'
 
     materialID = db.Column(db.Integer, primary_key=True)
-    materialURL = db.Column(db.String(500), nullable=False)
-    lessonID = db.Column(db.Integer, db.ForeignKey('lesson.lessonID'), nullable=False)
-    content = db.Column(db.String(500), nullable=False)
+    materialURL = db.Column(db.String(256), nullable=False)
+    lessonID = db.Column(db.Integer, db.ForeignKey(Lesson.lessonID), nullable=False)
+    content = db.Column(db.String(100), nullable=False)
 
     def to_dict(self):
         """
@@ -272,7 +278,7 @@ class Questions(db.Model):
             result[column] = getattr(self, column)
         return result
 
-#QUESTION CLASS
+#QUIZATTEMPT CLASS
 class QuizAttempt(db.Model):
     __tablename__ = 'quizAttempt'
 
@@ -406,6 +412,17 @@ def classList_by_learner(learnerID):
 @app.route("/classList", methods=['POST'])
 def assign_learner():
     dataList = request.get_json()
+
+    #Check if class size exceeds
+    toAssignLength = len(dataList)
+    selectedClass = Classes.query.filter_by(classID=dataList[0]['classID']).first()
+    remainingClassSlots = selectedClass.maxSlot - selectedClass.size
+    if toAssignLength > remainingClassSlots:
+        return jsonify({
+                "data": dataList,
+                "message": "Class size is exceeded. Failed to assign learners."
+            }), 500
+
     successList = []
     for data in dataList:
         if not all(key in data.keys() for
@@ -440,6 +457,7 @@ def assign_learner():
         try:
             db.session.add(assignment)
             db.session.commit()
+            selectedClass.addToSize(1)
         except Exception as e:
             return jsonify({
                 "data": successList,
@@ -632,7 +650,7 @@ def lessonMaterials_by_lesson(lessonID, learnerID):
             }), 201
     else:
         return jsonify({
-            "message": "Please attempt the previous lesson quizzes to view this lesson."
+            "message": "Please view all lesson materials and attempt the quiz of the current lesson before moving on to the next lesson."
         }), 202
 
 #LESSONMATERIALSVIEWED

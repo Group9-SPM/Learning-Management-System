@@ -125,6 +125,34 @@ class TestClasses(unittest.TestCase):
             "trainerID": 1}
         )
 
+    def test_addToSize(self):
+        cls1 = Classes(classID=1, startDate='2021-05-21', endDate='2021-11-19',size=25, startTime='07:00', endTime='12:00', minSlot=10, maxSlot=30, regStartDate='2021-04-01', regEndDate='2021-05-01', courseID=1, trainerID=1)
+        cls1.addToSize(1)
+        self.assertEqual(cls1.to_dict(), {
+            'classID': 1,
+            'startDate': '2021-05-21',
+            'endDate': '2021-11-19',
+            'size': 26,
+            "startTime": '07:00',
+            "endTime": '12:00',
+            "minSlot": 10,
+            "maxSlot": 30,
+            "regStartDate": '2021-04-01',
+            "regEndDate": '2021-05-01',
+            "courseID": 1,
+            "trainerID": 1}
+        )
+
+    def test_addToSize_size_exceeds(self):
+        cls1 = Classes(classID=1, startDate='2021-05-21', endDate='2021-11-19',size=25, startTime='07:00', endTime='12:00', minSlot=10, maxSlot=30, regStartDate='2021-04-01', regEndDate='2021-05-01', courseID=1, trainerID=1)
+        self.assertEqual(cls1.size, 25)
+        try:
+            cls1.addToSize(6)
+        except Exception as e:
+            self.assertEqual(str(e), "Unable to add to class size, size exceeds max slots.")
+            self.assertEqual(cls1.size, 25)
+            
+
 class TestClassList(unittest.TestCase):
     def test_to_dict(self):
         cl1 = ClassList(classID=1, learnerID=1, finalQuizGrade='A')
