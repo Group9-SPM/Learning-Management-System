@@ -242,6 +242,9 @@
         if (checkSize == true && eligibility && checkEnrolment ){
           signUp(classid)
         }
+        else if (!eligibility){
+          alert("You are not eligible for this course!");
+        }
       else{
         alert("Please ensure the current date is during the registration period or ensure that the class is not full! ");
       }
