@@ -167,7 +167,41 @@ class TestCreateEnrolment(TestApp):
         })
 
  
+    def test_create_enrolment_invalidClassSize(self):
+        e1 = EnrolmentList(classID=8, learnerID=4,
+                    courseID=4, enrolmentStatus='pending')
+        
+        co1 = Course(courseID='4',courseName='Repair Words 101',
+                    courseDesc ='Learn how to speak repair words', courseDuration='1h')
 
+        c1 = Classes(classID=8,courseID=4, endDate=datetime.datetime.now(),
+                    endTime="13:00",  maxSlot=30, minSlot=30,
+                    regEndDate=datetime.datetime.now(), regStartDate=datetime.datetime.now(),
+                    size=30, startDate=datetime.datetime.now(), startTime="12:00", trainerID=4,courseID='4',courseName='Repair Words 101',
+                    courseDesc ='Learn how to speak repair words', courseDuration='1h',empName='Lily', department='Production', username ="Lily65", roleType="T")
+
+        l1 = Learner (empID='4', badges='3', empName='Emma', department='HR', username ="emma65", roleType="L")
+        
+        db.session.add(e1)
+        db.session.add(c1)
+        db.session.add(co1)
+        db.session.add(l1)
+        db.session.commit()
+
+        request_body = {
+            'classID': c1.classID,
+            'learnerID': l1.empID,
+            'courseID': co1.courseID,
+            'enrolmentStatus': 'pending'
+        }
+
+        response = self.client.post("/enrolmentList",
+                                    data=json.dumps(request_body),
+                                    content_type='application/json')
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(response.json, {
+            'message': 'Class is full.'
+        })
 
 if __name__ == '__main__':
     unittest.main()
