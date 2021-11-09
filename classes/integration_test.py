@@ -254,10 +254,11 @@ class TestCreateQuiz(TestApp):
         }) 
 class TestCreateQuestion(TestApp):
     def test_create_quiz_question(self):
-        qns = Questions(quizID=10, qnNo=1,
+        qns = Questions(questionsID=1, quizID=10, qnNo=1,
                      question='You are great today.', options='True,False', answer='True')
 
         request_body = {
+            'questionsID': qns.questionsID,
             'quizID': qns.quizID,
             'qnNo': qns.qnNo,
             'question': qns.question,
