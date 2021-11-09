@@ -1,6 +1,5 @@
 import unittest
-from app import Employee, Learner, Course, Quiz, Questions, EnrolmentList, Classes, ClassList, LessonMaterialsViewed, QuizAttempt
-
+from app import Lesson, Employee, Learner, Course, Quiz, Questions, EnrolmentList, Classes, ClassList, LessonMaterialsViewed, QuizAttempt
 
 #amanda - Employee & Learner
 class TestEmployee(unittest.TestCase):
@@ -49,6 +48,18 @@ class TestEnrolmentList(unittest.TestCase):
             'learnerID': 1,
             'classID': 1, 
             'enrolmentStatus': 'Pending'}
+        )
+
+class TestLesson(unittest.TestCase):
+    def test_to_dict(self):
+        l1 = Lesson(lessonID='1', lessonNum='1', classID='1', courseID='1', lessonName ="Fixing Scanner", lessonDesc="How to fix scanner.")
+        self.assertEqual(l1.to_dict(), {
+            'lessonID': '1',
+            'lessonNum': '1', 
+            'classID': '1',
+            'courseID': '1',
+            "lessonName": "Fixing Scanner",
+            "lessonDesc": "How to fix scanner."}
         )
 
 # Diyanah - Quiz and Questions
