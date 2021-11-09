@@ -51,31 +51,28 @@
 
 <body>
 
-  <!-- ======= Header ======= -->
-  <header id="header" class="fixed-top d-flex align-items-center">
-    <div class="container d-flex align-items-center justify-content-between">
-
-      <div class="logo">
-        <h1><a href="index.html">Learning Management System</a></h1>
-        <!-- Uncomment below if you prefer to use an image logo -->
-        <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
-      </div>
-
-      <nav id="navbar" class="navbar">
-        <ul>
-          <li><a class="nav-link scrollto " href="enrolledCourses.html">Home</a></li>
-          <li><a class="nav-link scrollto" href="./learner/allCourses.html">All Courses</a></li>
-          <li class="dropdown"><a href="#"><span>Learner</span> <i class="bi bi-chevron-down"></i></a>
-            <ul>
-              <li><a href="#">Profile</a></li>
-              <li><a href="#">Enrolled Courses</a></li>
-              <li><a href="#">Completed Courses</a></li>
-            </ul>
-          </li>
-          <li><a class="getstarted scrollto" href="#about">Log Out</a></li>
-        </ul>
-        <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav><!-- .navbar -->
+    <!-- ======= Header ======= -->
+    <header id="header" class="fixed-top d-flex align-items-center">
+      <div class="container d-flex align-items-center justify-content-between">
+  
+        <div class="logo">
+          <h1><a href="index.html">Learning Management System</a></h1>
+          <!-- Uncomment below if you prefer to use an image logo -->
+          <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+        </div>
+  
+        <nav id="navbar" class="navbar">
+          <ul>
+            <li class="dropdown"><a href="#"><span>Learner</span> <i class="bi bi-chevron-down"></i></a>
+              <ul>
+                <li><a href="allCourses.html">Available Courses</a></li>
+                <li><a href="confirmedCourses.html">Enrolled Courses</a></li>
+              </ul>
+            </li>
+            <li><a class="getstarted scrollto" href="../index.html">Log Out</a></li>
+          </ul>
+          <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav><!-- .navbar -->
 
     </div>
   </header><!-- End Header -->
@@ -106,21 +103,11 @@
             <h5 id='courseDesc'></h5>
           </div>
   
-          <div class="row">
-            <div class="col-md-6 col-lg-6 mb-5 mb-lg-5 ">
+          <div class="row justify-content-center">
               <div class="icon-box" data-aos="fade-up" data-aos-delay="100" >
                 <div class="icon"><i class="bi bi-collection"></i></div>
-                <h4 class="title"><a id="content">Content</a></h4>
-                <p class="description">Course materials uploaded</p>
-              </div>
-            </div>
-  
-            <div class="col-md-6 col-lg-6 mb-5 mb-lg-5">
-              <div class="icon-box" data-aos="fade-up" data-aos-delay="200">
-                <div class="icon"><i class="bx bx-file"></i></div>
-                <h4 class="title"><a href="QuizContent.html">Quizzes</a></h4>
-                <p class="description">Quizzes to be taken after course materials have been viewed</p>
-              </div>
+                <h4 class="title"><a id="content">Course Content and Quizzes</a></h4>
+                <p class="description">Lesson materials uploaded and Quizzes to be taken at the end of each lesson</p>
             </div>
   
           </div>
@@ -209,7 +196,7 @@
   <script src="../assets/vendor/swiper/swiper-bundle.min.js"></script>
 
   <!-- Template Main JS File -->
-  <script src="assets/js/main.js"></script>
+  <script src="../assets/js/main.js"></script>
 
 </body>
 
