@@ -2,7 +2,7 @@ import unittest
 import flask_testing
 import json
 import datetime
-from app import app, db, ClassList, Learner, Classes, EnrolmentList, Course, ClassList, Quiz, Questions, Lesson, LessonMaterials, LessonMaterialsViewed, QuizAttempt
+from app import app, db, ClassList, Learner, Classes, EnrolmentList, Course, Quiz, Questions, Lesson, LessonMaterials, LessonMaterialsViewed, QuizAttempt
 
 
 class TestApp(flask_testing.TestCase):
@@ -470,7 +470,7 @@ class TestLessonMaterialsViewed(TestApp):
         db.session.add(lmv1)
         db.session.commit()
 
-        response = self.client.get("/lessonMaterialsViewed/update/1/1/1")
+        response = self.client.get("/lessonMaterialsViewed/add/1/1/1")
 
         self.assertEqual(response.json, {
             'message': "Lesson Material already viewed."
@@ -513,28 +513,29 @@ class TestQuizAttempt(TestApp):
 
     def test_submit_quiz(self):
         qn1 = Questions(questionsID=1, quizID=1, qnNo=1, question='You had a great day', options='True,False', answer='True')
-        qa1 = QuizAttempt(quizAttemptID=1, quizID=qn1.quizID, learnerID=1, score=1, max_score=1)
+        qa1 = QuizAttempt(quizID=qn1.quizID, learnerID=1, score=1, max_score=1)
 
         db.session.add(qn1)
         db.session.add(qa1)
         db.session.commit()
 
         request_body = {
-                            quiz_id: qn1.quizID,
-                            learner_id: qa1.learnerID,
-                            lesson_id: 1,
-                            qn_1: 'True'
+                            "quiz_id": qn1.quizID,
+                            'learner_id': qa1.learnerID,
+                            'lesson_id': 1,
+                            'qn_1': 'True'
                         }
 
         response = self.client.post("/submitQuiz",
                                     data=request_body,
-                                    content_type='application/json')
+                                    content_type='multipart/form-data')
         self.assertEqual(response.json,
-                        {
-                                "quiz_id" : 1,
-                                "learner_id" : 1,
-                                "score": 1,
-                                "max_score": 1
+                        {       
+                            "quizAttemptID": 2,
+                            "quizID" : 1,
+                            "learnerID" : 1,
+                            "score": 1,
+                            "max_score": 1
                         })
 
 
