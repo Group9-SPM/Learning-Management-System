@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Learning Management System</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="../assets/img/favicon.png" rel="icon">
+  <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="../assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="../assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="../assets/css/style.css" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: Vesperr - v4.4.0
+  * Template URL: https://bootstrapmade.com/vesperr-free-bootstrap-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+
+  <!-- Latest compiled and minified JavaScript -->
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+      integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+      crossorigin="anonymous"></script>
+
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+      integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+      crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
+
+  <style>
+      main{
+        max-width: 1000px;
+        margin: auto;
+      }
+      table{
+
+      border: 2px solid black;
+      }
+
+      th,td{
+      padding: 12px;
+      }
+  </style>
+</head>
+<body>
+  <header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container d-flex align-items-center justify-content-between">
+
+      <div class="logo">
+        <h1><a href="allCourses.html">Learning Management System</a></h1>
+      </div>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li class="dropdown"><a href="#"><span>Administrator</span> <i class="bi bi-chevron-down"></i></a>
+            <ul>
+              <li><a href="allCourses.html">All Courses</a></li>
+            </ul>
+          </li>
+          <li><a class="getstarted scrollto" href="../index.html">Log Out</a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="breadcrumbs">
+      <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+         <p></p>
+          <ol>
+            <li><a href="allCourses.html">Home</a></li>
+            <li>Courses</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section id="services" class="services">
+      <div class="container">
+        <div class="section-title" data-aos="fade-up">
+          <h2>Courses</h2>
+        </div>
+      </div>
+    </section>
+
+    <div class="container px-5 my-5">
+      <div class="bg-img">
+        <div class="bg-text">
+          <h3 class="fw-bolder mb-3">All Courses</h3>
+        </div>
+      </div>
+    
+      <br>
+      <table id="coursesTable" class="table table-striped" style="text-align: center"> 
+        <thead>
+          <tr> 
+              <th scope="col">Course Code</th> 
+              <th scope="col">Course Name</th> 
+              <th scope="col">Description</th>
+          </tr>
+        </thead>  
+        <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    function showError(message) {
+      $('#coursesTable')
+          .append("<label>"+message+"</label>");
+      }
+
+    $(async() => {           
+        var serviceURL = "http://localhost:5000/courses";
+
+        try {
+            const response =
+            await fetch(
+                serviceURL, { method: 'GET' }
+            );
+            const result = await response.json();
+            if (response.ok) {
+                var allCourses = result.data;
+
+                var rows = "";
+                for (const course of allCourses) {
+                      eachRow = "<td id='courseID'>" + course.courseID + "</td>" +
+                      "<td id='courseName_" + course.courseID + "'>"+ findCourse(course.courseID,course.courseName,course.courseDesc) +"</td>" +
+                      "<td id='courseDesc'>" + course.courseDesc + "</td>";
+                      rows += "<tr>" + eachRow + "</tr>";
+                }
+                $('#coursesTable').append(rows);
+            }
+        } catch (error) {
+            showError('There is a problem retrieving courses data, please refresh the page or try again later.');
+        }
+      });
+
+    function findCourse(courseID,courseName, courseDesc) {
+        $(async() => {
+          var serviceURL = "http://localhost:5000/course/" + courseID;
+          try {
+              const response =
+              await fetch(
+                serviceURL, { method: 'GET' }
+              );
+              const result = await response.json();
+
+              if (response.ok) { 
+                var courses = result.data;
+                var course = '';
+                course = "<a href = 'courseClasses.html'>"+result.data.courseName+"</a>";
+                document.getElementById('courseName_' + courseID).innerHTML = course;
+              } else {
+                  alert("Theres an issue with the data.");
+              }
+          }
+          catch (error) {
+              alert('There is a problem, please try again later.');
+        }
+      }
+    )};
+
+</script>
+
+<br><br>
+
+<div class="card text-white bg-dark my-3 py-3 text-center">
+  <div class="card-body"><p class="text-white m-0" style="font-family: 'Courier New', Courier, monospace;"> "Keep learning because knowledge is the key to power" </p></div>
+</div>
+
+</main>
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="container">
+      <div class="row d-flex align-items-center">
+        <div class="col-lg-6 text-lg-left text-center">
+          <div class="copyright">
+            &copy; Copyright <strong>Vesperr</strong>. All Rights Reserved
+          </div>
+          <div class="credits">
+            <!-- All the links in the footer should remain intact. -->
+            <!-- You can delete the links only if you purchased the pro version. -->
+            <!-- Licensing information: https://bootstrapmade.com/license/ -->
+            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/vesperr-free-bootstrap-template/ -->
+            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <nav class="footer-links text-lg-right text-center pt-2 pt-lg-0">
+            <a href="../index.html" class="scrollto">Home</a>
+            <a href="#about" class="scrollto">About</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Use</a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+  <!-- Vendor JS Files -->
+  <script src="../assets/vendor/aos/aos.js"></script>
+  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="../assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="../assets/vendor/php-email-form/validate.js"></script>
+  <script src="../assets/vendor/purecounter/purecounter.js"></script>
+  <script src="../assets/vendor/swiper/swiper-bundle.min.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="../assets/js/main.js"></script>
+
+</body>
+</html>

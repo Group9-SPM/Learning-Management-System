@@ -139,17 +139,24 @@
                 if (response.ok) {
                     // success case
                     var allStudents = result.data;
-                    // for loop to setup all table rows with obtained data
-                    var rows = "";
-                    for (const student of allStudents) {
-                        eachRow =`<td>${student.empName}</td>
-                                <td>${student.finalQuizGrade ?? "-"}</td>
-                                <td align='right'><button type='button' class='btn btn-danger'>Withdraw</button></td>`;
-                       
-                        rows += "<tr>" + eachRow + "</tr>";
+                    if (allStudents.length != 0) {
+                        // for loop to setup all table rows with obtained data
+                        var rows = "";
+                        for (const student of allStudents) {
+                            eachRow =`<td>${student.empName}</td>
+                                    <td>${student.finalQuizGrade ?? "-"}</td>
+                                    <td align='right'><button type='button' class='btn btn-danger'>Withdraw</button></td>`;
+                        
+                            rows += "<tr>" + eachRow + "</tr>";
+                        }
+                        // add all the rows to the table
+                        $('#students').append(rows);
+                    } else {
+                        $('#students').append(`<tr>
+                                                <td colspan='3' class="w-100">No students assigned yet.</td>
+                                            </tr>`);
                     }
-                    // add all the rows to the table
-                    $('#students').append(rows);
+                    
                     
                     $('#students').append(
                         `<tr>
