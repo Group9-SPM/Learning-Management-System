@@ -109,7 +109,7 @@
     document.getElementById('content').setAttribute('href', './courseContent.html?courseID=' + courseID + '&classID=' + classID);
 
     $(async() => {           
-      var serviceURL = "http://localhost:5000/course/" + courseID;
+      var serviceURL = "http://3.229.247.48:5000/course/" + courseID;
       try {
           const response =
             await fetch(

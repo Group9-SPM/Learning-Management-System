@@ -123,7 +123,7 @@
     var learnerID = sessionStorage.learnerID;
 
     $(async() => {           
-      var serviceURL = "http://localhost:5000/lesson/lessonByID/" + lessonID + "/" + learnerID;
+      var serviceURL = "http://3.229.247.48:5000/lesson/lessonByID/" + lessonID + "/" + learnerID;
       try {
           const response =
             await fetch(
@@ -143,7 +143,7 @@
             } 
         }); 
     $(async() => {           
-            var serviceURL = "http://localhost:5000/quiz/check/" + lessonID;
+            var serviceURL = "http://3.229.247.48:5000/quiz/check/" + lessonID;
     
             try {
                 const response =
@@ -194,7 +194,7 @@
                       }
                     }, 1000);
                     $(async() => {           
-                      var serviceURLNEXT = "http://localhost:5000/question/" + quizID;
+                      var serviceURLNEXT = "http://3.229.247.48:5000/question/" + quizID;
                       try {
                           const response =
                           await fetch(
@@ -248,7 +248,7 @@
           e.preventDefault(); // avoid to execute the actual submit of the form.
 
           var form = $(this);
-          var url = "http://localhost:5000/submitQuiz";;
+          var url = "http://3.229.247.48:5000/submitQuiz";;
 
           $.ajax({
                 type: "POST",

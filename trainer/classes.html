@@ -39,7 +39,7 @@
 <script>
   $(async() => {           
     var courseID = sessionStorage.courseID;
-    var serviceURL = "http://localhost:5000/classes/" + courseID; //5010
+    var serviceURL = "http://3.229.247.48:5000/classes/" + courseID; //5010
     try {
       const response =
       await fetch(
@@ -66,7 +66,7 @@
   async function findClass() {
     var classID = document.getElementById('classID').innerHTML;
     classID = classID.substr(6, classID.length);
-    var serviceURL = "http://localhost:5000/classes/" + Number(classID); 
+    var serviceURL = "http://3.229.247.48:5000/classes/" + Number(classID); 
     var found = false;
     try {
       const response =

@@ -138,7 +138,7 @@
   sessionStorage.setItem("learnerID", "1")
   function getCourseName(courseID, classID){
     $(async() => { 
-    var serviceURL = 'http://localhost:5000/course/' + courseID;
+    var serviceURL = 'http://3.229.247.48:5000/course/' + courseID;
     try {
           const response =
           await fetch(
@@ -160,7 +160,7 @@
 
   function getTrainerName(empID, classID){
     $(async() => { 
-    var serviceURL = 'http://localhost:5000/employee/' + empID;
+    var serviceURL = 'http://3.229.247.48:5000/employee/' + empID;
     try {
           const response =
           await fetch(
@@ -185,7 +185,7 @@
           .append("<label>"+message+"</label>");
   }
   $(async() => {           
-      var serviceURL = 'http://localhost:5000/classList/learner/' + sessionStorage.learnerID;
+      var serviceURL = 'http://3.229.247.48:5000/classList/learner/' + sessionStorage.learnerID;
       try {
           const response =
           await fetch(
@@ -206,7 +206,7 @@
           });
       function getCourse(classID){
         $(async() => {           
-          var serviceURL = 'http://localhost:5000/classes/byClass/' + classID;
+          var serviceURL = 'http://3.229.247.48:5000/classes/byClass/' + classID;
           try {
             const response =
             await fetch(

@@ -103,7 +103,7 @@
                 .append("<label>"+message+"</label>");
         }
         $(async() => {           
-            var serviceURL = "http://127.0.0.1:5000/learner";
+            var serviceURL = "http://3.229.247.48:5000/learner";
     
             try {
                 // Retrieve list of all learners
@@ -145,7 +145,7 @@
 
         // Assigns list of learners and add records in classList
         async function assignLearner(assignmentList) {
-            var serviceURL = "http://127.0.0.1:5000/classList";
+            var serviceURL = "http://3.229.247.48:5000/classList";
             return fetch (serviceURL,
             {
                 method: "POST",
