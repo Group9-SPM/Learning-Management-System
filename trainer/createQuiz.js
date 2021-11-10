@@ -125,7 +125,7 @@ function createQuiz(quizData, questionData) {
   quizDuration = quizData.quizDuration
 
   const quiz_data = { lessonID, quizType, quizDuration, passingCriteria };
-  fetch('http://localhost:5000/quiz-create', { 
+  fetch('http://3.229.247.48:5000/quiz-create', { 
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -162,7 +162,7 @@ function createQuiz(quizData, questionData) {
 }
 
 function createQns(question_data) {
-  fetch('http://localhost:5000/question-create', { 
+  fetch('http://3.229.247.48:5000/question-create', { 
     method: 'POST', 
     headers: {
       'Content-Type': 'application/json',

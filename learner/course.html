@@ -104,7 +104,7 @@
   var courseName = url.searchParams.get("courseName");
 
   $(async() => {           
-      var serviceURL = "http://localhost:5000/course/" + courseID;
+      var serviceURL = "http://3.229.247.48:5000/course/" + courseID;
       try {
           const response =
             await fetch(
@@ -186,7 +186,7 @@
     }
 
     async function checkEnrolmentList(learnerID, courseID){
-      var serviceURL = 'http://localhost:5000/enrolmentList/' + learnerID;
+      var serviceURL = 'http://3.229.247.48:5000/enrolmentList/' + learnerID;
       try {
           const response =
           await fetch(
@@ -215,7 +215,7 @@
 
     function getTrainerName(empID ,classID){
       $(async() => { 
-        var serviceURL = 'http://localhost:5000/employee/' + empID;
+        var serviceURL = 'http://3.229.247.48:5000/employee/' + empID;
         try {
               const response =
               await fetch(
@@ -238,7 +238,7 @@
       window.onload = function findPreReq() {
         var courseID = url.searchParams.get("courseID");
         $(async() => { 
-          var serviceURL = 'http://localhost:5000/prerequisite/' + courseID;
+          var serviceURL = 'http://3.229.247.48:5000/prerequisite/' + courseID;
           try {
               const response =
               await fetch(
@@ -270,7 +270,7 @@
         function findCourse(courseID) {
           $(async() => {
 
-            var serviceURL = "http://localhost:5000/course/" + courseID;
+            var serviceURL = "http://3.229.247.48:5000/course/" + courseID;
             try {
                 const response =
                 await fetch(
@@ -292,7 +292,7 @@
           )};
 
       async function findEligibility(learnerID) {
-        var serviceURL = 'http://localhost:5000/learner/' + learnerID;
+        var serviceURL = 'http://3.229.247.48:5000/learner/' + learnerID;
         try {
             const response =
             await fetch(
@@ -324,7 +324,7 @@
           var classID = id;
           var learnerID = sessionStorage.learnerID ;
           var courseID = url.searchParams.get("courseID");
-          var serviceURL = "http://localhost:5000/enrolmentList";
+          var serviceURL = "http://3.229.247.48:5000/enrolmentList";
 
           try {
                 const response =
@@ -354,7 +354,7 @@
           }
 
         $(async() => {         
-            var serviceURL = "http://localhost:5000/classes/" + courseID;
+            var serviceURL = "http://3.229.247.48:5000/classes/" + courseID;
             try {
                 const response =
                 await fetch(

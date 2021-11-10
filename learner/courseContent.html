@@ -129,7 +129,7 @@
       // $('#progresslessonbar').html('75%'); 
 
       $(async() => {           
-        var serviceURL = "http://localhost:5000/course/" + courseID;
+        var serviceURL = "http://3.229.247.48:5000/course/" + courseID;
         try {
             const response =
               await fetch(
@@ -149,7 +149,7 @@
           } 
         }); 
       $(async() => {           
-        var serviceURL = "http://localhost:5000/lesson/" + classID+"/"+courseID;
+        var serviceURL = "http://3.229.247.48:5000/lesson/" + classID+"/"+courseID;
         try {
             const response =
               await fetch(
@@ -175,7 +175,7 @@
           }); 
         // Check if lesson is viewed
         function checkLessonViewed(materialID, lessonID, lesson_content) {
-          var serviceURL = "http://localhost:5000/lessonMaterialsViewed/check/" + materialID + "/" + learnerID + "/" + lessonID;
+          var serviceURL = "http://3.229.247.48:5000/lessonMaterialsViewed/check/" + materialID + "/" + learnerID + "/" + lessonID;
           $.get(serviceURL, function(data,status) {
             if(data.status == "success")
             {
@@ -198,7 +198,7 @@
 
         // Add User Viewed
         function updateLessonViewed(materialID, lessonID) {
-          var serviceURL = "http://localhost:5000/lessonMaterialsViewed/add/" + materialID + "/" + learnerID + "/" + lessonID;
+          var serviceURL = "http://3.229.247.48:5000/lessonMaterialsViewed/add/" + materialID + "/" + learnerID + "/" + lessonID;
           $.get(serviceURL, function(data, status) {
             document.getElementById("lesson_mat_v_"+materialID).removeAttribute("disabled");
           });
@@ -206,7 +206,7 @@
 
         // Mark Completed
         function updateLessonViewedCompleted(materialID, lessonID) {
-          var serviceURL = "http://localhost:5000/lessonMaterialsViewed/update/" + materialID + "/" + learnerID + "/" + lessonID;
+          var serviceURL = "http://3.229.247.48:5000/lessonMaterialsViewed/update/" + materialID + "/" + learnerID + "/" + lessonID;
           $.get(serviceURL, function(data, status) {
             document.getElementById("lesson_mat_div_"+materialID).innerHTML = "Completed!";
           });
@@ -214,7 +214,7 @@
         
         function lessonNum(number, lessonName, lessonNum) {
           $(async() => {           
-            var serviceURL = "http://localhost:5000/lesson/" + classID + "/" + number + "/" + courseID;
+            var serviceURL = "http://3.229.247.48:5000/lesson/" + classID + "/" + number + "/" + courseID;
             try {
             const response =
               await fetch(
@@ -236,12 +236,12 @@
       }
 
       function enableQuiz(lessonID) {
-        var serviceURL = "http://localhost:5000/lessonMaterialsViewed/update/" + materialID + "/" + learnerID + "/" + lessonID;
+        var serviceURL = "http://3.229.247.48:5000/lessonMaterialsViewed/update/" + materialID + "/" + learnerID + "/" + lessonID;
       }
 
       function getLessonMaterial(lessonID, lessonName, lessonNum) {
         $(async() => {           
-        var serviceURL = "http://localhost:5000/lessonMaterials/" + lessonID + "/" + learnerID;
+        var serviceURL = "http://3.229.247.48:5000/lessonMaterials/" + lessonID + "/" + learnerID;
 
         try {
             const response =

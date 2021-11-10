@@ -39,7 +39,7 @@
 
 <script>
   $(async() => {           
-    var serviceURL = "http://localhost:5000/courses"; 
+    var serviceURL = "http://3.229.247.48:5000/courses"; 
     try {
       const response =
       await fetch(
@@ -70,7 +70,7 @@
   });
   async function findCourse() {
     var courseName = document.getElementById('courseName').innerHTML;
-    var serviceURL = "http://localhost:5000/course/" + courseName; 
+    var serviceURL = "http://3.229.247.48:5000/course/" + courseName; 
     try {
       const response =
       await fetch(

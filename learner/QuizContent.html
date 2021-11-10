@@ -114,7 +114,7 @@
     document.getElementById('attempt_quiz_btn').setAttribute('href', './QuizStart.html?lessonID='+lessonID);
     document.getElementById('view_previous_attempts').setAttribute('href', './QuizAttempt.html?lessonID='+lessonID);
     $(async() => {           
-        var serviceURL = "http://localhost:5000/lesson/lessonByID/" + lessonID + "/" + learnerID;
+        var serviceURL = "http://3.229.247.48:5000/lesson/lessonByID/" + lessonID + "/" + learnerID;
         try {
             const response =
               await fetch(

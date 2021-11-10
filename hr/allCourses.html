@@ -135,7 +135,7 @@
       }
 
     $(async() => {           
-        var serviceURL = "http://localhost:5000/courses";
+        var serviceURL = "http://3.229.247.48:5000/courses";
 
         try {
             const response =
@@ -162,7 +162,7 @@
 
     function findCourse(courseID,courseName, courseDesc) {
         $(async() => {
-          var serviceURL = "http://localhost:5000/course/" + courseID;
+          var serviceURL = "http://3.229.247.48:5000/course/" + courseID;
           try {
               const response =
               await fetch(

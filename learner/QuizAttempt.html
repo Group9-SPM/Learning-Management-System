@@ -114,7 +114,7 @@
     var learnerID = sessionStorage.learnerID;
     document.getElementById('back_refferer').setAttribute('href', './QuizContent.html?lessonID='+lessonID );
     $(async() => {           
-        var serviceURL = 'http://localhost:5000/quizAttempts/check/' + lessonID + "/" + learnerID;
+        var serviceURL = 'http://3.229.247.48:5000/quizAttempts/check/' + lessonID + "/" + learnerID;
         try {
             const response =
             await fetch(
