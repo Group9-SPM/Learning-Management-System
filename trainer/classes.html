@@ -66,7 +66,7 @@
   async function findClass() {
     var classID = document.getElementById('classID').innerHTML;
     classID = classID.substr(6, classID.length);
-    var serviceURL = "http://localhost:5000/classes/" + Number(classID); //5010
+    var serviceURL = "http://localhost:5000/classes/" + Number(classID); 
     var found = false;
     try {
       const response =
@@ -96,13 +96,11 @@
   };
 </script>
 <body>
-  <!-- ======= Header ======= -->
+
   <header id="header" class="fixed-top d-flex align-items-center">
     <div class="container d-flex align-items-center justify-content-between">
       <div class="logo">
         <h1><a href="./trainer.html">Learning Management System</a></h1>
-        <!-- Uncomment below if you prefer to use an image logo -->
-        <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
       </div>
       <nav id="navbar" class="navbar">
         <ul>
@@ -113,10 +111,9 @@
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav>
     </div>
-  </header><!-- End Header -->
+  </header>
 
   <main id="main">
-    <!-- ======= Features Section ======= -->
     <section id="features" class="features">
       <div class="container">
 
@@ -129,16 +126,15 @@
         </div>
 
       </div>
-    </section><!-- End Features Section -->
+    </section>
     
-  </main><!-- End #main -->
+  </main>
 
   <script>
     var courseInfo = document.getElementById("courseInfo");
     courseInfo.innerHTML = sessionStorage.courseID + " - " + sessionStorage.courseName;
   </script>
-  
-  <!-- ======= Footer ======= -->
+
   <footer id="footer">
     <div class="container">
       <div class="row d-flex align-items-center">
@@ -164,7 +160,7 @@
         </div>
       </div>
     </div>
-  </footer><!-- End Footer -->
+  </footer>
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 

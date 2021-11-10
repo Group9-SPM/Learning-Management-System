@@ -8,35 +8,28 @@
   <title>Learning Management System</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
-
   <!-- Favicons -->
   <link href="../assets/img/favicon.png" rel="icon">
   <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-
-  <!-- Google Fonts -->
+    <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
-  <!-- Vendor CSS Files -->
-  <link href="../assets/vendor/aos/aos.css" rel="stylesheet">
-  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="../assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="../assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-  <link href="../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+ <!-- Vendor CSS Files -->
+ <link href="../assets/vendor/aos/aos.css" rel="stylesheet">
+ <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+ <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+ <link href="../assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+ <link href="../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+ <link href="../assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+ <link href="../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
-  <!-- Template Main CSS File -->
-  <link href="../assets/css/style.css" rel="stylesheet">
-
+  <link href="../assets/css/style.css" rel="stylesheet">  
   <!-- =======================================================
   * Template Name: Vesperr - v4.4.0
   * Template URL: https://bootstrapmade.com/vesperr-free-bootstrap-template/
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
-
-<!-- Latest compiled and minified JavaScript -->
-  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
@@ -49,8 +42,6 @@
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-
-
   <style>
       main{
         max-width: 1000px;
@@ -60,43 +51,28 @@
 </head>
 
 <body>
-
-  <!-- ======= Header ======= -->
   <header id="header" class="fixed-top d-flex align-items-center">
     <div class="container d-flex align-items-center justify-content-between">
-
       <div class="logo">
-        <h1><a href="index.html">Learning Management System</a></h1>
-        <!-- Uncomment below if you prefer to use an image logo -->
-        <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+        <h1><a href="../index.html">Learning Management System</a></h1>
       </div>
-
       <nav id="navbar" class="navbar">
         <ul>
-          <li><a class="nav-link scrollto " href="#hero">Home</a></li>
-          <li><a class="nav-link scrollto" href="#about">About</a></li>
-          <li><a class="nav-link scrollto" href="#team">Team</a></li>
-          <li><a class="nav-link scrollto" href="courses">Courses</a></li>
-          <li class="dropdown"><a href="#"><span>Name<i class="bi bi-chevron-down"></i></a>
+          <li class="dropdown"><a href="#"><span>Learner</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
-              <li><a href="profile.html">Profile</a></li>
+              <li><a href="allCourses.html">Available Courses</a></li>
               <li><a href="confirmedCourses.html">Enrolled Courses</a></li>
             </ul>
           </li>
-          <li><a class="getstarted scrollto" href="#about">log out</a></li>
+          <li><a class="getstarted scrollto" href="../index.html">Log Out</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav><!-- .navbar -->
-
+      </nav>
     </div>
-  </header><!-- End Header -->
-
+  </header>
   <main id="main">
-
-    <!-- ======= Breadcrumbs Section ======= -->
     <section class="breadcrumbs">
       <div class="container">
-
         <div class="d-flex justify-content-between align-items-center">
          <p></p>
           <ol>
@@ -104,22 +80,22 @@
             <li>Course Details</li>
           </ol>
         </div>
-
       </div>
-    </section><!-- End Breadcrumbs Section onclick="clear()"-->
-
-     <header class="py-5">
-      <div class="container px-5 my-5">
-        <div class="text-center mb-5">
-            <h1 class="fw-bolder" id = "courseTitle">Courses</h1>
-            <p class="lead fw-normal text-muted mb-4" id ="courseID" ></p>
+    </section>
+    <section id="services" class="services">
+      <div class="container">
+        <div class="section-title" data-aos="fade-up">
+          <h2  id = "courseTitle"></h2>
+          <h5 id ="courseID" ></h5>
         </div>
-    </header>
+      </div>
+    </section>
     <div class="container px-5 my-5">
       <p id = "coursePrereq"></p>
       <p id = "courseDesc"></p>
       <br><br>
     </div>
+  </main>
 
 <script>
   var url_string = window.location.href;
@@ -148,8 +124,6 @@
         } 
   }); 
 </script>
-
-
     <table id = "classesTable"class="table table-striped" style="text-align: center; font-size:small;" >
       <thead>
         <tr> 
@@ -164,29 +138,7 @@
             <th scope="col"></th>
         </tr>
       </thead>
-    <tbody>
-        <!-- <th scope="col">></th<tr v-for="classs in classes">
-          <td id = "classID">{{ classs.classID }}</td>
-          <td>{{ classs.startDate.substr(0, 16) }} - {{ classs.endDate.substr(0, 16) }} </td>
-          <td>{{ classs.startTime }} - {{ classs.endTime }}</td>
-          <td id="regStartDate"> {{ classs.regStartDate}} </td>
-          <td id="regEndDate"> {{ classs.regEndDate }} </td>
-
-          <td v-if ="classs.maxSlot ==  classs.size" style='color: tomato;font-weight: bold;' id="size">{{ classs.size }}</td>
-          <td v-else style='color: green;font-weight: bold;'>{{ classs.size }}</td>
-
-          <td id='maxSlot'>{{ classs.maxSlot }}</td>
-          <td>{{ classs.trainerID }}</td>
-
-            <td v-if = "okToSignUp"><button type="button" class="btn btn-primary" v-on:click="signUp(classs.classID)">  Sign Up </button></td>
-          <td v-else><button type="button" class="btn btn-secondary" disabled>  Sign Up </button></td>
-         
-          <td v-if = "date <= classs.regStartDate"> date is either equal or after regStartDate </td>
-          <td v-else>checking fail</td>
-          <td v-if = "date > classs.regEndDate"> date is either equal or before regEndDate {{ date }} {{ classs.regEndDate }}</td>
-          <td v-else>checking fail</td> 
-        </tr>-->
-      </tbody>
+      <tbody></tbody>
     </table>
 </main> 
 
@@ -194,8 +146,6 @@
     learnerID = sessionStorage.learnerID;
 
      function okToSignUp(classid){
-
-       // var courseID = url.searchParams.get("courseID");
 
         var regStartDate = document.getElementById('regStartDate').innerHTML
         var regEndDate = document.getElementById("regEndDate").innerHTML
@@ -205,38 +155,23 @@
 
         var regStartDate = new Date(regStartDate).toISOString().substr(0, 10).split('-')
         var regEndDate = new Date(regStartDate).toISOString().substr(0, 10).split('-')
-        
-        console.log("goes into oktosignup")
-        // console.log(date)
-        // console.log(regStartDate)
-
-     // console.log(date[2])
-      //if(date[0] == regStartDate[0] && date[1] >= regStartDate && date[2] >= regStartDate[2]){
-        //checkDate = true
-      //}
-      //else if (date[0] == regStartDate[0] && date[1] >= regStartDate && date[2] >= regStartDate[2])
-    
         var checkDate = true;
         var checkSize = true;
         var eligibility = findEligibility(learnerID);
         var checkEnrolment = checkEnrolmentList(learnerID, courseID)
-        //console.log(eligibility);
 
         if(size < maxSlot){
           checkSize = true
-          console.log("size ok")
         }
         else if ( size > maxSlot || size == maxSlot){
           checkSize = false
-          console.log("size not ok")
         }
+        //checkdate not done 
         if (date <= regStartDate){
           checkDate = true
-          console.log("good date")
         }
         else{
           checkDate = false
-          console.log("bad date")
         }
 
         if (checkSize == true && eligibility && checkEnrolment ){
@@ -253,31 +188,30 @@
     async function checkEnrolmentList(learnerID, courseID){
       var serviceURL = 'http://localhost:5000/enrolmentList/' + learnerID;
       try {
-            const response =
-            await fetch(
-              serviceURL, { method: 'GET' }
-            );
-            const result = await response.json();
-            if (response.ok ) {
-                var learnerEnrolledcourseID = result.data;
-                let check = true;
-                for (const learner of learnerEnrolledcourseID){
-                  if (courseID == learner.courseID){
-                      check = false;
-                      return check
-                  }
+          const response =
+          await fetch(
+            serviceURL, { method: 'GET' }
+          );
+          const result = await response.json();
+          if (response.ok ) {
+              var learnerEnrolledcourseID = result.data;
+              let check = true;
+              for (const learner of learnerEnrolledcourseID){
+                if (courseID == learner.courseID){
+                    check = false;
+                    return check
                 }
-                return check
               }
-              else{
-                return check
-              }
-            } catch (error) {
-            showError
-            ('There is a problem retrieving enrolment list please try again later.' + error);
-              } 
-          }
-        
+              return check
+            }
+            else{
+              return check
+            }
+          } catch (error) {
+          showError
+          ('There is a problem retrieving enrolment list please try again later.' + error);
+            } 
+        }
 
     function getTrainerName(empID ,classID){
       $(async() => { 
@@ -288,12 +222,11 @@
                 serviceURL, { method: 'GET' }
               );
               const result = await response.json();
-              
               if (response.ok ) {
                   var employee = result.data;
                   var trainer = '';
                   trainer = result.data.empName
-                  document.getElementById(classID+"trainerID").innerHTML = trainer;  
+                  document.getElementById(classID + "trainerID").innerHTML = trainer;  
                 }
               } catch (error) {
               showError
@@ -316,7 +249,6 @@
                 var preReqCourses = result.data;
                 var preReq = '';
                 preReq = result.data.prerequisiteID
-
                 if(preReq == 0){
                   document.getElementById("coursePrereq").innerHTML = "No prerequisite course";
                 }
@@ -341,7 +273,6 @@
                   serviceURL, { method: 'GET' }
                 );
                 const result = await response.json();
-
                 if (response.ok) { 
                   var courses = result.data;
                   var course = result.data.courseName;
@@ -369,17 +300,13 @@
                 var badges = '';
                 var preReqCourse = document.getElementById("coursePrereq").innerHTML
                 badges = result.data.badges
-                //let check = ""
-
                 if (badges == null){
                   badges = 0
                 }  
                 if (badges == preReqCourse || preReqCourse == "No prerequisite course"){
-                  //check = true
                   return true             
                 }
                 else{
-                  //check = false
                   return false 
                 }
               }
@@ -407,7 +334,7 @@
                 const information = await data;
                 if (response.ok)  {
                   alert("Class successfully enrolled!");
-                 // window.location.replace("allCourses.html");
+                  window.location.replace("allCourses.html");
                 } 
                 else {
                   alert("You have previously enrolled into this course!");
@@ -423,7 +350,6 @@
           }
 
         $(async() => {         
-            // console.log(courseID)
             var serviceURL = "http://localhost:5000/classes/" + courseID;
             try {
                 const response =
@@ -433,8 +359,6 @@
                 const result = await response.json();
                 if (response.ok) {
                     var allClasses = result.data;
-                    console.log(allClasses);
-                    
                     var rows = "";
                     for (const classs of allClasses) {
                           eachRow = "<td id='classID'>" + classs.classID + "</td>" +
@@ -442,7 +366,6 @@
                           "<td>" + classs.startTime + " - " + classs.endTime + "</td>"+
                           "<td id= 'regStartDate'>"+ classs.regStartDate.substr(0, 16) + "</td>"+
                           "<td id= 'regEndDate'>"+ classs.regEndDate.substr(0, 16) + "</td>"+
-      
                           "<td id= '" + classs.classID + "size'>"+ classs.size + "</td>"+
                           "<td id='" + classs.classID + "maxSlot'>"+ classs.maxSlot + "</td>"+
                           "<td id='" + classs.classID + "trainerID'>" + getTrainerName(classs.trainerID,classs.classID ) + "</td>"+
@@ -459,8 +382,6 @@
           });
 
 </script>
-
-  <!-- ======= Footer ======= -->
   <footer id="footer">
     <div class="container">
       <div class="row d-flex align-items-center">
@@ -478,7 +399,7 @@
         </div>
         <div class="col-lg-6">
           <nav class="footer-links text-lg-right text-center pt-2 pt-lg-0">
-            <a href="#intro" class="scrollto">Home</a>
+            <a href="../index.html" class="scrollto">Home</a>
             <a href="#about" class="scrollto">About</a>
             <a href="#">Privacy Policy</a>
             <a href="#">Terms of Use</a>
@@ -486,21 +407,21 @@
         </div>
       </div>
     </div>
-  </footer><!-- End Footer -->
+  </footer>
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
-  <script src="assets/vendor/aos/aos.js"></script>
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
-  <script src="assets/vendor/purecounter/purecounter.js"></script>
-  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="../assets/vendor/aos/aos.js"></script>
+  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="../assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="../assets/vendor/php-email-form/validate.js"></script>
+  <script src="../assets/vendor/purecounter/purecounter.js"></script>
+  <script src="../assets/vendor/swiper/swiper-bundle.min.js"></script>
 
   <!-- Template Main JS File -->
-  <script src="assets/js/main.js"></script>
+  <script src="../assets/js/main.js"></script>
 
 </body>
 

@@ -51,13 +51,13 @@
         var eachRow = "";
         for (const course of allCourses) {
           eachRow = `<div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
-                      <div class="col-lg-3">
+                      <div class="col-lg-4">
                         <p>${course.courseID}</p>
                       </div>
-                      <div class="col-lg-3">
+                      <div class="col-lg-4">
                         <a id='courseName' onclick='findCourse()' style="cursor: pointer; color: #3498db;">${course.courseName}</a>
                       </div>
-                      <div class="col-lg-3">
+                      <div class="col-lg-4">
                         <p>${course.courseDesc}</p>
                       </div>
                     </div>`;
@@ -98,14 +98,11 @@
 </script>
 <body>
 
-  <!-- ======= Header ======= -->
   <header id="header" class="fixed-top d-flex align-items-center">
     <div class="container d-flex align-items-center justify-content-between">
 
       <div class="logo">
         <h1><a href="./trainer.html">Learning Management System</a></h1>
-        <!-- Uncomment below if you prefer to use an image logo -->
-        <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
       </div>
 
       <nav id="navbar" class="navbar">
@@ -114,39 +111,32 @@
           <li><a class="getstarted" href="../index.html">Logout</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav><!-- .navbar -->
-
+      </nav>
     </div>
-  </header><!-- End Header -->
+  </header>
 
   <main id="main">
-    <!-- ======= F.A.Q Section ======= -->
     <section id="faq" class="faq">
       <div class="container">
-
         <div class="section-title" data-aos="fade-up">
           <h2>Assigned Courses</h2>
         </div>
-
         <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="50">
-          <div class="col-lg-3">
+          <div class="col-lg-4">
             <h4>Course Code</h4>
           </div>
-          <div class="col-lg-3">
+          <div class="col-lg-4">
             <h4>Course Name</h4>
           </div>
-          <div class="col-lg-3">
+          <div class="col-lg-4">
             <h4>Description</h4>
           </div>
         </div>
         <div id="coursesTable"></div>
-
       </div>
-    </section><!-- End F.A.Q Section -->
+    </section>
+  </main>
 
-  </main><!-- End #main -->
-
-  <!-- ======= Footer ======= -->
   <footer id="footer">
     <div class="container">
       <div class="row d-flex align-items-center">
@@ -164,7 +154,7 @@
         </div>
         <div class="col-lg-6">
           <nav class="footer-links text-lg-right text-center pt-2 pt-lg-0">
-            <a href="#intro" class="scrollto">Home</a>
+            <a href="../index.html" class="scrollto">Home</a>
             <a href="#about" class="scrollto">About</a>
             <a href="#">Privacy Policy</a>
             <a href="#">Terms of Use</a>
@@ -172,7 +162,7 @@
         </div>
       </div>
     </div>
-  </footer><!-- End Footer -->
+  </footer>
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 

@@ -69,31 +69,25 @@
 </head>
 
 <body>
+  <header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container d-flex align-items-center justify-content-between">
 
-    <header id="header" class="fixed-top d-flex align-items-center">
-      <div class="container d-flex align-items-center justify-content-between">
-  
-        <div class="logo">
-          <h1><a href="index.html">Learning Management System</a></h1>
-        </div>
-  
-        <nav id="navbar" class="navbar">
-          <ul>
-            <li><a class="nav-link scrollto " href="#hero">Home</a></li>
-            <li><a class="nav-link scrollto" href="#about">About</a></li>
-            <li><a class="nav-link scrollto" href="#team">Team</a></li>
-            <li><a class="nav-link scrollto" href="courses">Courses</a></li>
-            <li class="dropdown"><a href="#"><span>Name<i class="bi bi-chevron-down"></i></a>
-              <ul>
-                <li><a href="profile.html">Profile</a></li>
+      <div class="logo">
+        <h1><a href="index.html">Learning Management System</a></h1>
+      </div>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li class="dropdown"><a href="#"><span>Learner</span> <i class="bi bi-chevron-down"></i></a>
+            <ul>
+              <li><a href="allCourses.html">Available Courses</a></li>
               <li><a href="confirmedCourses.html">Enrolled Courses</a></li>
-              </ul>
-            </li>
-            <li><a class="getstarted scrollto" href="#about">log out</a></li>
-          </ul>
-          <i class="bi bi-list mobile-nav-toggle"></i>
-        </nav>
-
+            </ul>
+          </li>
+          <li><a class="getstarted scrollto" href="../index.html">Log Out</a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
     </div>
   </header>
 
@@ -104,21 +98,22 @@
         <div class="d-flex justify-content-between align-items-center">
          <p></p>
           <ol>
-            <li><a href="index.html">Home</a></li>
+            <li><a href="allCourses.html">Home</a></li>
             <li>Courses</li>
           </ol>
         </div>
 
       </div>
     </section>
-    <header class="py-5">
-      <div class="container px-5 my-5">
-        <div class="text-center mb-5">
-            <h1 class="fw-bolder">Enrolled Courses</h1>
+    <section id="services" class="services">
+      <div class="container">
+        <div class="section-title" data-aos="fade-up">
+          <h2>Enrolled Courses</h2>
         </div>
-    </header>
-
+      </div>
+    </section>
     <br><br>
+    </main>
 
     <table id="enrolledCoursesTable" class="table table-striped" style="text-align: center"> 
       <thead>
@@ -141,72 +136,56 @@
 <script>
 
   sessionStorage.setItem("learnerID", "1")
+  function getCourseName(courseID, classID){
+    $(async() => { 
+    var serviceURL = 'http://localhost:5000/course/' + courseID;
+    try {
+          const response =
+          await fetch(
+            serviceURL, { method: 'GET' }
+          );
+          const result = await response.json();
+          if (response.ok) {
+              var courses = result.data;
+              var course = '';
+              course = "<a href = './courseOverview.html?courseID="+ courseID + "&classID=" + classID + "'>"+result.data.courseName+"</a>";
+              document.getElementById("class_"+classID).innerHTML= course;  
+            }
+          } catch (error) {
+          showError
+          ('There is a problem retrieving course name please try again later.' + error);
+            } 
+        }
+    )};
 
-    function getCourseName(courseID, classID){
-      $(async() => { 
-
-      var serviceURL = 'http://localhost:5000/course/' + courseID;
-      try {
-            const response =
-            await fetch(
-              serviceURL, { method: 'GET' }
-            );
-            const result = await response.json();
-            
-            if (response.ok) {
-                var courses = result.data;
-                var course = '';
-
-                course = "<a href = '../courseOverview.html?courseID="+ courseID + "&classID=" + classID + "'>"+result.data.courseName+"</a>";
-                document.getElementById("class_"+classID).innerHTML= course;  
-              }
-        
-            } catch (error) {
-
-            showError
-            ('There is a problem retrieving course name please try again later.' + error);
-              } 
-          }
-      )};
-
-    function getTrainerName(empID, classID){
-      $(async() => { 
-
-      var serviceURL = 'http://localhost:5000/employee/' + empID;
-      try {
-            const response =
-            await fetch(
-              serviceURL, { method: 'GET' }
-            );
-            const result = await response.json();
-            
-            if (response.ok) {
-                var employee = result.data;
-                var trainer = '';
-
-                trainer = result.data.empName
-
-                document.getElementById("trainer_"+classID).innerHTML = trainer;  
-              
-              }
-        
-            } catch (error) {
-
-            showError
-            ('There is a problem retrieving trainer name please try again later.' + error);
-              } 
-          }
-      )};
+  function getTrainerName(empID, classID){
+    $(async() => { 
+    var serviceURL = 'http://localhost:5000/employee/' + empID;
+    try {
+          const response =
+          await fetch(
+            serviceURL, { method: 'GET' }
+          );
+          const result = await response.json();
+          if (response.ok) {
+              var employee = result.data;
+              var trainer = '';
+              trainer = result.data.empName
+              document.getElementById("trainer_"+classID).innerHTML = trainer;  
+            }
+          } catch (error) {
+          showError
+          ('There is a problem retrieving trainer name please try again later.' + error);
+            } 
+        }
+    )};
 
   function showError(message) {
       $('#enrolledCoursesTable')
           .append("<label>"+message+"</label>");
   }
-      
   $(async() => {           
-
       var serviceURL = 'http://localhost:5000/classList/learner/' + sessionStorage.learnerID;
-
       try {
           const response =
           await fetch(
@@ -221,52 +200,43 @@
               }
             }
           } catch (error) {
-
           showError
           ('There is a problem retrieving class list history, please try again later.' + error);
                   } 
           });
-    
       function getCourse(classID){
         $(async() => {           
           var serviceURL = 'http://localhost:5000/classes/byClass/' + classID;
-          console.log(classID)
-
           try {
-                  const response =
-                  await fetch(
-                      serviceURL, { method: 'GET' }
-                  );
-                  const result = await response.json();
-                  if (response.ok) {
-                      var enrolledCourses = result.data; 
-                      
-                      console.log(enrolledCourses);
-                      var rows = "";
-                      
-                      for (var courses of enrolledCourses) {
-                        
+            const response =
+            await fetch(
+                serviceURL, { method: 'GET' }
+            );
+            const result = await response.json();
+            if (response.ok) {
+                var enrolledCourses = result.data; 
+                
+                console.log(enrolledCourses);
+                var rows = "";
+                
+                for (var courses of enrolledCourses) {
 
-                          eachRow = "<td id='class_"+ courses.classID +"'>"  + await getCourseName(courses.courseID, courses.classID) + "</td>" +
-                          "<td>" + courses.classID + "</td>" +
-                          "<td>" + courses.startDate.substr(0, 16) + " - " +courses.endDate.substr(0, 16)  + "</td>"+
-                          "<td>" + courses.startTime +" - " +courses.endTime + "</td>"+
-                          "<td id='trainer_"+ courses.classID+"'>"  + await getTrainerName(courses.trainerID, courses.classID) + "</td>" ;
-                          
-                          rows += "<tr>" + eachRow + "</tr>";
-                      }
-       
-                    $('#enrolledCoursesTable').append(rows);
+                    eachRow = "<td id='class_"+ courses.classID +"'>"  + await getCourseName(courses.courseID, courses.classID) + "</td>" +
+                    "<td>" + courses.classID + "</td>" +
+                    "<td>" + courses.startDate.substr(0, 16) + " - " +courses.endDate.substr(0, 16)  + "</td>"+
+                    "<td>" + courses.startTime +" - " +courses.endTime + "</td>"+
+                    "<td id='trainer_"+ courses.classID+"'>"  + await getTrainerName(courses.trainerID, courses.classID) + "</td>" ;
+                    
+                    rows += "<tr>" + eachRow + "</tr>";
                 }
-            } catch (error) {
-                showError('There is a problem retrieving enrolled classes data, please refresh the page or try again later.');
-            } 
-        });
-      
-      }
+              $('#enrolledCoursesTable').append(rows);
+              }
+          } catch (error) {
+              showError('There is a problem retrieving enrolled classes data, please refresh the page or try again later.');
+          } 
+      });  
+    }
 </script>
-
-
   <!-- ======= Footer ======= -->
   <footer id="footer">
     <div class="container">
@@ -285,7 +255,7 @@
         </div>
         <div class="col-lg-6">
           <nav class="footer-links text-lg-right text-center pt-2 pt-lg-0">
-            <a href="#intro" class="scrollto">Home</a>
+            <a href="../index.html" class="scrollto">Home</a>
             <a href="#about" class="scrollto">About</a>
             <a href="#">Privacy Policy</a>
             <a href="#">Terms of Use</a>
@@ -305,10 +275,7 @@
   <script src="../assets/vendor/php-email-form/validate.js"></script>
   <script src="../assets/vendor/purecounter/purecounter.js"></script>
   <script src="../assets/vendor/swiper/swiper-bundle.min.js"></script>
-
   <!-- Template Main JS File -->
   <script src="../assets/js/main.js"></script>
-
 </body>
-
 </html>
