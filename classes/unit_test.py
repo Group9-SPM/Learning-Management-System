@@ -1,7 +1,7 @@
 import unittest
 from app import Lesson, Employee, Learner, Course, Quiz, Questions, EnrolmentList, Classes, ClassList, LessonMaterialsViewed, QuizAttempt, LessonMaterials, Prerequisite
 
-#amanda - Employee, Learner, Lessonmaterial
+#Amanda - Employee, Learner, Lessonmaterial
 class TestEmployee(unittest.TestCase):
 
     def test_to_dict(self):
