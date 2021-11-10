@@ -147,7 +147,7 @@
                             </div>
                           </div>`;
         newNode.innerHTML = newQuestion;
-        quiz.insertBefore(newNode, quiz.childNodes[length-2]);
+        quiz.insertBefore(newNode, quiz.childNodes[length-(qnsData.length-i)]);
       } 
     } else {
       options = qnsData[2].split(',');
