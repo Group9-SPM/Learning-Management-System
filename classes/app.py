@@ -459,12 +459,12 @@ def assign_learner():
             try:
                 selectedClass.addToSize(1)
                 return str(selectedClass.size)
-            except Exception as e:
+            except Exception:
                 return jsonify({
                     "data": successList,
                     "message": "Failed to assign learner with ID = " + str(data['learnerID']) + ". Unable to commit to database. "
                 }), 500
-        except Exception as e:
+        except Exception:
             return jsonify({
                 "data": successList,
                 "message": "Failed to assign learner with ID = " + str(data['learnerID']) + ". Unable to commit to database. "
