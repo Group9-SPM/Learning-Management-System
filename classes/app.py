@@ -458,7 +458,6 @@ def assign_learner():
             db.session.commit()
             try:
                 selectedClass.addToSize(1)
-                return str(selectedClass.size)
             except Exception:
                 return jsonify({
                     "data": successList,
