@@ -161,13 +161,13 @@ INSERT INTO  employee(empName, department, username, roleType) VALUES("Layla Cha
 
 INSERT INTO course(courseName, courseDesc, courseDuration) VALUES("Repair Words 101", "Learn how to speak repair words", "1h");
 INSERT INTO course(courseName, courseDesc, courseDuration) VALUES("Repair 101", "Learn how to repair things", "3h");
-INSERT INTO course(courseName, courseDesc, courseDuration) VALUES("Repair testing ", "Learn how to repair things testing ", "3h");
+INSERT INTO course(courseName, courseDesc, courseDuration) VALUES("Repair testing", "Learn how to repair things testing ", "3h");
 
 INSERT INTO prerequisite VALUES(2, 1);
 INSERT INTO prerequisite VALUES(3, 2);
 
 INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
-VALUES("2021-11-20", "2021-12-31", 30, "12:00", "13:00", 10, 30, "2021-10-25", "2021-11-15", 1, 4);
+VALUES("2021-11-20", "2021-12-31", 29, "12:00", "13:00", 10, 30, "2021-10-25", "2021-11-15", 1, 4);
 INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
 VALUES("2021-11-20", "2021-12-31", 20, "15:00", "16:00", 10, 30, "2021-11-05", "2021-11-25", 1, 4);
 INSERT INTO classes(startDate, endDate, size, startTime, endTime, minSlot, maxSlot, regStartDate, regEndDate, courseID, trainerID)
@@ -184,10 +184,8 @@ INSERT INTO learner VALUES(1, NULL);
 INSERT INTO learner VALUES(2, "1");
 INSERT INTO learner VALUES(3, NULL);
 
-INSERT INTO classList VALUES(3, 1, NULL);
 INSERT INTO classList VALUES(1, 4, NULL);
 INSERT INTO classList VALUES(1, 2, NULL);
-INSERT INTO classList VALUES(2, 1, NULL);
 
 INSERT INTO enrolmentList VALUES(1, 1, 2,"Pending");
 INSERT INTO enrolmentList VALUES(2, 2 , 1 ,"Successful");

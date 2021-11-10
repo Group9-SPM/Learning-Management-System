@@ -397,7 +397,6 @@ def classList_by_class(classID):
 @app.route("/classList/learner/<int:learnerID>")
 def classList_by_learner(learnerID):
     assignedClasses = ClassList.query.filter_by(learnerID=learnerID)
-    print(assignedClasses)
     if assignedClasses:
         return jsonify({
             "data": [classes.to_dict()
@@ -429,7 +428,7 @@ def assign_learner():
                 key in ('learnerID', 'classID')):
             return jsonify({
                 "data": successList,
-                "message": "Failed to assign learner with ID = " + data['learnerID'] + ". Incorrect JSON object provided."
+                "message": "Failed to assign learner with ID = " + str(data['learnerID']) + ". Incorrect JSON object provided."
             }), 500
 
         # (1): Validate class
@@ -437,7 +436,7 @@ def assign_learner():
         if not classes:
             return jsonify({
                 "data": successList,
-                "message": "Failed to assign learner with ID = " + data['learnerID'] + ". Class is not valid."
+                "message": "Failed to assign learner with ID = " + str(data['learnerID']) + ". Class is not valid."
             }), 500
 
         # (2): Validate learner
@@ -445,7 +444,7 @@ def assign_learner():
         if not learner:
             return jsonify({
                 "data": successList,
-                "message": "Failed to assign learner with ID = " + data['learnerID'] + ". Learner is not valid."
+                "message": "Failed to assign learner with ID = " + str(data['learnerID']) + ". Learner is not valid."
             }), 500
 
         # (4): Create assignment record in ClassList
@@ -457,11 +456,18 @@ def assign_learner():
         try:
             db.session.add(assignment)
             db.session.commit()
-            selectedClass.addToSize(1)
+            try:
+                selectedClass.addToSize(1)
+                return str(selectedClass.size)
+            except Exception as e:
+                return jsonify({
+                    "data": successList,
+                    "message": "Failed to assign learner with ID = " + str(data['learnerID']) + ". Unable to commit to database. "
+                }), 500
         except Exception as e:
             return jsonify({
                 "data": successList,
-                "message": "Failed to assign learner with ID = " + data['learnerID'] + ". Unable to commit to database. " + str(e)
+                "message": "Failed to assign learner with ID = " + str(data['learnerID']) + ". Unable to commit to database. "
             }), 500
 
         successList.append(data['learnerID'])

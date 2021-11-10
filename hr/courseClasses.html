@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>HR - Course Page</title>
+  <title>Course - Classes</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -50,49 +50,79 @@
   // });
 </script>
 <body>
-  <header id="header" class="fixed-top d-flex align-items-center">
-    <div class="container d-flex align-items-center justify-content-between">
-      <div class="logo">
-        <h1><a href="./course.html">Learning Management System</a></h1>
-      </div>
-      <nav id="navbar" class="navbar">
-        <ul>
-          <li><a class="nav-link scrollto " href="./course.html">Home</a></li>
-          <li><a class="nav-link scrollto" href="./course.html">Course</a></li>
-          <li><a class="getstarted scrollto" href="../index.html">Logout</a></li>
-        </ul>
-        <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav>
-    </div>
-  </header>
+    <header id="header" class="fixed-top d-flex align-items-center">
+        <div class="container d-flex align-items-center justify-content-between">
+    
+          <div class="logo">
+            <h1><a href="allCourses.html">Learning Management System</a></h1>
+          </div>
+    
+          <nav id="navbar" class="navbar">
+            <ul>
+              <li class="dropdown"><a href="#"><span>Administrator</span> <i class="bi bi-chevron-down"></i></a>
+                <ul>
+                  <li><a href="allCourses.html">All Courses</a></li>
+                </ul>
+              </li>
+              <li><a class="getstarted scrollto" href="../index.html">Log Out</a></li>
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+          </nav><!-- .navbar -->
+        </div>
+      </header>
+    
+      <main id="main">
+        <section class="breadcrumbs">
+          <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+             <p></p>
+              <ol>
+                <li><a href="allCourses.html">Home</a></li>
+                <li>Courses</li>
+                <li>Classes</li>
+              </ol>
+            </div>
+          </div>
+        </section>
 
-  <main id="main">
-    <section id="services" class="services">
+    <section id="features" class="features">
       <div class="container">
+
         <div class="section-title" data-aos="fade-up">
-          <h2>RE101 - HP OfficeJet All-in-One 8010, 8020, Pro 8030, 8020e, 8030e Printers</h2>
-          <p>This course will cover on the set up to troubleshooting of HP OfficeJet All-in-One 8010, 8020, Pro 8030, 8020e, 8030e Printers.</p>
+          <h2>Classes</h2>
+          <h3>Repair Words 101</h3>
         </div>
 
-        <div class="row">
-          <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
-            <div class="icon-box" data-aos="fade-up" data-aos-delay="200">
-              <div class="icon"><i class="bx bx-file"></i></div>
-              <h4 class="title"><a href="content.html">Content</a></h4>
-              <p class="description">View Teaching Materials, Chapters/Sections and Quizzes.</p>
+        <div class="row" data-aos="fade-up" data-aos-delay="300">
+          <div class="col-lg-4 col-md-4 mt-4 mt-md-0">
+            <div class="icon-box">
+              <i class="ri-store-line" style="color: #ffbb2c;"></i>
+              <h3><a href="classList.html">Class A</a></h3>
             </div>
           </div>
-
-          <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
-            <div class="icon-box" data-aos="fade-up" data-aos-delay="100">
-              <div class="icon"><i class="bx bx-face"></i></div>
-              <h4 class="title"><a href="classes.html">Classes</a></h4>
-              <p class="description">View all classes and assigned learners to keep track of their progress. Assign or withdraw trainers and learners for each class.</p>
+          <div class="col-lg-4 col-md-4 mt-4 mt-md-0">
+            <div class="icon-box">
+              <i class="ri-bar-chart-box-line" style="color: #5578ff;"></i>
+              <h3><a href="classList.html">Class B</a></h3>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-4 mt-4 mt-md-0">
+            <div class="icon-box">
+              <i class="ri-calendar-todo-line" style="color: #e80368;"></i>
+              <h3><a href="classList.html">Class C</a></h3>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-4 mt-4">
+            <div class="icon-box">
+              <i class="ri-paint-brush-line" style="color: #e361ff;"></i>
+              <h3><a href="classList.html">Class D</a></h3>
             </div>
           </div>
         </div>
+
       </div>
     </section>
+    
   </main>
   <footer id="footer">
     <div class="container">
