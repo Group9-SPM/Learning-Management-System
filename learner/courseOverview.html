@@ -19,7 +19,6 @@
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
   <!-- Vendor CSS Files -->
-
   <link href="../assets/vendor/aos/aos.css" rel="stylesheet">
   <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
@@ -50,17 +49,11 @@
 </head>
 
 <body>
-
-    <!-- ======= Header ======= -->
     <header id="header" class="fixed-top d-flex align-items-center">
       <div class="container d-flex align-items-center justify-content-between">
-  
         <div class="logo">
-          <h1><a href="index.html">Learning Management System</a></h1>
-          <!-- Uncomment below if you prefer to use an image logo -->
-          <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+          <h1><a href="../index.html">Learning Management System</a></h1>
         </div>
-  
         <nav id="navbar" class="navbar">
           <ul>
             <li class="dropdown"><a href="#"><span>Learner</span> <i class="bi bi-chevron-down"></i></a>
@@ -72,50 +65,40 @@
             <li><a class="getstarted scrollto" href="../index.html">Log Out</a></li>
           </ul>
           <i class="bi bi-list mobile-nav-toggle"></i>
-        </nav><!-- .navbar -->
-
+        </nav>
     </div>
-  </header><!-- End Header -->
+  </header>
 
   <main id="main">
-
-    <!-- ======= Breadcrumbs Section ======= -->
     <section class="breadcrumbs">
       <div class="container">
-
         <div class="d-flex justify-content-between align-items-center">
          <p></p>
           <ol>
-            <li><a href="courses.html">Courses</a></li>
+            <li><a href="./confirmedCourses.html">Enrolled Courses</a></li>
             <li>Course Overview</li>
           </ol>
         </div>
 
       </div>
-    </section><!-- End Breadcrumbs Section -->
+    </section>
 
-    <!-- ======= Services Section ======= -->
     <section id="services" class="services">
-        <div class="container">
-  
-          <div class="section-title" data-aos="fade-up">
-            <h2 id='courseName'></h2>
-            <h5 id='courseDesc'></h5>
-          </div>
-  
-          <div class="row justify-content-center">
-              <div class="icon-box" data-aos="fade-up" data-aos-delay="100" >
-                <div class="icon"><i class="bi bi-collection"></i></div>
-                <h4 class="title"><a id="content">Course Content and Quizzes</a></h4>
-                <p class="description">Lesson materials uploaded and Quizzes to be taken at the end of each lesson</p>
-            </div>
-  
-          </div>
-  
+      <div class="container">
+        <div class="section-title" data-aos="fade-up">
+          <h2 id='courseName'></h2>
+          <h5 id='courseDesc'></h5>
         </div>
-      </section><!-- End Services Section -->
-
-  </main><!-- End #main -->
+        <div class="row justify-content-center">
+            <div class="icon-box" data-aos="fade-up" data-aos-delay="100" >
+              <div class="icon"><i class="bi bi-collection"></i></div>
+              <h4 class="title"><a id="content">Course Content and Quizzes</a></h4>
+              <p class="description">Lesson materials uploaded and Quizzes to be taken at the end of each lesson</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 
   <script>
     /* retrieving courseID + classID from enrolledCourses.html*/
@@ -123,66 +106,57 @@
     var url = new URL(url_string);
     var courseID = url.searchParams.get("courseID");
     var classID = url.searchParams.get("classID");
-
     document.getElementById('content').setAttribute('href', './courseContent.html?courseID=' + courseID + '&classID=' + classID);
 
     $(async() => {           
-            // Change serviceURL to your own change to wtv port number it is 
-            var serviceURL = "http://localhost:5000/course/" + courseID;
-    
-            try {
-                const response =
-                 await fetch(
-                   serviceURL, { method: 'GET' }
-                );
-                const result = await response.json();
-                 if (response.status === 200) {
-                    // success case
-                    var desc = result.data.courseDesc;
-                    var name = result.data.courseName;
-                    document.getElementById('courseName').innerHTML = name;
-                    document.getElementById('courseDesc').innerHTML = desc;
+      var serviceURL = "http://localhost:5000/course/" + courseID;
+      try {
+          const response =
+            await fetch(
+              serviceURL, { method: 'GET' }
+          );
+          const result = await response.json();
+            if (response.status === 200) {
+              var desc = result.data.courseDesc;
+              var name = result.data.courseName;
+              document.getElementById('courseName').innerHTML = name;
+              document.getElementById('courseDesc').innerHTML = desc;
 
-                                } else {
-                                    // unexpected outcome, throw the error
-                                    throw response.status;
-                                }
-                            } catch (error) {
-                                // Errors when calling the service; such as network error, 
-                                // service offline, etc
-                                alert ('There is a problem retrieving data, please try again later.' + error);
-                            } // error
-                    }); 
+            } else {
+                throw response.status;
+            }
+        } catch (error) {
+            alert ('There is a problem retrieving data, please try again later.' + error);
+        } 
+      }); 
+</script>
 
-  </script>
-
-  <!-- ======= Footer ======= -->
-  <footer id="footer">
-    <div class="container">
-      <div class="row d-flex align-items-center">
-        <div class="col-lg-6 text-lg-left text-center">
-          <div class="copyright">
-            &copy; Copyright <strong>Vesperr</strong>. All Rights Reserved
-          </div>
-          <div class="credits">
-            <!-- All the links in the footer should remain intact. -->
-            <!-- You can delete the links only if you purchased the pro version. -->
-            <!-- Licensing information: https://bootstrapmade.com/license/ -->
-            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/vesperr-free-bootstrap-template/ -->
-            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-          </div>
+<footer id="footer">
+  <div class="container">
+    <div class="row d-flex align-items-center">
+      <div class="col-lg-6 text-lg-left text-center">
+        <div class="copyright">
+          &copy; Copyright <strong>Vesperr</strong>. All Rights Reserved
         </div>
-        <div class="col-lg-6">
-          <nav class="footer-links text-lg-right text-center pt-2 pt-lg-0">
-            <a href="#intro" class="scrollto">Home</a>
-            <a href="#about" class="scrollto">About</a>
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Use</a>
-          </nav>
+        <div class="credits">
+          <!-- All the links in the footer should remain intact. -->
+          <!-- You can delete the links only if you purchased the pro version. -->
+          <!-- Licensing information: https://bootstrapmade.com/license/ -->
+          <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/vesperr-free-bootstrap-template/ -->
+          Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
         </div>
       </div>
+      <div class="col-lg-6">
+        <nav class="footer-links text-lg-right text-center pt-2 pt-lg-0">
+          <a href="../index.html" class="scrollto">Home</a>
+          <a href="#about" class="scrollto">About</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Use</a>
+        </nav>
+      </div>
     </div>
-  </footer><!-- End Footer -->
+  </div>
+</footer>
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 

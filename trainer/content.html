@@ -38,7 +38,7 @@
 </head>
 <script>
   $(async() => {
-    var serviceURL = "http://localhost:5000/lesson/" + sessionStorage.classID + "/" + sessionStorage.courseID; //5005
+    var serviceURL = "http://localhost:5000/lesson/" + sessionStorage.classID + "/" + sessionStorage.courseID; 
     try {
       const response =
       await fetch(
@@ -71,7 +71,7 @@
   });
   async function findLesson(btnInfo) {
     var lessonNum = Number(btnInfo.value);
-    var serviceURL = "http://localhost:5000/lesson/" + sessionStorage.classID + "/" + lessonNum + "/" + sessionStorage.courseID; //5005
+    var serviceURL = "http://localhost:5000/lesson/" + sessionStorage.classID + "/" + lessonNum + "/" + sessionStorage.courseID; 
     try {
       const response =
       await fetch(
@@ -98,13 +98,10 @@
   };
 </script>
 <body>
-  <!-- ======= Header ======= -->
   <header id="header" class="fixed-top d-flex align-items-center">
     <div class="container d-flex align-items-center justify-content-between">
       <div class="logo">
         <h1><a href="./trainer.html">Learning Management System</a></h1>
-        <!-- Uncomment below if you prefer to use an image logo -->
-        <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
       </div>
       <nav id="navbar" class="navbar">
         <ul>
@@ -115,10 +112,9 @@
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav>
     </div>
-  </header><!-- End Header -->
+  </header>
 
   <main id="main">
-    <!-- ======= Features Section ======= -->
     <section id="features" class="features">
       <div class="container">
         <div class="section-title" data-aos="fade-up">
@@ -128,15 +124,14 @@
         </div>
         <div class="accordion" id="accordionExample" data-aos="fade-up" data-aos-delay="300"></div>
       </div>
-    </section><!-- End Features Section -->
-  </main><!-- End #main -->
-
+    </section>
+  </main>
+</body>
   <script>
     var courseInfo = document.getElementById("courseInfo");
     courseInfo.innerHTML = sessionStorage.courseID + " - " + sessionStorage.courseName;
   </script>
 
-  <!-- ======= Footer ======= -->
   <footer id="footer">
     <div class="container">
       <div class="row d-flex align-items-center">
@@ -162,7 +157,7 @@
         </div>
       </div>
     </div>
-  </footer><!-- End Footer -->
+  </footer>
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
@@ -177,6 +172,6 @@
 
   <!-- Template Main JS File -->
   <script src="../assets/js/main.js"></script>
-</body>
+
 
 </html>

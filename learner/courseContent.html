@@ -50,17 +50,11 @@
 </head>
 
 <body>
-
-  <!-- ======= Header ======= -->
   <header id="header" class="fixed-top d-flex align-items-center">
     <div class="container d-flex align-items-center justify-content-between">
-
       <div class="logo">
-        <h1><a href="index.html">Learning Management System</a></h1>
-        <!-- Uncomment below if you prefer to use an image logo -->
-        <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+        <h1><a href="../index.html">Learning Management System</a></h1>
       </div>
-
       <nav id="navbar" class="navbar">
         <ul>
           <li class="dropdown"><a href="#"><span>Learner</span> <i class="bi bi-chevron-down"></i></a>
@@ -72,68 +66,52 @@
           <li><a class="getstarted scrollto" href="../index.html">Log Out</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav><!-- .navbar -->
-
+      </nav>
     </div>
-  </header><!-- End Header -->
-
+  </header>
   <main id="main">
-
-    <!-- ======= Breadcrumbs Section ======= -->
     <section class="breadcrumbs">
       <div class="container">
-
         <div class="d-flex justify-content-between align-items-center">
          <p></p>
           <ol>
-            <li><a href="./course.html">Courses</a></li>
+            <li><a href="./confirmedCourses.html">Enrolled Courses</a></li>
             <li>Course Content</li>
           </ol>
         </div>
-
       </div>
-    </section><!-- End Breadcrumbs Section -->
-
-      <!-- Start of Header  -->
-      <div class="bg-img">
-        <div class="bg-text">
-            <h1 class="display-4 font-weight-bold mt-4 mb-0" style="color:black" id ='courseName'></h1>
-        </div>
+    </section>
+    <div class="bg-img">
+      <div class="bg-text">
+          <h1 class="display-4 font-weight-bold mt-4 mb-0" style="color:black" id ='courseName'></h1>
+      </div>
     </div>
-    <!-- End of Header -->
 
     <br>
       <h2 id='courseName'></h2>
       <h5 id='classID'></h5>
     <br>
-
-    
-<div class="b-example-divider"></div>
-
-<div class="row">
-  <div class="col-md-4 col-sm-12">
-    <div class="d-flex flex-column flex-shrink-3 p-3 bg-light">
-      <a class="d-flex align-items-center m-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-        <svg class="bi me-2" width="40" height="40"><use xlink:href="#bootstrap"/></svg>
-        <span class="fs-4">Content</span>
-      </a>
-      <hr>
-      <ul class="nav nav-pills flex-column mb-auto" id="lesson_content_list">
-
-      </ul>
-      <hr>
+    <div class="b-example-divider"></div>
+    <div class="row">
+      <div class="col-md-4 col-sm-12">
+        <div class="d-flex flex-column flex-shrink-3 p-3 bg-light">
+          <a class="d-flex align-items-center m-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+            <svg class="bi me-2" width="40" height="40"><use xlink:href="#bootstrap"/></svg>
+            <span class="fs-4">Content</span>
+          </a>
+          <hr>
+          <ul class="nav nav-pills flex-column mb-auto" id="lesson_content_list">
+          </ul>
+          <hr>
+        </div>
+      </div>
+      <!-- <iframe id='iframe_display' style='border:none;' name='materials' height='300px' width='300px'></iframe> -->
+      <div class="col-md-8 col-sm-6">
+        <div id="lessonmaterials_div"></div>
+        <div id="quiz_div" class="p-2"></div>
+      </div>
     </div>
-  </div>
-  <!-- <iframe id='iframe_display' style='border:none;' name='materials' height='300px' width='300px'></iframe> -->
-  <div class="col-md-8 col-sm-6">
-      <div id="lessonmaterials_div"></div>
-      <div id="quiz_div" class="p-2"></div>
-  </div>
-</div>
-
-
-
-  </main><!-- End #main -->
+  </main>
 
   <script>
       var url_string = window.location.href;
@@ -151,67 +129,51 @@
       // $('#progresslessonbar').html('75%'); 
 
       $(async() => {           
-            // Change serviceURL to your own change to wtv port number it is 
-            var serviceURL = "http://localhost:5000/course/" + courseID;
-    
-            try {
-                const response =
-                 await fetch(
-                   serviceURL, { method: 'GET' }
-                );
-                const result = await response.json();
-                 if (response.status === 200) {
-                    // success case
-                    var desc = result.data.courseDesc;
-                    var courseName = result.data.courseName;
-                    document.getElementById('courseName').innerHTML = courseName;
-                    $('#lessonmaterials_div').html('<h5>Welcome to '+courseName+'!</h5><p>Please click on to the lesson content on the left to view lesson materials</p>');
-                                } else {
-                                    // unexpected outcome, throw the error
-                                    throw response.status;
-                                }
-                            } catch (error) {
-                                // Errors when calling the service; such as network error, 
-                                // service offline, etc
-                                alert ('There is a problem retrieving data, please try again later.' + error);
-                            } // error
-                  }); 
-
+        var serviceURL = "http://localhost:5000/course/" + courseID;
+        try {
+            const response =
+              await fetch(
+                serviceURL, { method: 'GET' }
+            );
+            const result = await response.json();
+              if (response.status === 200) {
+                var desc = result.data.courseDesc;
+                var courseName = result.data.courseName;
+                document.getElementById('courseName').innerHTML = courseName;
+                $('#lessonmaterials_div').html('<h5>Welcome to '+courseName+'!</h5><p>Please click on to the lesson content on the left to view lesson materials</p>');
+              } else {
+                  throw response.status;
+              }
+          } catch (error) {
+              alert ('There is a problem retrieving data, please try again later.' + error);
+          } 
+        }); 
       $(async() => {           
-            // Change serviceURL to your own change to wtv port number it is 
-            var serviceURL = "http://localhost:5000/lesson/" + classID+"/"+courseID;
-    
-            try {
-                const response =
-                 await fetch(
-                   serviceURL, { method: 'GET' }
-                );
-                const result = await response.json();
-                 if (response.status === 200) {
-                    // success case
-                    var lesson_list_html = "";
-                    for(let n_lessons = 0; n_lessons < result.data.length; n_lessons++ )
-                    {
-                      var current_n = n_lessons+1;
-                      lesson_list_html += '<li class="nav-item"><a href="#" class="nav-link link-dark" aria-current="page" onclick="lessonNum(\''+result.data[n_lessons]["lessonID"]+'\',\''+result.data[n_lessons]["lessonName"]+'\',\''+result.data[n_lessons]["lessonNum"]+'\')">Lesson '+current_n+' <br>('+result.data[n_lessons]["lessonName"]+')</a></li>';
-                    }
-                    $('#lesson_content_list').html(lesson_list_html);
-
-                                } else if (response.status == 201) {
-                                  $('#lessonmaterials_div').html(result.message);
-                                } else {
-                                    // unexpected outcome, throw the error
-                                    throw response.status;
-                                }
-                            } catch (error) {
-                                // Errors when calling the service; such as network error, 
-                                // service offline, etc
-                                alert ('There is a problem retrieving data, please try again later.' + error);
-                            } // error
-                  }); 
-
+        var serviceURL = "http://localhost:5000/lesson/" + classID+"/"+courseID;
+        try {
+            const response =
+              await fetch(
+                serviceURL, { method: 'GET' }
+            );
+            const result = await response.json();
+              if (response.status === 200) {
+                var lesson_list_html = "";
+                for(let n_lessons = 0; n_lessons < result.data.length; n_lessons++ )
+                {
+                  var current_n = n_lessons+1;
+                  lesson_list_html += '<li class="nav-item"><a href="#" class="nav-link link-dark" aria-current="page" onclick="lessonNum(\''+result.data[n_lessons]["lessonID"]+'\',\''+result.data[n_lessons]["lessonName"]+'\',\''+result.data[n_lessons]["lessonNum"]+'\')">Lesson '+current_n+' <br>('+result.data[n_lessons]["lessonName"]+')</a></li>';
+                }
+                $('#lesson_content_list').html(lesson_list_html);
+                } else if (response.status == 201) {
+                  $('#lessonmaterials_div').html(result.message);
+                } else {
+                    throw response.status;
+                }
+            } catch (error) {
+                alert ('There is a problem retrieving data, please try again later.' + error);
+            }
+          }); 
         // Check if lesson is viewed
-
         function checkLessonViewed(materialID, lessonID, lesson_content) {
           var serviceURL = "http://localhost:5000/lessonMaterialsViewed/check/" + materialID + "/" + learnerID + "/" + lessonID;
           $.get(serviceURL, function(data,status) {
@@ -235,7 +197,6 @@
         }
 
         // Add User Viewed
-
         function updateLessonViewed(materialID, lessonID) {
           var serviceURL = "http://localhost:5000/lessonMaterialsViewed/add/" + materialID + "/" + learnerID + "/" + lessonID;
           $.get(serviceURL, function(data, status) {
@@ -244,7 +205,6 @@
         }
 
         // Mark Completed
-
         function updateLessonViewedCompleted(materialID, lessonID) {
           var serviceURL = "http://localhost:5000/lessonMaterialsViewed/update/" + materialID + "/" + learnerID + "/" + lessonID;
           $.get(serviceURL, function(data, status) {
@@ -253,86 +213,69 @@
         }
         
         function lessonNum(number, lessonName, lessonNum) {
-
           $(async() => {           
-            // Change serviceURL to your own change to wtv port number it is 
             var serviceURL = "http://localhost:5000/lesson/" + classID + "/" + number + "/" + courseID;
-    
             try {
-                const response =
-                 await fetch(
-                   serviceURL, { method: 'GET' }
-                );
-                const result = await response.json();
-                 if (response.status === 200) {
-                    // success case;
-                    var lessonID = result.data.lessonID;
-                    return getLessonMaterial(lessonID, lessonName, lessonNum);
-                                } else if (response.status === 201) {
-                                  $('#lessonmaterials_div').html(result.message);
-                                } else {
-                                    // unexpected outcome, throw the error
-                                    throw response.status;
-                                }
-                            } catch (error) {
-                                // Errors when calling the service; such as network error, 
-                                // service offline, etc
-                                alert ('There is a problem retrieving data, please try again later.' + error);
-                            } // error
-                  }); 
-        
-        }
+            const response =
+              await fetch(
+                serviceURL, { method: 'GET' }
+            );
+            const result = await response.json();
+              if (response.status === 200) {
+                var lessonID = result.data.lessonID;
+                return getLessonMaterial(lessonID, lessonName, lessonNum);
+              } else if (response.status === 201) {
+                $('#lessonmaterials_div').html(result.message);
+              } else {
+                  throw response.status;
+              }
+          } catch (error) {
+              alert ('There is a problem retrieving data, please try again later.' + error);
+          } 
+        });   
+      }
 
-        function enableQuiz(lessonID) {
-          var serviceURL = "http://localhost:5000/lessonMaterialsViewed/update/" + materialID + "/" + learnerID + "/" + lessonID;
-        }
+      function enableQuiz(lessonID) {
+        var serviceURL = "http://localhost:5000/lessonMaterialsViewed/update/" + materialID + "/" + learnerID + "/" + lessonID;
+      }
 
-        function getLessonMaterial(lessonID, lessonName, lessonNum) {
+      function getLessonMaterial(lessonID, lessonName, lessonNum) {
+        $(async() => {           
+        var serviceURL = "http://localhost:5000/lessonMaterials/" + lessonID + "/" + learnerID;
 
-          $(async() => {           
-            // Change serviceURL to your own change to wtv port number it is 
-            var serviceURL = "http://localhost:5000/lessonMaterials/" + lessonID + "/" + learnerID;
-
-            try {
-                const response =
-                await fetch(
-                  serviceURL, { method: 'GET' }
-                );
-                const result = await response.json();
-                if (response.status === 200) {
-                    // success case
-                    var lesson_content = result.data
-                    $('#lessonmaterials_div').html("");
-                    var html_content = "<h2>"+lessonName+"</h2><hr>";
-                    $('#lessonmaterials_div').append(html_content);
-                    for(let lesson_c = 0; lesson_c < lesson_content.length;lesson_c++)
-                    {
-                      // Check if Lesson was viewed before
-                      checkLessonViewed(lesson_content[lesson_c]["materialID"],lesson_content[lesson_c]["lessonID"], lesson_content[lesson_c]) 
-                      // document.getElementById('iframe_display').src = "./materials/" + lesson_content[lesson_c]['content'];
+        try {
+            const response =
+            await fetch(
+              serviceURL, { method: 'GET' }
+            );
+            const result = await response.json();
+            if (response.status === 200) {
+                var lesson_content = result.data
+                $('#lessonmaterials_div').html("");
+                var html_content = "<h2>"+lessonName+"</h2><hr>";
+                $('#lessonmaterials_div').append(html_content);
+                for(let lesson_c = 0; lesson_c < lesson_content.length;lesson_c++)
+                {
+                  // Check if Lesson was viewed before
+                  checkLessonViewed(lesson_content[lesson_c]["materialID"],lesson_content[lesson_c]["lessonID"], lesson_content[lesson_c]) 
+                  // document.getElementById('iframe_display').src = "./materials/" + lesson_content[lesson_c]['content'];
+                }
+                $('#quiz_div').html("<a href='./QuizContent.html?lessonID="+lessonID+"'>Lesson "+lessonNum+" Quiz</a>")
+                    } else if (response.status === 201) {
+                      $('#lessonmaterials_div').html(result.message);
+                    } else if (response.status === 202) {
+                      alert(result.message);
+                    } else {
+                        throw response.status;
                     }
-                    $('#quiz_div').html("<a href='./QuizContent.html?lessonID="+lessonID+"'>Lesson "+lessonNum+" Quiz</a>")
-                                } else if (response.status === 201) {
-                                  $('#lessonmaterials_div').html(result.message);
-                                } else if (response.status === 202) {
-                                  
-                                  alert(result.message);
-                                } else {
-                                    // unexpected outcome, throw the error
-                                    throw response.status;
-                                }
-                            } catch (error) {
-                                // Errors when calling the service; such as network error, 
-                                // service offline, etc
-                                alert ('There is a problem retrieving data, please try again later.' + error);
-                            } // error
-                  }); 
-                
+                } catch (error) {
+                    alert ('There is a problem retrieving data, please try again later.' + error);
+                } 
+              }); 
+            
 
         }
 </script>
-
-  <!-- ======= Footer ======= -->
   <footer id="footer">
     <div class="container">
       <div class="row d-flex align-items-center">
@@ -358,7 +301,7 @@
         </div>
       </div>
     </div>
-  </footer><!-- End Footer -->
+  </footer>
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 

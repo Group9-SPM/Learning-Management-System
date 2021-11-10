@@ -49,15 +49,10 @@
 </head>
 
 <body>
-
-    <!-- ======= Header ======= -->
     <header id="header" class="fixed-top d-flex align-items-center">
       <div class="container d-flex align-items-center justify-content-between">
-  
         <div class="logo">
-          <h1><a href="index.html">Learning Management System</a></h1>
-          <!-- Uncomment below if you prefer to use an image logo -->
-          <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+          <h1><a href="../index.html">Learning Management System</a></h1>
         </div>
   
         <nav id="navbar" class="navbar">
@@ -71,35 +66,30 @@
             <li><a class="getstarted scrollto" href="../index.html">Log Out</a></li>
           </ul>
           <i class="bi bi-list mobile-nav-toggle"></i>
-        </nav><!-- .navbar -->
+        </nav>
     </div>
-  </header><!-- End Header -->
+  </header>
 
   <main id="main">
-
-    <!-- ======= Breadcrumbs Section ======= -->
     <section class="breadcrumbs">
       <div class="container">
 
         <div class="d-flex justify-content-between align-items-center">
          <p></p>
           <ol>
-            <li><a href="courses.html">Courses</a></li>
+            <li><a href="confirmedCourses.html">Enrolled Courses</a></li>
             <li>Course Quizzes</li>
           </ol>
         </div>
 
       </div>
-    </section><!-- End Breadcrumbs Section -->
+    </section>
 
-
-    <!-- Start of Header  -->
     <div class="bg-img">
       <div class="bg-text">
           <h1 class="display-4 font-weight-bold" style="color:black" id="quiz_title"></h1>
       </div>
     </div>
-    <!-- End of Header -->
 
     <br>
     <br>
@@ -124,7 +114,7 @@
 <br><br>
     
 
-  </main><!-- End #main -->
+  </main>
 
   <script>
     var url_string = window.location.href;
@@ -133,32 +123,26 @@
     var learnerID = sessionStorage.learnerID;
 
     $(async() => {           
-            // Change serviceURL to your own change to wtv port number it is 
-            var serviceURL = "http://localhost:5000/lesson/lessonByID/" + lessonID + "/" + learnerID;
-    
-            try {
-                const response =
-                 await fetch(
-                   serviceURL, { method: 'GET' }
-                );
-                const result = await response.json();
-                 if (response.status === 200) {
-                    $('#quiz_title').html(result.data.lessonName);
-                    $('#quiz_desc').html(result.data.lessonDesc);
-                                } else if (response.status == 201) {
-                                  return false;
-                                } else {
-                                    // unexpected outcome, throw the error
-                                    throw response.status;
-                                }
-                            } catch (error) {
-                                // Errors when calling the service; such as network error, 
-                                // service offline, etc
-                                alert ('There is a problem retrieving data, please try again later.' + error);
-                            } // error
-                  }); 
+      var serviceURL = "http://localhost:5000/lesson/lessonByID/" + lessonID + "/" + learnerID;
+      try {
+          const response =
+            await fetch(
+              serviceURL, { method: 'GET' }
+          );
+          const result = await response.json();
+            if (response.status === 200) {
+              $('#quiz_title').html(result.data.lessonName);
+              $('#quiz_desc').html(result.data.lessonDesc);
+                } else if (response.status == 201) {
+                  return false;
+                } else {
+                    throw response.status;
+                }
+            } catch (error) {
+                alert ('There is a problem retrieving data, please try again later.' + error);
+            } 
+        }); 
     $(async() => {           
-            // Change serviceURL to your own change to wtv port number it is 
             var serviceURL = "http://localhost:5000/quiz/check/" + lessonID;
     
             try {
@@ -210,7 +194,6 @@
                       }
                     }, 1000);
                     $(async() => {           
-                      // Change serviceURL to your own change to wtv port number it is 
                       var serviceURLNEXT = "http://localhost:5000/question/" + quizID;
                       try {
                           const response =
@@ -236,33 +219,27 @@
 
                               $('#question_fields').html(lesson_list_html);
                             
-                                          } else if (response.status == 201) {
-                                            alert("Quiz not found");
-                                            // Redirect back when quiz is not found
-                                            window.location.href = document.referrer;
-                                          } else {
-                                              // unexpected outcome, throw the error
-                                              throw response.status;
-                                          }
-                                      } catch (error) {
-                                          // Errors when calling the service; such as network error, 
-                                          // service offline, etc
-                                          alert ('There is a problem retrieving data, please try again later.' + error);
-                                      } // error
+                                  } else if (response.status == 201) {
+                                    alert("Quiz not found");
+                                    // Redirect back when quiz is not found
+                                    window.location.href = document.referrer;
+                                  } else {
+                                      throw response.status;
+                                  }
+                              } catch (error) {
+                                  alert ('There is a problem retrieving data, please try again later.' + error);
+                              } // error
                             }); 
                                 } else if (response.status == 201) {
                                   alert("Quiz not found");
                                   // Redirect back when quiz is not found
                                   window.location.href = document.referrer;
                                 } else {
-                                    // unexpected outcome, throw the error
                                     throw response.status;
                                 }
                             } catch (error) {
-                                // Errors when calling the service; such as network error, 
-                                // service offline, etc
                                 alert ('There is a problem retrieving data, please try again later.' + error);
-                            } // error
+                            } 
                   }); 
       
         $(document).ready(function() {
@@ -287,8 +264,6 @@
           });
         });
   </script>
-
-  <!-- ======= Footer ======= -->
   <footer id="footer">
     <div class="container">
       <div class="row d-flex align-items-center">
@@ -306,7 +281,7 @@
         </div>
         <div class="col-lg-6">
           <nav class="footer-links text-lg-right text-center pt-2 pt-lg-0">
-            <a href="#intro" class="scrollto">Home</a>
+            <a href="../index.html" class="scrollto">Home</a>
             <a href="#about" class="scrollto">About</a>
             <a href="#">Privacy Policy</a>
             <a href="#">Terms of Use</a>
@@ -314,7 +289,7 @@
         </div>
       </div>
     </div>
-  </footer><!-- End Footer -->
+  </footer>
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
