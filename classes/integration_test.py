@@ -271,7 +271,6 @@ class TestCreateQuiz(TestApp):
                                     data=json.dumps(request_body),
                                     content_type='application/json')
         self.assertEqual(response.json, {
-
             'quizID': 1,
             'quizDuration': '10',
             'passingCriteria': '5',
@@ -280,12 +279,8 @@ class TestCreateQuiz(TestApp):
         })
 
     def test_create_quiz_invalid_lesson(self):
-        lesson = Lesson(lessonNum='10',
-                    classID=1, courseID=5, lessonName='Fixing Printers', lessonDesc='How to fix printers')
         quiz = Quiz(quizDuration='10',
-                    passingCriteria='5', quizType='UG', lessonID=2)
-        db.session.add(lesson)
-        db.session.commit()
+                    passingCriteria='5', quizType='UG')
 
         request_body = {
             'quizID': quiz.quizID,

@@ -38,35 +38,6 @@
   ======================================================== -->
 </head>
 
-<script>
-  async function findQuiz() {
-    var quizID = sessionStorage.quizID;
-    var serviceURL = "http://localhost:5000/course/" + quizID; 
-    try {
-      const response =
-      await fetch(
-        serviceURL, { method: 'GET' }
-      );
-      const data = await response.json();
-      if (response.ok) { 
-        var name = data.data.courseName;
-        if (courseName == name) {
-          sessionStorage.courseName = data.data.courseName;
-          sessionStorage.courseID = data.data.courseID;
-          window.location.assign("./classes.html");
-        } else {
-          alert("Cant find course.");
-        }
-      } else {
-        alert("Theres an issue with the data.");
-      }
-    }
-    catch (error) {
-      alert('There is a problem, please try again later.');
-    }
-  };
-</script>
-
 <body>
   <header id="header" class="fixed-top d-flex align-items-center">
     <div class="container d-flex align-items-center justify-content-between">
@@ -128,7 +99,6 @@
   </main>
 
   <script>
-    console.log(sessionStorage);
     var courseInfo = document.getElementById("courseInfo");
     courseInfo.innerHTML = sessionStorage.courseID + " - " + sessionStorage.courseName + " | " + sessionStorage.lessonNum + " - " + sessionStorage.lessonName;
     

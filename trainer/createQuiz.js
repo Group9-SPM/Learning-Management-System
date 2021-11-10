@@ -118,7 +118,6 @@ function create() {
 }
 
 function createQuiz(quizData, questionData) {
-  console.log(quizData);
   quizData = JSON.parse(quizData);
   lessonID = Number(quizData.lessonID);
   passingCriteria = quizData.passingCriteria;
@@ -138,7 +137,6 @@ function createQuiz(quizData, questionData) {
     var quizID = data.quizID;
     var question_data = {};
     questionData = JSON.parse(questionData);
-
     if (sessionStorage.multiple == "true") {
       for (let i = 0; i < questionData.length; i++) {
         qnNo = questionData[i].qnNo;
@@ -156,9 +154,9 @@ function createQuiz(quizData, questionData) {
       question_data = { quizID, qnNo, question, options, answer };
       createQns(question_data);
     }
+    window.location.replace("./content.html")
   })
   .catch((error) => {
-    alert('There is a problem, please try again later.');
     console.error('Error:', error);
   });
 }
@@ -172,11 +170,12 @@ function createQns(question_data) {
     body: JSON.stringify(question_data),
   })
   .then(response => response.json())
-  .then((data) => {
-    window.location.replace("./content.html")
+  .then(response => {
+    if (response.status == 500) {
+      alert('There is a problem, please try again later.');
+    }
   })
   .catch((error) => {
-    alert('There is a problem, please try again later.');
     console.error('Error:', error);
   });
 }
